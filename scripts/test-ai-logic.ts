@@ -68,9 +68,9 @@ async function main() {
     ],
   };
   const r = await analyzeGap({ profile, posisi: "Web Developer", posisi_preset: "web_frontend" }, fixture);
-  // JS menengah(3×0,8) + React dasar(3×0,5) + Git menengah(3×0,8) + TS 0 + Testing 0 + Kerja tim menengah(2×0,8)
-  // = (2,4+1,5+2,4+0+0+1,6)/(3+3+3+2+1+2) = 7,9/14 = 56
-  cek("skor Rani vs fixture = 56 (tanpa LLM, cocok nama/sinonim)", r.skor === 56, r.skor);
+  // Inti: wajib 3×(JS 0,8 + React 0,5 + Git 0,8) + penting 2×(TS 0 + Kerja tim 0,8) = 7,9 / 13 = 60,8; bonus 0 -> 61
+  cek("skor profil vs fixture = 61 (tanpa LLM, cocok nama/sinonim)", r.skor === 61, r.skor);
+  cek("skor_rincian ada: wajib 3/3, penting 1/2", r.skor_rincian?.wajib.terpenuhi === 3 && r.skor_rincian?.penting.terpenuhi === 1, r.skor_rincian);
   cek("gap = TypeScript, Software testing (urut prioritas)", JSON.stringify(r.gap.map((g) => g.nama)) === '["TypeScript","Software testing (unit/automated)"]', r.gap);
   cek("kekuatan punya bukti dari CV", r.kekuatan.length === 4 && r.kekuatan.every((k) => k.bukti.length > 0), r.kekuatan);
   cek("sumber: 10 lowongan, bukan perkiraan", r.sumberLowongan.jumlah === 10 && !r.sumberLowongan.perkiraanUmum);
