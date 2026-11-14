@@ -89,7 +89,7 @@ export function ProfilView() {
       jobDescription: preset ? undefined : state.jobDescription.trim() || undefined,
       demo,
     });
-    update({ ...RESET_ANALISIS, profile, gap, jalur: null });
+    update({ ...RESET_ANALISIS, profile, gap, jalur: null, ringkasanJalur: null });
     setStage("roadmap");
     try {
       update({ roadmap: await api.roadmap({ gap, tahap, posisi: pos, tujuan, demo }) });
@@ -112,8 +112,8 @@ export function ProfilView() {
       }
       if (modeEksplorasi) {
         setStage("eksplorasi");
-        const { jalur } = await api.eksplorasi({ profile, demo });
-        update({ ...RESET_ANALISIS, profile, gap: null, jalur });
+        const { jalur, ringkasan_ai } = await api.eksplorasi({ profile, tahap, demo });
+        update({ ...RESET_ANALISIS, profile, gap: null, jalur, ringkasanJalur: ringkasan_ai ?? null });
         setStage(null);
         return;
       }
@@ -166,7 +166,7 @@ export function ProfilView() {
     return (
       <div className="flex flex-col gap-5">
         <Steps aktif={2} />
-        <JalurPicker jalur={state.jalur} onPilih={pilihJalur} />
+        <JalurPicker jalur={state.jalur} ringkasan={state.ringkasanJalur} onPilih={pilihJalur} />
         {error && <ErrorCard message={error} />}
         <button
           type="button"
