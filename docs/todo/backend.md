@@ -3,7 +3,7 @@
 Pemilik: **Backend**. Hanya Backend yang mengedit file ini. Frontend boleh membaca.
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 
-**Sedang dikerjakan:** permintaan FE (lint, typecheck, verifikasi production) selesai. Berikutnya: siaga bantu FE (layar Wawancara), persiapan demo (9.5)
+**Sedang dikerjakan:** FEATURE FREEZE (9.5). Semua langkah MVP BE tercentang; tinggal konfirmasi env Vercel (RynNoir) + bersihkan akun uji Turso (`scripts/akun-uji.ts`). 10 menit sebelum presentasi: buka situs sekali untuk membangunkan server & DB
 
 ---
 
@@ -43,44 +43,44 @@ Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang di
 
 ### Fitur 0 — Fondasi
 - [x] 0.1 Scaffold, dependensi, auth + smoke test 15/15, `schema.sql`, draf `lib/schemas.ts`
-- [ ] 0.2 (bersama FE) Sepakati `lib/schemas.ts`: 5 kategori radar + mekanisme mode demo
+- [x] 0.2 (bersama FE) Kontrak disepakati (v2: radar per posisi + `label`, mekanisme `demo: true`; lihat Log kontrak)
 - [x] 0.3 Turso (aws-ap-southeast-1) + migrasi, GitHub, Vercel + env. Production: auth 401, intent/profile LLM asli 3–4 dtk, guardrail OK, `test-analyses` 12/12 ke Turso, demo OK, cookie Secure+HttpOnly+SameSite=lax
 
 ### Fitur 1 — Pemahaman tujuan
 - [x] 1.1 `lib/llm.ts` fallback Gemini → Groq — teruji langsung (Gemini timeout/429 → Groq menjawab). `GEMINI_MODEL=gemini-3.5-flash` (2.5-flash ditolak untuk akun baru). Opsi `LLM_ORDER`
 - [x] 1.2 Batas input (`lib/limits.ts`) + kuota per sesi & IP (`lib/quota.ts`, tabel `llm_usage`). Teruji: permintaan ke-41 → 429
 - [x] 1.3 `/api/intent` + guardrail kategori — `scripts/test-intent.ts` 10/10 dengan LLM asli
-- [ ] → Serah terima `/api/intent`
+- [x] → Serah terima `/api/intent`
 
 ### Fitur 2 — Profil
 - [x] 2.1 `/api/profile` dengan `cv_valid` dan bukti — LLM asli: CV Rani valid, resep → `cv_valid:false`, injeksi di CV tidak menambah skill
 - [x] 2.2 Validasi bukti oleh kode (`lib/evidence.ts`), 14 uji offline lulus
-- [ ] → Serah terima `/api/profile`
+- [x] → Serah terima `/api/profile`
 
 ### Fitur 3 — Gap & skor
 - [x] 3.1 `data/lowongan.json` v2: 75 lowongan (Web 35, Data Analyst 15, UI/UX 14, Mobile 11), sumber per lowongan di `data/sumber.csv`, dapat dibangun ulang dengan `python data/kurasi/build.py` (hasil identik). Alias pencocokan: nama kelompok + opsi_teknologi + `data/sinonim.json`
 - [x] 3.2 `lib/scoring.ts` + `scripts/test-scoring.ts` (11/11 lulus, contoh manual 57)
 - [x] 3.3 `/api/gap` dengan data asli: sumbu radar per posisi + label, `sumberLowongan.posisi_data`/`diakses`, proyek berbukti = portofolio. Posisi tanpa data (QA, Cybersecurity, DevOps) → perkiraan umum
-- [ ] → Serah terima `/api/gap`
+- [x] → Serah terima `/api/gap`
 
 ### Fitur 4 — Roadmap
-- [ ] 4.1 `/api/roadmap` — lulus uji LLM (4 minggu, tanpa URL, gap wajib di minggu 1–2); tinggal deploy Vercel
-- [ ] → Serah terima `/api/roadmap`
+- [x] 4.1 `/api/roadmap` — lulus uji LLM (4 minggu, tanpa URL, gap wajib di minggu 1–2), production OK; teknologi dipilih sesuai kekuatan pengguna
+- [x] → Serah terima `/api/roadmap`
 
 ### Fitur 5 — Wawancara
 - [x] 5.1 `/api/interview/questions` — LLM asli: tepat 5, `gap_asal` valid & beragam, sapaan "kamu"
 - [x] 5.2 `/api/interview/grade` + batas skor oleh kode (`scripts/test-ai-logic.ts` 15/15). Kualitas saran LLM menunggu uji kunci
-- [ ] → Serah terima `/api/interview/*`
+- [x] → Serah terima `/api/interview/*`
 
 ### Fitur 6 — Riwayat
 - [x] 6.1 `/api/analyses` (simpan, daftar, detail)
 - [x] 6.2 PATCH roadmap item, POST percobaan wawancara, cek pemilik (`scripts/test-analyses.ts` 12/12, uji 2 akun)
-- [ ] → Serah terima `/api/analyses/*`
+- [x] → Serah terima `/api/analyses/*`
 
 ### Fitur 7 — Mode demo
 - [x] 7.1 `data/demo/rani.json` dari hasil asli (`scripts/build-demo.ts`) + fallback demo. Teruji dengan semua kunci API rusak: intent → profil → gap → roadmap → pertanyaan → nilai contoh jawaban semuanya 200
-- [ ] 7.2 Uji batas panggilan sesi tamu
-- [ ] → Serah terima mode demo
+- [x] 7.2 Uji batas panggilan sesi tamu (`scripts/test-demo-http.ts`): kuota dinaikkan ke 60/jam/sesi & 400/jam/IP (±6 demo penuh); permintaan ke-61 → 429 pesan ramah; `demo:true` tetap 200 saat kuota habis
+- [x] → Serah terima mode demo — teruji dengan semua kunci API dirusak: intent, profile, gap, roadmap, grade ×5 contoh jawaban Rani, roadmap adaptif semuanya 200
 
 ### Fitur 8 — Penguatan
 - [x] 8.1 `scripts/test-guardrail.ts`: 27/27 lulus (18 intent: sesuai topik termasuk bahasa Inggris & Jawa, di luar topik, non-TI, 4 manipulasi, ambigu; 4 profil; 4 penilaian; 1 bias). Laporan untuk slide: `docs/hasil-uji-backend.md`. Perbaikan: hapus atribut sensitif di server, temperature 0 untuk ekstraksi, pemindai skill deterministik (`lib/skill-scan.ts`) → variasi skor CV yang sama 7 → 0–2, selisih antar-identitas 1
@@ -88,8 +88,8 @@ Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang di
 ### Fitur 9 — Bonus & finalisasi
 - [x] 9.1 (bonus) Roadmap adaptif — `POST /api/roadmap/adaptif`: analisis hasil wawancara oleh kode (topik skor < 60 / tidak dapat dinilai, rubrik terlemah), LLM menyusun ulang roadmap dengan topik terlemah di minggu 1–2 (dicek kode). Demo: AI gagal → roadmap lama + `diperbarui:false`. `scripts/test-roadmap-adaptif.ts` lulus
 - [x] 9.2 (bonus) Mode eksplorasi — `POST /api/eksplorasi` `{profile}` → peringkat 4 posisi berdata (skor, wajib terpenuhi, kekuatan, gap teratas, alasan template). Deterministik tanpa LLM (2–30 ms). `scripts/test-eksplorasi.ts` lulus
-- [ ] 9.4 (bonus) Tanya mentor — endpoint
-- [ ] 9.5 Feature freeze, deploy final, cek env, bangunkan DB
+- [ ] 9.4 (bonus) Tanya mentor — endpoint — **tidak dikerjakan (feature freeze)**
+- [ ] 9.5 Feature freeze, deploy final, cek env, bangunkan DB — deploy `55cff50` sukses (status Vercel), production lulus `test-demo-http.ts` (AI asli), `/api/auth/me` 401, "resep nasi goreng" → di_luar_topik, tidak ada `NEXT_PUBLIC_` di kode. Sisa: RynNoir konfirmasi 7 env di Vercel; jalankan `scripts/akun-uji.ts` ke Turso. Bahan slide: `docs/bahan-slide-backend.md`
 
 ---
 
@@ -98,6 +98,7 @@ Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang di
 | Tanggal | Perubahan | Dampak ke FE |
 |---|---|---|
 | 2026-11-14 | Draf v0: Intent, Profile, GapResult, Roadmap, Question, Grade, AnalysisSummary | Mulai membuat mock dari tipe ini |
+| 2026-11-14 | **Rumus skor direvisi** (kontrak tetap 0–100): skor = inti (wajib + penting) + bonus nilai_tambah maks 10. Field opsional baru `GapResult.skor_rincian` `{wajib, penting, nilai_tambah: {terpenuhi, total}}`. Skor Rani 31 → 51; `data/demo/rani.json` dibangun ulang | Angka skor lebih tinggi dari sebelumnya; opsional tampilkan "Wajib 3/4 · Penting 3/4" dari `skor_rincian` di ubin skor. Mode demo memakai data baru (pertanyaan & contoh jawaban ikut berubah) |
 | 2026-11-14 | Tambahan (non-breaking): `HasilWawancara`, `AdaptiveRoadmapRequest`, `AdaptiveRoadmap` (= Roadmap + `fokus_ulang`, `catatan`, `diperbarui`) | Tombol "Perbarui roadmap" di ringkasan wawancara |
 | 2026-11-14 | Tambahan (non-breaking): `ExplorationRequest`, `JalurKarier`, `ExplorationResult` untuk `/api/eksplorasi` | Layar pilihan jalur karier (mode eksplorasi) |
 | 2026-11-14 | **v2 radar per posisi (disepakati BE):** `KategoriRadar` enum → string (id dari dataset, mis. `frontend`, `backend`, `database`, `tools`, `profesional`); **`RadarPoint.label` baru** (teks sumbu, wajib ditampilkan FE); jumlah sumbu 4–5 tergantung posisi; `sumberLowongan.posisi_data?` & `diakses?` baru. `GapItem.nama` bisa panjang (nama kelompok, mis. "Framework frontend (React/Vue/...)") | FE: tampilkan `label` untuk sumbu radar (jangan memetakan enum lama); teks "berdasarkan {jumlah} lowongan {posisi_data}, diakses {diakses}"; potong/wrap nama gap yang panjang |
@@ -112,6 +113,7 @@ _(kosong)_
 
 ## Catatan / blocker
 
+- Rumus skor revisi (`lib/scoring.ts`): rumus PRD §8.3 membuat skor kandidat layak tertahan ~30 karena 15+ skill nilai_tambah. Kini skor inti dari wajib+penting, nilai_tambah jadi bonus maks +10. Contoh: Rani 51 (wajib 3/4, penting 3/4).
 - Radar: `target` = bobot kategori relatif terhadap kategori terberat posisi itu; `kamu` = capaian pada skala yang sama (selalu ≤ target). Kategori tanpa kebutuhan = 0/0.
 - Groq `gpt-oss-120b` free tier: batas 8.000 token/menit (±1 alur penuh). Ditambah cadangan `groq-20b` (`openai/gpt-oss-20b`, limit terpisah). Urutan lokal: `LLM_ORDER=groq,groq-20b,gemini`.
 - Gemini free tier lambat (8–24 dtk/panggilan) dan cepat 429; satu alur penuh 95 dtk vs ±10 dtk dengan `LLM_ORDER=groq,gemini`. Sudah ditambahkan ke `.env.example`. Di Vercel: latensi production (intent 1,2 dtk, roadmap adaptif 2,0 dtk) konsisten dengan Groq di depan; RynNoir mohon konfirmasi `LLM_ORDER=groq,groq-20b,gemini` di Settings → Environment Variables.
