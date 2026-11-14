@@ -92,6 +92,19 @@ bukan statistik pasar. Posisi tanpa data (QA, Cybersecurity, DevOps) diberi labe
 - Batas input (tujuan 500, CV 6.000, jawaban 1.500 karakter) dan kuota permintaan per sesi & per IP.
 - Skor adalah **alat refleksi, bukan penilaian resmi**, dan dinilai dari skill + bukti, bukan identitas.
 
+## Antarmuka (frontend)
+
+- **Halaman:** `/mulai` (tujuan + kartu konfirmasi) → `/profil` (tempel/unggah PDF CV) → `/hasil` (skor, radar,
+  gap, kekuatan berbukti, roadmap, simpan, ekspor PDF) → `/wawancara` (5 pertanyaan, umpan balik, ringkasan,
+  roadmap adaptif) · `/riwayat` · `/masuk` · `/daftar` · `/lupa-password` · `/akun`.
+- **Gaya "Stiker Biru"** dengan maskot **Kira** (`DESIGN.md`): mobile-first (360 px), desktop dengan sidebar ikon
+  dan tata letak bento. Gap ditulis "perlu ditingkatkan" berwarna oranye, tidak pernah merah.
+- **Mode tamu:** hasil tersimpan di `sessionStorage` (muat ulang tidak menghapus hasil; teks CV tidak ikut disimpan).
+- **Aksesibilitas:** diuji otomatis dengan axe-core di 15 keadaan layar (360 px & 1280 px): 0 pelanggaran
+  WCAG 2.1 A/AA, target sentuh ≥44 px, fokus keyboard terlihat, `prefers-reduced-motion` dihormati,
+  chart punya `aria-label` berisi angka.
+- Satu pintu API di `lib/api-client.ts`; semua teks penolakan/error/gelembung Kira di `lib/pesan-template.ts`.
+
 ## Dokumen proyek
 
 `PRD.md` (kebutuhan) · `CLAUDE.md` (aturan teknis) · `DESIGN.md` (gaya visual) · `WORKFLOW.md` (alur tim) ·
