@@ -47,6 +47,16 @@ const disensor = hapusAtributSensitif(
 );
 cek("atribut sensitif dihapus (nama, gender, agama, TTL, status)", !/budi|laki|islam|padang|menikah/i.test(disensor));
 cek("isi CV lain tetap utuh (pendidikan, skill)", /S1 Informatika/.test(disensor) && /Status code HTTP, React/.test(disensor));
+const tanpaKampus = hapusAtributSensitif("Kampus: Universitas Swasta Kecil\nAsal Universitas: X\nAlmamater: Y\nPENDIDIKAN\nS1 Teknik Informatika, Universitas Indonesia, semester 6\nSKILL: React");
+cek("baris berlabel kampus dihapus", !/swasta|asal universitas|almamater/i.test(tanpaKampus));
+// Bukti keadilan yang deterministik (tanpa LLM): dua CV yang hanya beda identitas berlabel menghasilkan teks IDENTIK untuk AI.
+const kepalaRani = "Nama: Rani Putri\nJenis kelamin: Perempuan\nKampus: Universitas Indonesia";
+const kepalaBudi = "Nama: Budi Santoso\nJenis kelamin: Laki-laki\nKampus: Universitas Swasta Kecil di Daerah";
+cek(
+  "CV beda nama/gender/kampus (berlabel) -> teks ke AI identik",
+  hapusAtributSensitif(cvText.replace("[NAMA]", kepalaRani)) === hapusAtributSensitif(cvText.replace("[NAMA]", kepalaBudi)),
+);
+cek("kalimat pendidikan (tanpa label) tetap utuh", /S1 Teknik Informatika, Universitas Indonesia, semester 6/.test(tanpaKampus) && /SKILL: React/.test(tanpaKampus));
 
 // Pemindai deterministik: LLM yang melewatkan skill tetap menghasilkan profil lengkap.
 const minim = lengkapiSkill({ cv_valid: true, proyek: [], skills: [{ nama: "Git", jenis: "tools", tingkat: "menengah", bukti: "dikelola dengan Git dan GitHub" }] }, cvText);
