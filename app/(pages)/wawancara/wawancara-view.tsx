@@ -34,6 +34,14 @@ export function WawancaraView() {
   useEffect(() => {
     if (!gap || !posisi || questions || errorQ || started.current) return;
     started.current = true;
+    // Mode demo: pakai 5 pertanyaan Rani (hasil AI asli saat build) agar contoh jawaban selalu tersedia.
+    // Hanya bila ≥3 dari 5 gap asalnya ada di gap saat ini (CV yang dipakai memang CV Rani;
+    // ekstraksi ulang oleh AI bisa sedikit berbeda dari data build).
+    const namaGap = new Set(gap.gap.map((g) => g.nama));
+    if (state.demo && demoRani.questions.filter((q) => namaGap.has(q.gap_asal)).length >= 3) {
+      update({ questions: demoRani.questions, answers: {}, wawancaraIdx: 0, attemptSaved: false });
+      return;
+    }
     api
       .questions({ gap, posisi, demo: state.demo || undefined })
       .then((r) => update({ questions: r.questions, answers: {}, wawancaraIdx: 0, attemptSaved: false }))

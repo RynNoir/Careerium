@@ -4,7 +4,7 @@ Pemilik: **Frontend**. Hanya Frontend yang mengedit file ini. Backend boleh memb
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md`.
 
-**Sedang dikerjakan:** 9.6 (8.2 selesai; C4 demo 3x di production lolos)
+**Sedang dikerjakan:** 9.6 (9.3 ekspor PDF + pertanyaan demo tetap selesai)
 
 ---
 
@@ -52,7 +52,7 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 ### Fitur 9 — Bonus & finalisasi
 - [x] 9.1 (bonus) Roadmap adaptif — UI (tombol di ringkasan wawancara, catatan + sorot minggu 1–2 di Hasil)
 - [x] 9.2 (bonus) Mode eksplorasi — UI (konfirmasi boleh tanpa posisi; 3 kartu jalur setelah profil)
-- [ ] 9.3 (bonus) Ekspor PDF
+- [x] 9.3 (bonus) Ekspor PDF: tombol "Simpan sebagai PDF" di Hasil (dialog cetak browser, tanpa dependensi). Cetak: tanpa navigasi/tombol, semua gap & kekuatan + bukti, radar, roadmap + status centang
 - [ ] 9.4 (bonus) Tanya mentor — UI
 - [ ] 9.6 Video demo cadangan, screenshot, slide
 
@@ -70,4 +70,4 @@ _(kosong: permintaan eslint & typecheck sudah dikerjakan BE di PR #7)_
 - Kelas token Tailwind: `bg-bg`, `bg-surface`, `border-ink` (= token `border`), `text-text`, `text-text-muted`, `bg-primary`, `text-primary-text`, `bg-gap-soft`, dst. Kelas komponen: `.btn .btn-primary .btn-secondary .card .chip .field .badge-* .skeleton .hl .display .label-caps`.
 - Next 16 mempertahankan halaman lama di DOM (`<Activity>`): form akun mengosongkan password/kode pemulihan setelah sukses agar tidak tersisa saat kembali.
 - Roadmap adaptif mengganti roadmap di browser; bila hasil sudah tersimpan, roadmap baru belum ikut tersimpan (catatan ditampilkan di Hasil).
-- Mode demo dengan AI aktif: pertanyaan wawancara dibuat AI (bukan pertanyaan Rani), jadi tombol "Isi contoh jawaban Rani" hanya muncul saat AI gagal. Saat presentasi, siapkan jawaban sendiri atau minta FE memakai pertanyaan Rani tetap di mode demo.
+- Mode demo memakai 5 pertanyaan wawancara Rani yang tetap (hasil AI asli saat build) bila ≥3 gap asalnya cocok dengan gap saat ini, sehingga "Isi contoh jawaban Rani" selalu tersedia saat presentasi. Penilaian tetap oleh AI (fallback data Rani bila AI gagal).
