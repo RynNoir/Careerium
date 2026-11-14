@@ -1,0 +1,312 @@
+<title>Stiker Biru dan Kira</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+<style>
+/* Layout: kolom tunggal ~1140px — Kira (asli vs datar + 5 pose), mockup, token & aturan, langkah berikutnya. */
+:root{
+  --bg:#F2F5FB; --fg:#141B2E; --muted:#525B72; --line:#DCE2EE; --card:#FFFFFF; --accent:#1E5BD8; --chip:#E6ECF8;
+  --f-ui:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-disp:"Bricolage Grotesque","Inter",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#10141F;--fg:#E8ECF5;--muted:#A3ABC0;--line:#262D3E;--card:#171C29;--accent:#8CC4FF;--chip:#232A3B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10141F;--fg:#E8ECF5;--muted:#A3ABC0;--line:#262D3E;--card:#171C29;--accent:#8CC4FF;--chip:#232A3B;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-ui);font-size:15px;line-height:1.55}
+.wrap{max-width:1140px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+h1{font-family:var(--f-disp);font-size:clamp(30px,4.4vw,44px);line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em;font-weight:800}
+h2{font-family:var(--f-disp);font-size:24px;margin:0;text-wrap:balance;font-weight:800}
+h3{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 10px;font-weight:600}
+p{margin:0}
+.lead{color:var(--muted);max-width:72ch}
+.fixed{display:flex;flex-wrap:wrap;gap:8px}
+.tag{background:var(--chip);border-radius:999px;padding:4px 12px;font-size:13px}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:22px}
+.sec-head{display:flex;flex-direction:column;gap:6px}
+.cap{font-size:12px;color:var(--muted);margin-top:6px}
+.scroller{overflow-x:auto;border-radius:18px}
+.info{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+@media (max-width:920px){.info{grid-template-columns:minmax(0,1fr)}}
+.sw{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:13px;padding:3px 0}
+.sw i{width:26px;height:26px;border-radius:7px;border:2px solid #0E1A3D;display:block}
+.sw code,.mono{font-size:12px;color:var(--muted);font-family:ui-monospace,Consolas,monospace}
+.cr{font-size:13px;display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding:4px 0;font-variant-numeric:tabular-nums}
+.cr.bad b{color:#C81E1E}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cr.bad b{color:#FF8A8A}}
+:root[data-theme="dark"] .cr.bad b{color:#FF8A8A}
+ul.pl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:14px}
+.rec{background:var(--chip);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- Area Kira (selalu terang, warna merek) ---------- */
+.stage{background:#F5F8FF;border:2px solid #0E1A3D;border-radius:18px;color:#0E1A3D;background-image:radial-gradient(#C9D6EE 1px,transparent 1.3px);background-size:18px 18px}
+.duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:760px){.duo{grid-template-columns:minmax(0,1fr)}}
+.duo figure{margin:0;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;justify-content:space-between}
+.duo img{width:auto;max-width:100%;height:260px;object-fit:contain}
+.duo figcaption{font-size:13px;text-align:center;max-width:36ch}
+.duo figcaption b{font-family:var(--f-disp);font-size:16px;display:block}
+.flag{font-size:11px;font-weight:700;border:2px solid #0E1A3D;border-radius:8px;padding:2px 8px;background:#FFC24B;box-shadow:2px 2px 0 #0E1A3D}
+.flag.b{background:#3BA4FF}
+.poses{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.poses{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:520px){.poses{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pose{background:#FFFFFF;border:2px solid #0E1A3D;border-radius:14px;box-shadow:4px 4px 0 #0E1A3D;padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;color:#0E1A3D;text-align:center}
+.pose svg{max-width:100%;height:auto}
+.pose b{font-family:var(--f-disp);font-size:15px}
+.pose span{font-size:12px;color:#44507A;line-height:1.4}
+
+/* ---------- Mockup (selalu terang) ---------- */
+.m{--bg:#F5F8FF;--sf:#FFFFFF;--sfm:#E9F0FC;--ink:#0E1A3D;--mut:#44507A;--pri:#3BA4FF;--pri-t:#1E5BD8;--soft:#D6ECFF;--gold:#FFC24B;--gold-s:#FFEFC7;--lilac:#E6DEFF;--gap:#9A4A06;--gap-s:#FFE8CC;--tgt:#6B7699;
+  font-family:"Inter",system-ui,sans-serif;color:var(--ink);background:var(--bg);border-radius:18px;position:relative;overflow:hidden;border:2px solid var(--ink)}
+.m .disp{font-family:var(--f-disp)}
+.m svg{display:block}
+.m h4,.m h5{margin:0}
+.mocks{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start}
+.desk{min-width:900px;display:grid;grid-template-columns:76px minmax(0,1fr);padding:18px 18px 18px 0;gap:16px}
+.side{background:var(--ink);border-radius:0 30px 30px 0;margin-block:26px;padding:18px 0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.side .logo{width:38px;height:38px;border-radius:12px;background:var(--pri);color:var(--ink);display:grid;place-items:center;font-weight:800;font-family:var(--f-disp);margin-bottom:10px;border:2px solid #fff}
+.it{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;color:#fff}
+.it.on{background:var(--pri);color:var(--ink);box-shadow:3px 3px 0 #fff}
+.side .sp{flex:1}
+.main{display:flex;flex-direction:column;gap:16px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.top h4{font-size:28px;line-height:1.15;font-family:var(--f-disp);font-weight:800}
+.sub{font-size:13px;color:var(--mut)}
+.btn{font:inherit;font-size:13px;font-weight:700;border-radius:10px;padding:10px 16px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;border:2px solid var(--ink);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.btn.p{background:var(--pri)}
+.btn.s{background:var(--sf)}
+.card{background:var(--sf);border-radius:14px;padding:14px 16px;box-shadow:4px 4px 0 var(--ink);border:2px solid var(--ink);min-width:0}
+.card h5{margin:0 0 8px;font-size:15px;font-family:var(--f-disp);font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card h5 span{font-family:"Inter",sans-serif;font-weight:500;font-size:11px;color:var(--mut)}
+.note{font-size:11.5px;color:var(--mut);line-height:1.4}
+.legend{display:flex;gap:12px;font-size:11px;color:var(--mut);justify-content:center;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1.5px solid var(--ink);font-size:12.5px}
+.row:first-of-type{border-top:0}
+.row .nm{font-weight:600;flex:1;min-width:0}
+.meta{color:var(--mut);font-size:11.5px;font-weight:400}
+.ok{color:var(--pri-t)}
+.badge{font-size:10.5px;font-weight:800;border-radius:8px;padding:3px 9px;white-space:nowrap;border:1.5px solid var(--ink)}
+.b-w{background:var(--gap);color:#fff}
+.b-p{background:var(--gap-s);color:var(--gap)}
+.b-n{background:var(--lilac);color:var(--ink)}
+.ev{font-size:11px;color:var(--pri-t);font-weight:700;white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;border-radius:8px;padding:6px 10px;font-weight:600;display:inline-flex;align-items:center;gap:5px;background:var(--soft);color:var(--ink);border:1.5px solid var(--ink)}
+.grid3{display:grid;grid-template-columns:220px minmax(0,1fr) minmax(0,1.2fr);gap:16px}
+.score{background:var(--pri);position:relative}
+.score .note{color:var(--ink)}
+.big{font-family:var(--f-disp);font-size:80px;font-weight:800;line-height:.9;font-variant-numeric:tabular-nums}
+.tape{position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-3deg);width:66px;height:18px;background:var(--gold);border:2px solid var(--ink)}
+.hl{background:linear-gradient(transparent 55%, var(--gold) 55%);padding:0 2px}
+.bubble{background:var(--sf);border:2px solid var(--ink);border-radius:12px;padding:8px 10px;font-size:12px;font-weight:600;position:relative;box-shadow:3px 3px 0 var(--ink)}
+.cta{background:var(--gold);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px 10px 16px;font-weight:600;font-size:13.5px}
+.ph{width:300px;max-width:100%;margin:0 auto;padding:16px 16px 92px;min-height:620px;display:flex;flex-direction:column;gap:14px;border-radius:30px}
+.ph-top{display:flex;justify-content:space-between;align-items:center;font-family:var(--f-disp);font-weight:800;font-size:17px}
+.ph-h{font-family:var(--f-disp);font-size:29px;line-height:1.08;font-weight:800;margin:0}
+.ta{background:var(--sf);border:2px solid var(--ink);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.5;box-shadow:3px 3px 0 var(--ink)}
+.ta small{display:block;text-align:right;color:var(--mut);font-size:11px;margin-top:4px}
+.acts{display:flex;flex-direction:column;gap:10px}
+.acts .btn{width:100%}
+.nav{position:absolute;left:16px;right:16px;bottom:14px;background:var(--ink);border-radius:22px;display:flex;justify-content:space-around;padding:8px}
+.steps{display:flex;gap:6px;font-size:11px;color:var(--mut)}
+.steps span{flex:1;display:flex;flex-direction:column;gap:4px}
+.steps span::before{content:"";height:6px;border-radius:5px;background:var(--sfm);border:1.5px solid var(--ink)}
+.steps span.on{color:var(--ink);font-weight:700}
+.steps span.on::before{background:var(--pri)}
+@media (prefers-reduced-motion: no-preference){.pose svg{transition:transform .2s ease-out}.pose:hover svg{transform:translateY(-3px) rotate(-2deg)}}
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:12px">
+    <h1>Stiker Biru, ditemani Kira</h1>
+    <p class="lead">Gaya D (Stiker) dengan palet yang diambil dari maskot kamu: hitam diganti navy jubah Kira, kuning diganti biru langit sebagai warna utama, emas rumbai topi untuk sorotan. Kira digambar ulang versi datar agar menyatu dengan garis tinta dan bayangan keras. Semua angka di mockup adalah contoh.</p>
+    <div class="fixed" aria-label="Aturan yang berlaku">
+      <span class="tag">Bentuk sidebar referensi 1</span><span class="tag">Tema terang</span><span class="tag">Gap oranye tua, tidak pernah merah</span><span class="tag">Kontras teks ≥ 4,5:1, sudah dicek</span><span class="tag">Font tetap: Bricolage Grotesque + Inter</span>
+    </div>
+  </header>
+
+  <section class="sec" aria-labelledby="h-kira">
+    <div class="sec-head"><h2 id="h-kira">Kira</h2><p class="lead">Nama dari "karier". Mentor kecil yang sudah wisuda duluan, membawa laptop, dan menunjukkan langkah berikutnya. Bentuk tetap sama dengan gambar kamu: rambut ombak dengan ikal, topi wisuda dengan rumbai emas, headphone, jubah navy bergaris emas, laptop, dan ubin ikon yang melayang.</p></div>
+    <div class="duo">
+      <figure class="stage"><span class="flag">Asli · 3D</span><img src="kira-3d.png" alt="Kira versi 3D asli: maskot biru dengan topi wisuda, headphone, jubah navy, dan laptop" width="1127" height="1396"><figcaption><b>Untuk sampul & presentasi</b>Slide pitching, halaman pembuka, gambar pratinjau tautan. Tidak dipakai di layar produk.</figcaption></figure>
+      <figure class="stage"><span class="flag b">Datar · SVG</span><div id="kira-main"></div><figcaption><b>Untuk layar aplikasi</b>Warna polos, garis navy, satu bayangan keras, tanpa efek cahaya. Ringan (SVG, tanpa file gambar) dan tajam di ukuran berapa pun.</figcaption></figure>
+    </div>
+    <div>
+      <h3>5 pose dan tempat pemakaiannya</h3>
+      <div class="poses" id="poses"></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-mock">
+    <div class="sec-head"><h2 id="h-mock">Di layar</h2><p class="lead">Layar Hasil memakai grid bento gaya stiker. Satu-satunya tombol utama per layar berwarna biru langit dengan teks navy. Emas hanya untuk sorotan dan pita.</p></div>
+    <div class="mocks">
+      <div style="min-width:0"><div class="scroller" id="desk"></div><p class="cap">Layar Hasil (desktop ≥ 1024px)</p></div>
+      <div><div id="phone"></div><p class="cap" style="text-align:center">Layar Mulai (ponsel 360px)</p></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-tok">
+    <h2 id="h-tok">Token dan aturan</h2>
+    <div class="info">
+      <div><h3>Token warna</h3><div id="sw"></div></div>
+      <div><h3>Kontras (WCAG)</h3><div id="cr"></div>
+        <h3 style="margin-top:18px">Bentuk</h3><p style="font-size:14px">Kartu 14px · tombol 10px · chip 8px · garis 2px navy · bayangan keras 4px 4px (tombol 3px 3px) · tanpa blur dan gradien</p>
+        <h3 style="margin-top:18px">Tipografi</h3><p style="font-size:14px">Bricolage Grotesque 800 untuk judul dan angka skor, Inter untuk isi (16px, tinggi baris 1,55)</p></div>
+      <div><h3>Aturan Kira</h3>
+        <ul class="pl">
+          <li>Maksimal satu Kira per layar, ukuran 64–120px di desktop dan 56–88px di ponsel.</li>
+          <li>Kalimat di gelembung Kira berasal dari template kode, bukan dari AI.</li>
+          <li>Kira tidak pernah menyebut atau menilai skor. Angka hanya di kartu skor.</li>
+          <li>Jangan menaruh Kira di atas chart atau daftar bukti CV.</li>
+          <li>Versi 3D hanya untuk sampul dan presentasi.</li>
+        </ul>
+        <h3 style="margin-top:16px">Yang berubah dari D</h3>
+        <ul class="pl">
+          <li>Hitam tinta → navy <span class="mono">#0E1A3D</span></li>
+          <li>Kuning utama → biru langit; emas tinggal untuk sorotan</li>
+          <li>Oyen → Kira</li>
+          <li>Kekuatan memakai biru, bukan hijau</li>
+        </ul>
+      </div>
+    </div>
+    <div class="rec">
+      <strong>Status</strong>
+      <p>Arah ini sudah dikunci di DESIGN.md (2026-11-14). Halaman ini hanya referensi visual: jika ada yang berbeda, DESIGN.md yang berlaku. File SVG Kira ada di public/mascot/.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const I={
+ home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>',
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+ chart:'<path d="M3 3v18h18"/><path d="m7 15 4-5 4 3 5-6"/>',
+ map:'<path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/>',
+ msg:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+ check:'<path d="M20 6 9 17l-5-5"/>',
+ pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+ save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8"/>',
+ arrow:'<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+ book:'<path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/>',
+ code:'<path d="m8 7-5 5 5 5"/><path d="m16 7 5 5-5 5"/>',
+ grad:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/>'
+};
+const ic=(n,s=20)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
+
+/* ---------- Kira, versi datar (SVG orisinal dari bentuk maskot pengguna) ---------- */
+const K='#0E1A3D',A='#3BA4FF',AD='#1F7FE0',AL='#A9DCFF',G='#1B2B6B',Y='#FFC24B',P='#FF9DB5',M='#E8577A',LP='#C7CCE8';
+const arm=(sx,sy,qx,qy,hx,hy)=>`<path d="M${sx} ${sy} Q${qx} ${qy} ${hx} ${hy}" fill="none" stroke="${K}" stroke-width="15" stroke-linecap="round"/><path d="M${sx} ${sy} Q${qx} ${qy} ${hx} ${hy}" fill="none" stroke="${G}" stroke-width="10" stroke-linecap="round"/>`;
+const hand=(x,y)=>`<circle cx="${x}" cy="${y}" r="7.5" fill="${A}" stroke="${K}" stroke-width="2.5"/>`;
+const tile=(x,y,r,n)=>`<g transform="translate(${x} ${y}) rotate(${r} 11 11)"><rect x="2.5" y="2.5" width="22" height="22" rx="5" fill="${K}"/><rect width="22" height="22" rx="5" fill="#D6ECFF" stroke="${K}" stroke-width="2"/><g transform="translate(4.4 4.4) scale(.55)" fill="none" stroke="${K}" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">${I[n]}</g></g>`;
+const star=(x,y,s,c)=>`<path d="M${x} ${y-s} Q${x} ${y} ${x+s} ${y} Q${x} ${y} ${x} ${y+s} Q${x} ${y} ${x-s} ${y} Q${x} ${y} ${x} ${y-s} Z" fill="${c}" stroke="${K}" stroke-width="1.5" stroke-linejoin="round"/>`;
+const laptop=`<polygon points="104,100 136,96 138,124 106,128" fill="${LP}" stroke="${K}" stroke-width="2.5" stroke-linejoin="round"/><path d="M121 105 q5 5 0 12 q-5 -6 0 -12z" fill="#fff"/><polygon points="106,128 138,124 147,132 112,137" fill="#9AA3CC" stroke="${K}" stroke-width="2.5" stroke-linejoin="round"/>`;
+
+function kira(size=120,pose='tunjuk',label='Kira'){
+ const eyes={
+  open:`<ellipse cx="70" cy="80" rx="5" ry="6.5" fill="${K}"/><circle cx="71.8" cy="77.4" r="2" fill="#fff"/><ellipse cx="94" cy="80" rx="5" ry="6.5" fill="${K}"/><circle cx="95.8" cy="77.4" r="2" fill="#fff"/>`,
+  happy:`<path d="M64 82 Q70 74 76 82" fill="none" stroke="${K}" stroke-width="3" stroke-linecap="round"/><path d="M88 82 Q94 74 100 82" fill="none" stroke="${K}" stroke-width="3" stroke-linecap="round"/>`,
+  up:`<ellipse cx="71" cy="78" rx="5" ry="6.5" fill="${K}"/><circle cx="73" cy="75" r="2" fill="#fff"/><ellipse cx="95" cy="78" rx="5" ry="6.5" fill="${K}"/><circle cx="97" cy="75" r="2" fill="#fff"/>`};
+ const mouth={
+  open:`<path d="M75 89 Q82 100 89 89 Z" fill="${M}" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>`,
+  smile:`<path d="M76 90 Q82 96 88 90" fill="none" stroke="${K}" stroke-width="2.5" stroke-linecap="round"/>`,
+  o:`<ellipse cx="85" cy="93" rx="3" ry="2.6" fill="${M}" stroke="${K}" stroke-width="2"/>`};
+ const P_={
+  tunjuk:{e:'open',m:'open',arms:arm(62,110,44,108,26,100)+hand(26,100),lap:1,tiles:1,fx:''},
+  sapa:{e:'open',m:'open',arms:arm(62,110,42,104,32,82)+hand(32,82),lap:1,tiles:0,fx:`<g fill="none" stroke="${K}" stroke-width="2.5" stroke-linecap="round"><path d="M20 72 q-4 6 0 12"/><path d="M13 68 q-6 10 0 20"/></g>`},
+  pikir:{e:'up',m:'o',arms:arm(62,110,56,126,56,136)+hand(56,136)+arm(98,110,116,110,107,98)+hand(107,98),lap:0,tiles:0,fx:`<circle cx="122" cy="44" r="3" fill="#fff" stroke="${K}" stroke-width="2"/><circle cx="130" cy="33" r="4.5" fill="#fff" stroke="${K}" stroke-width="2"/><rect x="128" y="2" width="28" height="24" rx="10" fill="#fff" stroke="${K}" stroke-width="2.5"/><text x="142" y="20" text-anchor="middle" font-family="Bricolage Grotesque,Inter,sans-serif" font-weight="800" font-size="16" fill="${K}">?</text>`},
+  rayakan:{e:'happy',m:'open',arms:arm(62,110,40,100,30,74)+hand(30,74)+arm(98,110,120,100,130,74)+hand(130,74),lap:0,tiles:0,fx:star(16,46,7,Y)+star(146,48,7,Y)+star(22,124,5,A)+star(142,116,5,A)+`<rect x="34" y="18" width="7" height="4" rx="1" fill="${A}" transform="rotate(25 37 20)"/><rect x="118" y="14" width="7" height="4" rx="1" fill="${Y}" transform="rotate(-20 121 16)"/>`},
+  semangat:{e:'open',m:'smile',arms:arm(62,110,40,116,36,96)+hand(36,96),lap:1,tiles:0,fx:star(22,78,6,Y)+star(14,96,4,A)}
+ }[pose];
+ return `<svg width="${size}" height="${Math.round(size*170/160)}" viewBox="0 0 160 170" role="img" aria-label="${label}">
+ <path d="M14 140 Q80 118 146 140" fill="none" stroke="${AL}" stroke-width="3" stroke-linecap="round"/>
+ <ellipse cx="80" cy="165" rx="30" ry="3.5" fill="${K}" opacity=".15"/>
+ <ellipse cx="68" cy="153" rx="10" ry="8" fill="${A}" stroke="${K}" stroke-width="2.5"/><ellipse cx="92" cy="153" rx="10" ry="8" fill="${A}" stroke="${K}" stroke-width="2.5"/>
+ <path d="M60 102 Q52 126 48 148 Q80 154 112 148 Q108 126 100 102 Z" fill="${G}" stroke="${K}" stroke-width="2.5" stroke-linejoin="round"/>
+ <path d="M51 143 Q80 149 109 143" fill="none" stroke="${Y}" stroke-width="3"/>
+ <path d="M66 103 L80 120 L94 103 Z" fill="${A}"/><path d="M64 103 L80 122 L96 103" fill="none" stroke="${Y}" stroke-width="4" stroke-linejoin="round"/>
+ <circle cx="80" cy="124" r="6" fill="${Y}" stroke="${K}" stroke-width="2"/><path d="M80 119.5 Q83.5 123.5 80 128 Q76.5 123.5 80 119.5Z" fill="${AD}"/>
+ <path d="M146 140 Q80 162 14 140" fill="none" stroke="${AL}" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+ <ellipse cx="80" cy="70" rx="40" ry="36" fill="${A}" stroke="${K}" stroke-width="2.5"/>
+ <circle cx="41" cy="76" r="11" fill="${AD}" stroke="${K}" stroke-width="2.5"/><circle cx="41" cy="76" r="5.5" fill="${AL}" stroke="${K}" stroke-width="2"/>
+ <path d="M52 82 Q52 60 82 60 Q112 60 112 82 Q112 104 82 104 Q52 104 52 82 Z" fill="#fff" stroke="${K}" stroke-width="2"/>
+ <path d="M44 70 Q42 40 72 34 Q102 30 116 48 Q124 60 116 68 Q110 60 100 64 Q92 54 78 60 Q62 66 52 74 Q46 76 44 70 Z" fill="${A}" stroke="${K}" stroke-width="2.5" stroke-linejoin="round"/>
+ <path d="M58 50 Q74 41 96 43" fill="none" stroke="${AL}" stroke-width="4" stroke-linecap="round"/>
+ <circle cx="114" cy="60" r="9" fill="${A}" stroke="${K}" stroke-width="2.5"/><path d="M110 60 a4 4 0 1 0 4 -4" fill="none" stroke="${K}" stroke-width="2" stroke-linecap="round"/>
+ <path d="M58 40 Q80 50 104 40 L104 30 Q80 38 58 30 Z" fill="${K}"/>
+ <polygon points="30,30 82,14 132,28 80,44" fill="${G}" stroke="${K}" stroke-width="2.5" stroke-linejoin="round"/>
+ <path d="M84 22 Q86 6 100 2 Q92 12 96 24 Z" fill="${A}" stroke="${K}" stroke-width="2.5" stroke-linejoin="round"/>
+ <circle cx="81" cy="29" r="3" fill="${Y}" stroke="${K}" stroke-width="1.5"/>
+ <path d="M81 29 Q56 30 42 36 L40 48" fill="none" stroke="${Y}" stroke-width="2.5" stroke-linecap="round"/><path d="M36 47 h8 l2 12 h-12 z" fill="${Y}" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>
+ ${eyes[P_.e]}<ellipse cx="62" cy="91" rx="5" ry="3" fill="${P}"/><ellipse cx="102" cy="91" rx="5" ry="3" fill="${P}"/>${mouth[P_.m]}
+ ${P_.lap?arm(98,110,108,130,124,138):''}${P_.lap?laptop+hand(124,138):''}
+ ${P_.arms}
+ ${P_.tiles?tile(3,44,-8,'book')+tile(132,46,8,'code')+tile(135,72,-6,'grad'):''}
+ ${P_.fx}
+ </svg>`}
+
+const POSES=[
+ ['tunjuk','Menunjuk','Layar Hasil: mengarah ke skor dan gap prioritas'],
+ ['sapa','Menyapa','Layar Mulai, layar kosong, riwayat yang masih kosong'],
+ ['pikir','Berpikir','Loading: "Kira sedang membaca CV kamu…"'],
+ ['rayakan','Merayakan','Minggu roadmap selesai, skor wawancara naik'],
+ ['semangat','Menyemangati','Gap banyak, jawaban tidak dapat dinilai, error ramah']
+];
+document.getElementById('kira-main').innerHTML=kira(230,'tunjuk','Kira versi datar, pose menunjuk, dengan topi wisuda, laptop, dan ubin ikon');
+document.getElementById('poses').innerHTML=POSES.map(([k,n,u])=>`<div class="pose">${kira(120,k,'Kira pose '+n.toLowerCase())}<b>${n}</b><span>${u}</span></div>`).join('');
+
+/* ---------- Mockup ---------- */
+const AX=['Frontend','Backend','Tools & Git','Testing','Soft skill'],KAMU=[72,40,58,25,80],TARGET=[85,60,70,55,70];
+function radar(){const cx=120,cy=104,R=66,n=5,pt=(i,val)=>{const a=-Math.PI/2+i*2*Math.PI/n,r=R*val/100;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]};
+ const poly=vals=>vals.map((x,i)=>pt(i,x).map(q=>q.toFixed(1)).join(',')).join(' ');
+ let g='';[25,50,75,100].forEach(l=>g+=`<polygon points="${poly(Array(n).fill(l))}" fill="none" stroke="#CFD8EA"/>`);
+ for(let i=0;i<n;i++){const[x,y]=pt(i,100);g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#CFD8EA"/>`;
+  const[lx,ly]=pt(i,126);g+=`<text x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" font-size="10" text-anchor="middle" fill="#44507A">${AX[i]}</text>`}
+ g+=`<polygon points="${poly(TARGET)}" fill="none" stroke="#6B7699" stroke-width="2" stroke-dasharray="5 4"/>`;
+ g+=`<polygon points="${poly(KAMU)}" fill="#3BA4FF" fill-opacity=".55" stroke="#1E5BD8" stroke-width="2.5"/>`;
+ KAMU.forEach((x,i)=>{const[px,py]=pt(i,x);g+=`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="3.2" fill="#0E1A3D"/>`});
+ const label='Radar contoh. Skill kamu: '+AX.map((a,i)=>a+' '+KAMU[i]).join(', ')+'. Kebutuhan posisi: '+AX.map((a,i)=>a+' '+TARGET[i]).join(', ')+'.';
+ return `<svg viewBox="0 0 240 205" width="100%" role="img" aria-label="${label}">${g}</svg>
+ <div class="legend"><span><svg width="18" height="8"><rect x="0" y="1" width="18" height="6" rx="2" fill="#3BA4FF" stroke="#1E5BD8" stroke-width="1.5"/></svg>Skill kamu</span><span><svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="#6B7699" stroke-width="2" stroke-dasharray="4 3"/></svg>Kebutuhan posisi</span></div>`}
+const side=`<nav class="side" aria-label="Contoh sidebar"><div class="logo">C</div>${['home','file','chart','map','msg','clock'].map((n,i)=>`<div class="it${i===2?' on':''}">${ic(n)}</div>`).join('')}<div class="sp"></div><div class="it">${ic('user')}</div></nav>`;
+const nav=`<nav class="nav" aria-label="Contoh navigasi bawah">${['home','chart','msg','clock','user'].map((n,i)=>`<div class="it${i===0?' on':''}">${ic(n)}</div>`).join('')}</nav>`;
+const strengths=['HTML & CSS|Menengah','JavaScript|Menengah','Kerja tim|Mahir'].map(s=>{const[a,b]=s.split('|');return `<div class="row"><span class="ok">${ic('check',16)}</span><span class="nm">${a}<div class="meta">${b}</div></span><span class="ev">Bukti di CV ›</span></div>`}).join('');
+const gaps=`<div class="row"><span class="nm">React<div class="meta">Muncul di 21 dari 30 lowongan</div></span><span class="badge b-w">Wajib</span></div>
+ <div class="row"><span class="nm">Git & GitHub<div class="meta">Muncul di 14 dari 30 lowongan</div></span><span class="badge b-p">Penting</span></div>
+ <div class="row"><span class="nm">Unit testing<div class="meta">Muncul di 7 dari 30 lowongan</div></span><span class="badge b-n">Nilai tambah</span></div>`;
+const weeks=['Dasar React','Git & kolaborasi','Mini-proyek','Portofolio'];
+
+document.getElementById('desk').innerHTML=`<div class="m desk">${side}<div class="main">
+ <div class="top"><div><h4>Peta skill <span class="hl">Rani</span></h4><p class="sub">Web Developer · Magang · Semester akhir</p></div><button class="btn s" type="button">${ic('save',16)}Simpan</button></div>
+ <div class="grid3">
+  <div style="display:flex;flex-direction:column;gap:16px">
+   <div class="card score"><span class="tape" aria-hidden="true"></span><h5>Kecocokan</h5><div class="big">62</div><p class="note">dari 100 · alat refleksi, bukan penilaian resmi · berdasarkan 30 lowongan</p></div>
+   <div class="card" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:12px"><div class="bubble">Mulai dari React dulu, ya. Paling sering diminta.</div>${kira(112,'tunjuk','Kira menunjuk ke daftar gap')}</div>
+  </div>
+  <div class="card"><h5>Skill vs kebutuhan</h5>${radar()}</div>
+  <div style="display:flex;flex-direction:column;gap:16px">
+   <div class="card"><h5>Perlu ditingkatkan <span>urut prioritas</span></h5>${gaps}</div>
+   <div class="card"><h5>Kekuatan</h5>${strengths}</div>
+  </div>
+ </div>
+ <div class="cta"><span>Roadmap: ${weeks.map((w,i)=>`<b>M${i+1}</b> ${w}`).join(' · ')}</span><button class="btn p" type="button">Mulai wawancara ${ic('arrow',16)}</button></div>
+</div></div>`;
+
+document.getElementById('phone').innerHTML=`<div class="m ph">
+ <div class="ph-top"><span>Careerium</span><span class="badge" style="background:var(--gold)">1/3</span></div>
+ <div class="steps" aria-label="Langkah 1 dari 3"><span class="on">Tujuan</span><span>Profil</span><span>Hasil</span></div>
+ <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:4px"><p class="ph-h">Mau jadi <span class="hl">apa</span> di dunia TI?</p>${kira(92,'sapa','Kira menyapa')}</div>
+ <div class="ta">Aku semester 6 TI, mau magang jadi web developer tapi bingung skill apa yang masih kurang.<small>96/500</small></div>
+ <div class="chips"><span class="chip">Magang Data Analyst</span><span class="chip" style="background:var(--lilac)">Kerja di QA</span><span class="chip" style="background:var(--gold-s)">Pindah ke TI</span></div>
+ <div class="card" style="display:flex;flex-direction:column;gap:10px"><h5>Ini yang aku tangkap</h5><div class="chips">${['Magang','Web Developer','Semester akhir'].map(c=>`<span class="chip" style="background:#fff">${c} ${ic('pen',13)}</span>`).join('')}</div>
+  <div class="acts"><button class="btn p" type="button">Ya, lanjut</button><button class="btn s" type="button">Ubah</button></div></div>
+ ${nav}</div>`;
+
+/* ---------- Token & kontras ---------- */
+const SW=[['Latar','#F5F8FF'],['Kartu','#FFFFFF'],['Kartu redup','#E9F0FC'],['Tinta (teks, garis, bayangan, sidebar)','#0E1A3D'],['Teks sekunder','#44507A'],['Primary: tombol, ubin aktif, skor','#3BA4FF'],['Biru teks: link, kekuatan, garis chart','#1E5BD8'],['Primary lembut (chip)','#D6ECFF'],['Emas: sorotan, pita','#FFC24B'],['Emas lembut (chip)','#FFEFC7'],['Lilac (nilai tambah)','#E6DEFF'],['Gap','#9A4A06'],['Latar gap','#FFE8CC'],['Garis target chart','#6B7699'],['Error sistem saja','#C81E1E']];
+document.getElementById('sw').innerHTML=SW.map(([l,c])=>`<div class="sw"><i style="background:${c}"></i><span>${l}</span><code>${c}</code></div>`).join('');
+const CR=[['Tinta / latar',16.01,1],['Teks sekunder / kartu',7.85,1],['Tinta / biru langit',6.44,1],['Biru teks / kartu',5.93,1],['Tinta / emas',10.59,1],['Gap / latar gap',5.26,1],['Putih / gap (badge Wajib)',6.26,1],['Putih / sidebar',17.02,1],['Ubin aktif / sidebar (non-teks)',6.44,1],['Garis target / kartu (non-teks)',4.49,1],['Putih / biru langit: dilarang',2.64,0],['Teks sekunder / biru langit: dilarang',2.97,0]];
+document.getElementById('cr').innerHTML=CR.map(([l,c,ok])=>`<div class="cr${ok?'':' bad'}"><span>${l}</span><b>${c.toFixed(2)}:1 ${ok?'✓':'✗'}</b></div>`).join('');
+</script>
