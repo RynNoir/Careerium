@@ -69,6 +69,8 @@ npx tsx scripts/test-profile.ts                      # validasi bukti, atribut s
 npx tsx scripts/test-eksplorasi.ts                   # mode eksplorasi
 npx tsx scripts/test-guardrail.ts                    # 27 uji guardrail + uji bias (memakai kuota API)
 npx tsx scripts/test-demo-http.ts http://localhost:3000   # alur demo lewat HTTP + kuota sesi
+npx tsx scripts/cek-token.ts                         # sisa kuota Groq & status Gemini
+npx tsx scripts/test-llm-audit.ts                     # klasifikasi error AI & gagal cepat (tanpa kuota)
 ```
 
 Hasil uji guardrail & bias terakhir: `docs/hasil-uji-backend.md`.
