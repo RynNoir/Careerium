@@ -79,6 +79,7 @@ export async function understandIntent(text: string): Promise<Intent> {
   const data = text.replace(/<\/?teks_pengguna>/gi, ""); // cegah keluar dari pembatas
   const raw = await askJSON({
     label: "intent",
+    deterministic: true,
     schema: IntentLLM,
     instructions: INSTRUCTIONS,
     prompt: `<teks_pengguna>\n${data}\n</teks_pengguna>`,

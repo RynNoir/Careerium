@@ -14,6 +14,7 @@ export class LLMUnavailableError extends Error {
 
 type Provider = {
   name: string;
+  temp0?: boolean; // aman memakai temperature 0 (Gemini 3 disarankan memakai default)
   model: () => LanguageModel;
   providerOptions?: Parameters<typeof generateText>[0]["providerOptions"];
 };
@@ -34,12 +35,14 @@ function providers(): Provider[] {
     list.push({
       name: "groq",
       model: () => groq("openai/gpt-oss-120b"),
+      temp0: true,
       providerOptions: { groq: { reasoningEffort: "low" } },
     });
     // Cadangan kedua: limit token/menit Groq berlaku per model, jadi model lain menambah kapasitas.
     list.push({
       name: "groq-20b",
       model: () => groq("openai/gpt-oss-20b"),
+      temp0: true,
       providerOptions: { groq: { reasoningEffort: "low" } },
     });
   }
@@ -68,6 +71,7 @@ export async function askJSON<T>(opts: {
   timeoutMs?: number;
   label?: string; // untuk log, mis. "intent"
   check?: (out: T) => string | null; // aturan bisnis; pesan = gagal -> coba penyedia berikutnya
+  deterministic?: boolean; // ekstraksi/klasifikasi: temperature 0 bila penyedia mendukung
 }): Promise<T> {
   const list = providers();
   if (list.length === 0) {
@@ -87,6 +91,7 @@ export async function askJSON<T>(opts: {
           maxRetries: 0, // retry diatur di sini agar cepat pindah penyedia
           timeout: opts.timeoutMs ?? 20_000,
           providerOptions: p.providerOptions,
+          ...(opts.deterministic && p.temp0 ? { temperature: 0 } : {}),
         });
         const problem = opts.check?.(output);
         if (problem) throw new Error(`cek gagal: ${problem}`);

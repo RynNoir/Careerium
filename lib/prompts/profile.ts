@@ -2,6 +2,7 @@
 import { z } from "zod";
 import { askJSON } from "../llm";
 import { evidenceInText, normalizeForMatch } from "../evidence";
+import { lengkapiSkill } from "../skill-scan";
 import { JenisSkill, Profile, Tingkat } from "../schemas";
 
 const ProfileLLM = z.object({
@@ -25,7 +26,7 @@ Tugas:
 2. skills: setiap skill yang TERTULIS di CV.
    - nama: nama skill singkat dan baku (mis. "JavaScript", "React", "Figma", "Komunikasi").
    - jenis: teknis (bahasa, framework, konsep), tools (aplikasi/alat seperti Git, Figma, Excel), soft_skill.
-   - tingkat: dasar (hanya disebut, kursus, atau belajar mandiri), menengah (dipakai di proyek, tugas, magang, atau organisasi), mahir (dipakai berulang di beberapa proyek/pekerjaan, memimpin, atau pengalaman bertahun-tahun).
+   - tingkat: jika CV menulis tingkatnya sendiri (mis. "React (dasar)"), PAKAI itu. Jika tidak: dasar (hanya disebut di daftar skill, kursus, atau belajar mandiri), menengah (dipakai nyata di proyek, tugas, magang, atau organisasi), mahir (dipakai berulang di beberapa proyek/pekerjaan, memimpin, atau bertahun-tahun). Nilai hanya dari kalimat CV, tidak pernah dari identitas penulis.
    - bukti: kutipan PERSIS dari CV, salin kata per kata, 3–25 kata, yang menunjukkan skill itu. Jangan merangkum atau mengubah kata.
 3. proyek: proyek yang tertulis di CV. nama, deskripsi (1 kalimat dari isi CV), bukti (kutipan persis).
 
@@ -64,14 +65,25 @@ export function cleanProfile(raw: z.infer<typeof ProfileLLM>, cvText: string): P
 
 const MIN_CV_CHARS = 80; // terlalu pendek untuk CV: tolak tanpa memanggil LLM
 
+// Atribut yang tidak relevan untuk menilai skill dihapus sebelum ke LLM (lapisan kedua setelah redact.ts di klien).
+const ATRIBUT_SENSITIF =
+  /^\s*(jenis\s*kelamin|gender|sex|agama|religion|tempat[\s,/]*tanggal\s*lahir|tanggal\s*lahir|ttl|date\s*of\s*birth|usia|umur|age|status(\s*pernikahan)?|marital\s*status|suku|ras|nama(\s*lengkap)?|name|tinggi\s*badan|berat\s*badan|foto)\s*[:：].*$/gim;
+
+export function hapusAtributSensitif(cv: string): string {
+  return cv.replace(ATRIBUT_SENSITIF, "");
+}
+
 export async function extractProfile(cvText: string): Promise<Profile> {
   if (cvText.trim().length < MIN_CV_CHARS) return { cv_valid: false, skills: [], proyek: [] };
+  const bersih = hapusAtributSensitif(cvText);
   const raw = await askJSON({
     label: "profile",
     schema: ProfileLLM,
     instructions: INSTRUCTIONS,
-    prompt: `<cv>\n${cvText.replace(/<\/?cv>/gi, "")}\n</cv>`,
+    prompt: `<cv>\n${bersih.replace(/<\/?cv>/gi, "")}\n</cv>`,
     timeoutMs: 30_000,
+    deterministic: true,
   });
-  return cleanProfile(raw, cvText);
+  // LLM bisa melewatkan skill (terutama model cadangan); pemindai kamus melengkapi agar hasil konsisten.
+  return lengkapiSkill(cleanProfile(raw, cvText), bersih);
 }
