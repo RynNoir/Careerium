@@ -1,19 +1,45 @@
 "use client";
 
 import { Check } from "lucide-react";
-import type { Roadmap } from "@/lib/schemas";
+import type { AnalysisDetail, Roadmap } from "@/lib/schemas";
 
 export const roadmapKey = (minggu: number, i: number | "mp") => `${minggu}-${i}`;
+
+/**
+ * Roadmap tersimpan (per butir, urutan server: kegiatan lalu mini-proyek per minggu)
+ * → Roadmap biasa + peta kunci centang ke id butir + status selesai.
+ */
+export function dariTersimpan(saved: AnalysisDetail["roadmap"]) {
+  const roadmap: Roadmap = { minggu: [] };
+  const ids: Record<string, number> = {};
+  const done: Record<string, boolean> = {};
+  for (const w of saved) {
+    const kegiatan: string[] = [];
+    let mini = "";
+    for (const it of w.items) {
+      const key = it.jenis === "mini_proyek" ? roadmapKey(w.minggu, "mp") : roadmapKey(w.minggu, kegiatan.length);
+      if (it.jenis === "mini_proyek") mini = it.teks;
+      else kegiatan.push(it.teks);
+      ids[key] = it.id;
+      if (it.selesai) done[key] = true;
+    }
+    roadmap.minggu.push({ minggu: w.minggu, fokus: w.fokus, kegiatan: kegiatan.length ? kegiatan : ["-"], mini_proyek: mini });
+  }
+  return { roadmap, ids, done };
+}
 
 /** Roadmap 4 minggu dengan kotak centang. `done` dikendalikan pemanggil (state sesi / tersimpan). */
 export function RoadmapList({
   roadmap,
   done,
   onToggle,
+  sorot = [],
 }: {
   roadmap: Roadmap;
   done: Record<string, boolean>;
   onToggle: (key: string, value: boolean) => void;
+  /** minggu yang disorot (topik fokus ulang dari roadmap adaptif) */
+  sorot?: number[];
 }) {
   return (
     <div className="grid gap-4 md:grid-cols-2">
@@ -21,9 +47,16 @@ export function RoadmapList({
         const keys = [...w.kegiatan.map((_, i) => roadmapKey(w.minggu, i)), roadmapKey(w.minggu, "mp")];
         const selesai = keys.filter((k) => done[k]).length;
         return (
-          <section key={w.minggu} className="card flex flex-col gap-3" aria-labelledby={`minggu-${w.minggu}`}>
+          <section
+            key={w.minggu}
+            className={`card flex flex-col gap-3 ${sorot.includes(w.minggu) ? "bg-accent-soft" : ""}`}
+            aria-labelledby={`minggu-${w.minggu}`}
+          >
             <div className="flex items-center justify-between gap-2">
-              <span className="badge bg-accent text-[12px]">Minggu {w.minggu}</span>
+              <span className="flex flex-wrap gap-1.5">
+                <span className="badge bg-accent text-[12px]">Minggu {w.minggu}</span>
+                {sorot.includes(w.minggu) && <span className="badge bg-surface text-[12px]">Fokus ulang</span>}
+              </span>
               <span className="text-[13px] text-text-muted tabular-nums">
                 {selesai}/{keys.length} selesai
               </span>
@@ -38,7 +71,7 @@ export function RoadmapList({
                 </li>
               ))}
             </ul>
-            <div className="rounded-[10px] bg-surface-muted p-2">
+            <div className="rounded-btn bg-surface-muted p-2">
               <p className="label-caps px-1">Mini-proyek</p>
               <Centang label={w.mini_proyek} checked={!!done[keys.at(-1)!]} onChange={(v) => onToggle(keys.at(-1)!, v)} />
             </div>
