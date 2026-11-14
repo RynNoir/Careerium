@@ -67,7 +67,7 @@ const MIN_CV_CHARS = 80; // terlalu pendek untuk CV: tolak tanpa memanggil LLM
 
 // Atribut yang tidak relevan untuk menilai skill dihapus sebelum ke LLM (lapisan kedua setelah redact.ts di klien).
 const ATRIBUT_SENSITIF =
-  /^\s*(jenis\s*kelamin|gender|sex|agama|religion|tempat[\s,/]*tanggal\s*lahir|tanggal\s*lahir|ttl|date\s*of\s*birth|usia|umur|age|status(\s*pernikahan)?|marital\s*status|suku|ras|nama(\s*lengkap)?|name|tinggi\s*badan|berat\s*badan|foto)\s*[:：].*$/gim;
+  /^\s*(jenis\s*kelamin|gender|sex|agama|religion|tempat[\s,/]*tanggal\s*lahir|tanggal\s*lahir|ttl|date\s*of\s*birth|usia|umur|age|status(\s*pernikahan)?|marital\s*status|suku|ras|nama(\s*lengkap)?|name|tinggi\s*badan|berat\s*badan|foto|kampus|universitas|institusi|perguruan\s*tinggi|almamater|asal\s*(kampus|universitas|sekolah))\s*[:：].*$/gim;
 
 export function hapusAtributSensitif(cv: string): string {
   return cv.replace(ATRIBUT_SENSITIF, "");

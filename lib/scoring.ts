@@ -1,17 +1,28 @@
-// Perhitungan skor kecocokan & radar (PRD §8.3, direvisi). Deterministik: input sama -> hasil sama. BUKAN di prompt.
+// Agregasi skor kecocokan & radar (PRD §8.3, v3). Deterministik: nilai sama -> skor sama.
 //
-// Revisi: skor inti hanya dari kebutuhan "wajib" + "penting"; "nilai_tambah" menjadi bonus maks +10.
-// Alasan: dataset punya belasan skill nilai_tambah yang jarang dimiliki pemula, sehingga dengan rumus
-// lama skor kandidat layak pun tertahan di ~30 dan terasa menghakimi.
+// v3: AI asesor (lib/prompts/penilaian.ts) menilai tiap kebutuhan dengan rubrik 0–4 relatif terhadap tahap
+// pengguna; kode memvalidasi bukti lalu menjumlahkan di sini dengan bobot dari data lowongan.
+// Skor inti hanya dari "wajib" + "penting"; "nilai_tambah" menjadi bonus maks +10.
 import type { z } from "zod";
-import type { GapItem, Prioritas, Tingkat } from "./schemas";
+import type { GapItem, Prioritas, Tahap, Tingkat } from "./schemas";
 
 type PrioritasT = z.infer<typeof Prioritas>;
 type TingkatT = z.infer<typeof Tingkat>;
 
 export const BOBOT: Record<PrioritasT, number> = { wajib: 3, penting: 2, nilai_tambah: 1 };
-export const FAKTOR: Record<TingkatT, number> = { dasar: 0.5, menengah: 0.8, mahir: 1 };
 export const BONUS_MAKS = 10;
+
+// Rubrik 0–4: 0 tidak ada bukti, 1 hanya disebut, 2 latihan/kursus/proyek kecil, 3 dipakai nyata & cukup
+// untuk tahapnya, 4 menonjol. "Cukup untuk tahapnya" (3) sudah bernilai penuh: pemula tidak perlu mahir.
+export const KREDIT = [0, 0.4, 0.7, 1, 1] as const;
+export const kredit = (nilai: number) => KREDIT[Math.max(0, Math.min(4, Math.round(nilai)))];
+
+/** Cadangan tanpa AI: nilai rubrik dari tingkat skill. Semester awal/tengah: tingkat dasar sudah cukup. */
+export function nilaiDariTingkat(t: TingkatT, tahap?: z.infer<typeof Tahap> | null): number {
+  if (t === "mahir") return 4;
+  if (t === "menengah") return 3;
+  return tahap === "semester_awal" || tahap === "semester_tengah" ? 3 : 2;
+}
 const URUTAN: Record<PrioritasT, number> = { wajib: 0, penting: 1, nilai_tambah: 2 };
 
 export type Kebutuhan = {
@@ -31,12 +42,10 @@ export const SUMBU_UMUM: Sumbu[] = [
   { id: "soft_skill", label: "Soft skill" },
 ];
 
-/** tingkatDimiliki: nama kebutuhan -> tingkat skill pengguna (tidak ada = tidak dimiliki). */
-export function hitungSkor(kebutuhan: Kebutuhan[], tingkatDimiliki: Map<string, TingkatT>, sumbu: Sumbu[]) {
-  const nilai = (k: Kebutuhan) => {
-    const t = tingkatDimiliki.get(k.nama);
-    return BOBOT[k.prioritas] * (t ? FAKTOR[t] : 0);
-  };
+/** nilaiDimiliki: nama kebutuhan -> nilai rubrik 0–4 (tidak ada / 0 = belum dimiliki). */
+export function hitungSkor(kebutuhan: Kebutuhan[], nilaiDimiliki: Map<string, number>, sumbu: Sumbu[]) {
+  const dimiliki = (k: Kebutuhan) => (nilaiDimiliki.get(k.nama) ?? 0) > 0;
+  const nilai = (k: Kebutuhan) => BOBOT[k.prioritas] * kredit(nilaiDimiliki.get(k.nama) ?? 0);
   const jumlah = (ks: Kebutuhan[], f: (k: Kebutuhan) => number) => ks.reduce((s, k) => s + f(k), 0);
 
   const inti = kebutuhan.filter((k) => k.prioritas !== "nilai_tambah");
@@ -51,7 +60,7 @@ export function hitungSkor(kebutuhan: Kebutuhan[], tingkatDimiliki: Map<string, 
 
   const hitung = (p: PrioritasT) => {
     const ks = kebutuhan.filter((k) => k.prioritas === p);
-    return { terpenuhi: ks.filter((k) => tingkatDimiliki.has(k.nama)).length, total: ks.length };
+    return { terpenuhi: ks.filter(dimiliki).length, total: ks.length };
   };
   const rincian = { wajib: hitung("wajib"), penting: hitung("penting"), nilai_tambah: hitung("nilai_tambah") };
 
@@ -73,9 +82,9 @@ export function hitungSkor(kebutuhan: Kebutuhan[], tingkatDimiliki: Map<string, 
 }
 
 /** Kebutuhan yang belum dimiliki, urut prioritas lalu seberapa sering muncul di lowongan. */
-export function susunGap(kebutuhan: Kebutuhan[], tingkatDimiliki: Map<string, TingkatT>): GapItem[] {
+export function susunGap(kebutuhan: Kebutuhan[], nilaiDimiliki: Map<string, number>): GapItem[] {
   return kebutuhan
-    .filter((k) => !tingkatDimiliki.has(k.nama))
+    .filter((k) => !((nilaiDimiliki.get(k.nama) ?? 0) > 0))
     .sort((a, b) => URUTAN[a.prioritas] - URUTAN[b.prioritas] || b.jumlah_muncul - a.jumlah_muncul || a.nama.localeCompare(b.nama))
     .map((k) => ({ nama: k.nama, prioritas: k.prioritas, kategori_radar: k.kategori_radar, jumlah_muncul: k.jumlah_muncul }));
 }
