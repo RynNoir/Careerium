@@ -72,9 +72,9 @@ export function HasilView() {
           <div className="min-w-0 flex-1 lg:w-full">
             <ScoreTile gap={gap} />
           </div>
-          <div className="flex w-[42%] max-w-[180px] flex-col items-center gap-2 lg:w-full lg:max-w-none lg:rounded-[14px] lg:border-2 lg:border-ink lg:bg-surface lg:p-4 lg:shadow-[var(--shadow-card)]">
+          <div className="flex w-[42%] max-w-45 flex-col items-center gap-2 lg:w-full lg:max-w-none lg:rounded-card lg:border-2 lg:border-ink lg:bg-surface lg:p-4 lg:shadow-(--shadow-card)">
             <KiraBubble>{kiraHasil(gap)}</KiraBubble>
-            <Kira pose="menunjuk" size={72} className="lg:w-[96px]" />
+            <Kira pose="menunjuk" size={72} className="lg:w-24" />
           </div>
         </div>
 
@@ -92,11 +92,11 @@ export function HasilView() {
       </div>
 
       {/* Bar CTA: desktop bar emas; ponsel tombol menempel di atas navigasi bawah. */}
-      <div className="lg:flex lg:items-center lg:justify-between lg:gap-4 lg:rounded-[12px] lg:border-2 lg:border-ink lg:bg-accent lg:p-3 lg:pl-4 lg:shadow-[var(--shadow-card)]">
+      <div className="lg:flex lg:items-center lg:justify-between lg:gap-4 lg:rounded-xl lg:border-2 lg:border-ink lg:bg-accent lg:p-3 lg:pl-4 lg:shadow-(--shadow-card)">
         <p className="hidden font-semibold lg:block">
           {roadmap ? `Roadmap 4 minggu siap. Minggu 1: ${roadmap.minggu[0].fokus}` : "Latih jawabanmu untuk gap di atas."}
         </p>
-        <div className="fixed inset-x-4 bottom-[84px] z-10 lg:static">
+        <div className="fixed inset-x-4 bottom-21 z-10 lg:static">
           <Link href="/wawancara" className="btn btn-primary w-full lg:w-auto">
             Mulai latihan wawancara <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
@@ -160,7 +160,7 @@ function GapList({ gap }: { gap: GapResult }) {
           {items.map((g) => (
             <li key={g.nama} className="flex items-start gap-3 border-t-[1.5px] border-ink py-2.5 first:border-t-0">
               <div className="flex min-w-0 flex-1 flex-col">
-                <span className="font-semibold break-words">{g.nama}</span>
+                <span className="font-semibold wrap-break-word">{g.nama}</span>
                 <span className="text-[13px] text-text-muted">{sumberGap(g.jumlah_muncul, gap.sumberLowongan)}</span>
               </div>
               <PrioritasBadge prioritas={g.prioritas} />
@@ -194,7 +194,7 @@ function KekuatanList({ gap }: { gap: GapResult }) {
                 <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
                   <Check className="size-5 shrink-0 text-success" strokeWidth={3} aria-hidden="true" />
                   <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="font-semibold break-words">{k.nama}</span>
+                    <span className="font-semibold wrap-break-word">{k.nama}</span>
                     <span className="text-[13px] text-text-muted">Tingkat: {LABEL_TINGKAT[k.tingkat]}</span>
                   </span>
                   <span className="text-[13px] font-bold whitespace-nowrap text-primary-text">

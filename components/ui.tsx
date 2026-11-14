@@ -23,7 +23,7 @@ export function Kira({ pose, size = 72, className }: { pose: PoseKira; size?: nu
 /** Gelembung kalimat Kira. Teks wajib dari lib/pesan-template.ts. */
 export function KiraBubble({ children }: { children: React.ReactNode }) {
   return (
-    <p className="rounded-[12px] border-2 border-ink bg-surface px-3 py-2 text-[13px] font-semibold shadow-[var(--shadow-btn)]">
+    <p className="rounded-xl border-2 border-ink bg-surface px-3 py-2 text-[13px] font-semibold shadow-(--shadow-btn)">
       {children}
     </p>
   );

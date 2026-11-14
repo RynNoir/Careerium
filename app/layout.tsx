@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Suspense fallback={null}>
             <Sidebar />
           </Suspense>
-          <div className="mx-auto flex min-h-full w-full max-w-[1100px] flex-col px-4 pb-28 lg:pb-12 lg:pl-[108px] lg:pr-8 lg:max-w-[1240px]">
+          <div className="mx-auto flex min-h-full w-full max-w-275 flex-col px-4 pb-28 lg:pb-12 lg:pl-27 lg:pr-8 lg:max-w-310">
             <header className="flex items-center justify-between py-4 lg:py-6">
               <Link href="/mulai" className="font-display text-[19px] font-extrabold">
                 Careerium

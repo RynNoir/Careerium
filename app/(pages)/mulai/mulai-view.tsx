@@ -70,7 +70,7 @@ export function MulaiView() {
           </p>
         </div>
         {/* Maksimal satu Kira per layar: kartu penolakan punya Kira sendiri. */}
-        {!intent && <Kira pose="menyapa" size={80} className="shrink-0 lg:w-[110px]" />}
+        {!intent && <Kira pose="menyapa" size={80} className="shrink-0 lg:w-27.5" />}
       </div>
 
       {state.demo && (
@@ -101,7 +101,7 @@ export function MulaiView() {
             </label>
             <textarea
               id={inputId}
-              className="field min-h-[120px] resize-y"
+              className="field min-h-30 resize-y"
               value={text}
               maxLength={MAX_GOAL_CHARS}
               onChange={(e) => setText(e.target.value)}
@@ -148,7 +148,7 @@ export function MulaiView() {
         </form>
       ) : (
         <>
-          <div className="flex items-start justify-between gap-3 rounded-[10px] border-2 border-dashed border-border-soft px-3 py-2">
+          <div className="flex items-start justify-between gap-3 rounded-btn border-2 border-dashed border-border-soft px-3 py-2">
             <p className="text-[15px] text-text-muted">&ldquo;{state.goalText}&rdquo;</p>
             <button type="button" className="min-h-11 shrink-0 font-bold text-primary-text" onClick={ubahKalimat}>
               Ubah
@@ -327,14 +327,14 @@ function KartuKonfirmasi({
       </dl>
 
       {intent.posisi_preset === null && posisiOk && (
-        <div className="flex flex-col gap-2 rounded-[10px] bg-gap-soft p-3">
+        <div className="flex flex-col gap-2 rounded-btn bg-gap-soft p-3">
           <label htmlFor={`${id}-jd`} className="text-[14px] font-semibold">
             Deskripsi lowongan (opsional)
           </label>
           <p className="text-[13px]">{CATATAN_PERKIRAAN}</p>
           <textarea
             id={`${id}-jd`}
-            className="field min-h-[96px]"
+            className="field min-h-24"
             maxLength={MAX_JOB_DESC_CHARS}
             value={state.jobDescription}
             onChange={(e) => update({ jobDescription: e.target.value })}
@@ -380,7 +380,7 @@ function Baris({
           children
         ) : (
           <button type="button" className="chip self-start bg-surface" onClick={onEdit} aria-label={`Ubah ${label.toLowerCase()}: ${nilai}`}>
-            {nilai} <Pencil className="size-[13px]" aria-hidden="true" />
+            {nilai} <Pencil className="size-3.25" aria-hidden="true" />
           </button>
         )}
       </dd>
