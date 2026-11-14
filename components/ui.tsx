@@ -88,6 +88,32 @@ export function ErrorCard({ message, action }: { message: string; action?: React
   );
 }
 
+/** Keadaan kosong / penolakan: Kira + judul + kalimat template + aksi. */
+export function EmptyState({
+  pose = "menyapa",
+  judul,
+  children,
+  action,
+}: {
+  pose?: PoseKira;
+  judul: string;
+  children?: React.ReactNode;
+  action?: React.ReactNode;
+}) {
+  return (
+    <div className="card flex flex-col gap-3">
+      <div className="flex items-start gap-3">
+        <Kira pose={pose} size={64} className="shrink-0" />
+        <div className="flex flex-col gap-1">
+          <h2 className="text-[18px] leading-tight">{judul}</h2>
+          {children && <div className="text-text-muted">{children}</div>}
+        </div>
+      </div>
+      {action}
+    </div>
+  );
+}
+
 /** Skeleton + teks tahap + Kira berpikir (DESIGN.md §2.5). */
 export function StageLoading({ tahap, lines = 3 }: { tahap: string; lines?: number }) {
   return (

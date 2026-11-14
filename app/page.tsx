@@ -1,5 +1,2 @@
-import { redirect } from "next/navigation";
-
-export default function Home() {
-  redirect("/mulai");
-}
+// `/` langsung menampilkan layar Mulai (redirect() di halaman prerender memicu peringatan validasi Cache Components).
+export { default } from "./(pages)/mulai/page";
