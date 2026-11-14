@@ -3,7 +3,7 @@
 Pemilik: **Backend**. Hanya Backend yang mengedit file ini. Frontend boleh membaca.
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 
-**Sedang dikerjakan:** 8.1 & 9.2 selesai. Berikutnya: siaga bantu FE menyambung endpoint, lalu 9.1 roadmap adaptif
+**Sedang dikerjakan:** 9.1 selesai. Berikutnya: siaga bantu FE menyambung endpoint; persiapan demo (9.5)
 
 ---
 
@@ -26,6 +26,7 @@ Status: `belum` → `siap lokal` → `siap Vercel`.
 | POST `/api/roadmap` | 4 | `RoadmapRequest` → `Roadmap` | siap Vercel | Kirim juga `posisi` & `tujuan` agar roadmap sesuai konteks |
 | POST `/api/interview/questions` | 5 | `QuestionsRequest` → `QuestionsResponse` | siap Vercel | Selalu 5; `gap_asal` selalu nama dari daftar gap |
 | POST `/api/interview/grade` | 5 | `GradeRequest` → `Grade` | siap Vercel | Jawaban manipulatif / < 5 kata → `tidak_dapat_dinilai` tanpa LLM. Tidak ada fallback demo |
+| POST `/api/roadmap/adaptif` | 9.1 | `AdaptiveRoadmapRequest` → `AdaptiveRoadmap` | siap lokal | Kirim setelah sesi wawancara: `hasil_wawancara[{gap_asal, status, skor_total, skor}]` (dari Grade) + `roadmap_lama`. Tampilkan `catatan`; `diperbarui:false` = roadmap lama |
 | POST `/api/eksplorasi` | 9.2 | `ExplorationRequest` → `ExplorationResult` | siap lokal | Tanpa LLM. Pakai bila `intent.tujuan = eksplorasi` atau `posisi_preset` null: setelah profil, tampilkan 2–3 jalur teratas; jalur dipilih → set posisi/`posisi_preset` lalu panggil `/api/gap` |
 | POST/GET `/api/analyses` | 6 | `AnalysisCreate` → `{id}` (201); GET → `AnalysisSummary[]` | siap Vercel | Perlu login |
 | GET `/api/analyses/[id]` | 6 | `AnalysisDetail` | siap Vercel | Pemilik saja (lainnya 404). Roadmap per butir: `roadmap[].items[].id` |
@@ -85,7 +86,7 @@ Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang di
 - [x] 8.1 `scripts/test-guardrail.ts`: 27/27 lulus (18 intent: sesuai topik termasuk bahasa Inggris & Jawa, di luar topik, non-TI, 4 manipulasi, ambigu; 4 profil; 4 penilaian; 1 bias). Laporan untuk slide: `docs/hasil-uji-backend.md`. Perbaikan: hapus atribut sensitif di server, temperature 0 untuk ekstraksi, pemindai skill deterministik (`lib/skill-scan.ts`) → variasi skor CV yang sama 7 → 0–2, selisih antar-identitas 1
 
 ### Fitur 9 — Bonus & finalisasi
-- [ ] 9.1 (bonus) Roadmap adaptif — endpoint
+- [x] 9.1 (bonus) Roadmap adaptif — `POST /api/roadmap/adaptif`: analisis hasil wawancara oleh kode (topik skor < 60 / tidak dapat dinilai, rubrik terlemah), LLM menyusun ulang roadmap dengan topik terlemah di minggu 1–2 (dicek kode). Demo: AI gagal → roadmap lama + `diperbarui:false`. `scripts/test-roadmap-adaptif.ts` lulus
 - [x] 9.2 (bonus) Mode eksplorasi — `POST /api/eksplorasi` `{profile}` → peringkat 4 posisi berdata (skor, wajib terpenuhi, kekuatan, gap teratas, alasan template). Deterministik tanpa LLM (2–30 ms). `scripts/test-eksplorasi.ts` lulus
 - [ ] 9.4 (bonus) Tanya mentor — endpoint
 - [ ] 9.5 Feature freeze, deploy final, cek env, bangunkan DB
@@ -97,6 +98,7 @@ Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang di
 | Tanggal | Perubahan | Dampak ke FE |
 |---|---|---|
 | 2026-11-14 | Draf v0: Intent, Profile, GapResult, Roadmap, Question, Grade, AnalysisSummary | Mulai membuat mock dari tipe ini |
+| 2026-11-14 | Tambahan (non-breaking): `HasilWawancara`, `AdaptiveRoadmapRequest`, `AdaptiveRoadmap` (= Roadmap + `fokus_ulang`, `catatan`, `diperbarui`) | Tombol "Perbarui roadmap" di ringkasan wawancara |
 | 2026-11-14 | Tambahan (non-breaking): `ExplorationRequest`, `JalurKarier`, `ExplorationResult` untuk `/api/eksplorasi` | Layar pilihan jalur karier (mode eksplorasi) |
 | 2026-11-14 | **v2 radar per posisi (disepakati BE):** `KategoriRadar` enum → string (id dari dataset, mis. `frontend`, `backend`, `database`, `tools`, `profesional`); **`RadarPoint.label` baru** (teks sumbu, wajib ditampilkan FE); jumlah sumbu 4–5 tergantung posisi; `sumberLowongan.posisi_data?` & `diakses?` baru. `GapItem.nama` bisa panjang (nama kelompok, mis. "Framework frontend (React/Vue/...)") | FE: tampilkan `label` untuk sumbu radar (jangan memetakan enum lama); teks "berdasarkan {jumlah} lowongan {posisi_data}, diakses {diakses}"; potong/wrap nama gap yang panjang |
 | 2026-11-14 | Tambahan (non-breaking): `Question.pertanyaan` maks 500, `gap_asal` maks 100; `AnalysisCreate`, `AnalysisDetail`, `RoadmapItem`, `SavedRoadmapWeek`, `InterviewAttemptCreate` (`detail[]`, snake_case; beda dari PRD `skorTotal/skorDetail`), `InterviewAttempt` | Pakai tipe ini untuk layar Riwayat & simpan hasil |
