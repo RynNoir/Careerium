@@ -29,12 +29,22 @@ export const AI_MESSAGES = {
   bad_request: "Masukan tidak valid atau terlalu panjang. Periksa lagi lalu coba ulang.",
   too_many: "Kamu sudah banyak mencoba dalam satu jam terakhir. Istirahat sebentar, lalu coba lagi ya.",
   llm_unavailable: "Mentor AI sedang sibuk. Coba lagi sebentar lagi, atau pakai mode demo.",
+  llm_kuota: "Kuota mentor AI sedang penuh. Coba lagi {waktu}, atau pakai mode demo agar langsung lanjut.",
+  llm_lambat: "Mentor AI terlalu lama merespons. Coba lagi sebentar lagi, atau pakai mode demo.",
 } as const;
+export type AiErrorCode = keyof typeof AI_MESSAGES;
 
-const AI_STATUS: Record<keyof typeof AI_MESSAGES, number> = { bad_request: 400, too_many: 429, llm_unavailable: 503 };
+const AI_STATUS: Record<AiErrorCode, number> = { bad_request: 400, too_many: 429, llm_unavailable: 503, llm_kuota: 503, llm_lambat: 503 };
 
-export function aiError(code: keyof typeof AI_MESSAGES) {
-  return NextResponse.json({ error: AI_MESSAGES[code] }, { status: AI_STATUS[code] });
+const waktuTeks = (detik: number) => (detik < 60 ? `dalam ${detik} detik` : `dalam sekitar ${Math.ceil(detik / 60)} menit`);
+
+/** Respons error AI: { error, kode, cobaLagiDetik? } + header Retry-After. `error` tetap teks siap tampil. */
+export function aiError(code: AiErrorCode, cobaLagiDetik?: number) {
+  const error = AI_MESSAGES[code].replace("{waktu}", waktuTeks(cobaLagiDetik ?? 60));
+  return NextResponse.json(
+    { error, kode: code, ...(cobaLagiDetik ? { cobaLagiDetik } : {}) },
+    { status: AI_STATUS[code], headers: cobaLagiDetik ? { "Retry-After": String(cobaLagiDetik) } : undefined },
+  );
 }
 
 export const notFound = () =>
