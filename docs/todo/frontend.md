@@ -4,7 +4,7 @@ Pemilik: **Frontend**. Hanya Frontend yang mengedit file ini. Backend boleh memb
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md`.
 
-**Sedang dikerjakan:** _(tulis nomor langkah, contoh: 0.4)_
+**Sedang dikerjakan:** 1.4 (fondasi 0.4–0.6 selesai)
 
 ---
 
@@ -12,9 +12,9 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 
 ### Fitur 0 — Fondasi
 - [ ] 0.2 (bersama BE) Sepakati `lib/schemas.ts`: 5 kategori radar + mekanisme mode demo
-- [ ] 0.4 Kunci `DESIGN.md`
-- [ ] 0.5 shadcn/ui, token ke `globals.css`, font `next/font`, layout dasar
-- [ ] 0.6 Komponen dasar, `lib/api-client.ts`, `mocks/` persona Rani
+- [x] 0.4 Kunci `DESIGN.md` (Stiker Biru + Kira)
+- [x] 0.5 Token ke `globals.css`, font `next/font` (Inter + Bricolage), layout dasar (sidebar desktop, nav bawah ponsel). shadcn/ui tidak dipasang, lihat catatan
+- [x] 0.6 Komponen dasar (`components/ui.tsx`), `lib/api-client.ts`, store alur sessionStorage (`components/flow-provider.tsx`), data demo bertipe (`lib/demo-data.ts` dari `rani.json`, pengganti `mocks/`)
 
 > Selama `DESIGN.md` BELUM DIKUNCI: jangan membuat tampilan final. Struktur halaman, state, dan logika klien boleh dikerjakan.
 
@@ -60,9 +60,12 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 
 ## Butuh dari backend
 
-_(tulis permintaan di sini, lalu beri tahu BE lewat chat)_
+- (file bersama) `eslint.config.mjs`: tambahkan `.claude/**` ke `globalIgnores`. Saat ini `npm run lint` gagal karena skrip `.cjs` di `.claude/skills/` (bukan kode aplikasi). Sementara FE memakai `npx eslint app components lib`.
+- (file bersama) `package.json`: skrip `typecheck` sebaiknya `next typegen && tsc --noEmit`. Tanpa typegen, `RouteContext` di `app/api/analyses/**` tidak dikenal di clone baru.
 
 ## Catatan / blocker
 
 - Font Geist bawaan scaffold dilepas (gagal diunduh saat build, dan belum ada di `DESIGN.md`).
 - Cache Components aktif: halaman yang membaca data dinamis perlu dibungkus `<Suspense>`.
+- shadcn/ui sengaja tidak dipasang: `init` membuat `lib/utils.ts` (di luar kepemilikan FE) dan menambah dependensi, sedangkan gaya Stiker Biru menimpa hampir semua gaya bawaannya. Komponen ditulis sendiri dengan Tailwind + token; bisa ditambah per komponen nanti bila perlu.
+- Kelas token Tailwind: `bg-bg`, `bg-surface`, `border-ink` (= token `border`), `text-text`, `text-text-muted`, `bg-primary`, `text-primary-text`, `bg-gap-soft`, dst. Kelas komponen: `.btn .btn-primary .btn-secondary .card .chip .field .badge-* .skeleton .hl .display .label-caps`.
