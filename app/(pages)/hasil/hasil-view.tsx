@@ -7,6 +7,7 @@ import { useFlow } from "@/components/flow-provider";
 import { RadarCard } from "@/components/hasil/radar-card";
 import { RoadmapList } from "@/components/hasil/roadmap-list";
 import { ScoreTile } from "@/components/hasil/score-tile";
+import { SimpanHasil } from "@/components/hasil/simpan-hasil";
 import { EmptyState, ErrorCard, Kira, KiraBubble, PrioritasBadge, StageLoading, Steps } from "@/components/ui";
 import { api, ApiError } from "@/lib/api-client";
 import {
@@ -24,6 +25,18 @@ export function HasilView() {
   const { gap, roadmap, intent } = state;
   const [roadmapLoading, setRoadmapLoading] = useState(false);
   const [roadmapError, setRoadmapError] = useState<string | null>(null);
+  const [syncError, setSyncError] = useState<string | null>(null);
+
+  function toggle(key: string, v: boolean) {
+    update((s) => ({ roadmapDone: { ...s.roadmapDone, [key]: v } }));
+    const itemId = state.roadmapItemIds[key];
+    if (!state.savedId || !itemId) return;
+    setSyncError(null);
+    api.setRoadmapItem(state.savedId, itemId, v).catch((e) => {
+      update((s) => ({ roadmapDone: { ...s.roadmapDone, [key]: !v } }));
+      setSyncError(e instanceof ApiError ? e.message : pesanError(0));
+    });
+  }
 
   if (!gap || !intent?.tahap || !intent.posisi_target) {
     return (
@@ -48,7 +61,7 @@ export function HasilView() {
     setRoadmapError(null);
     setRoadmapLoading(true);
     try {
-      update({ roadmap: await api.roadmap({ gap: g, tahap, posisi, tujuan, demo: state.demo || undefined }), roadmapDone: {} });
+      update({ roadmap: await api.roadmap({ gap: g, tahap, posisi, tujuan, demo: state.demo || undefined }), roadmapDone: {}, roadmapItemIds: {} });
     } catch (e) {
       setRoadmapError(e instanceof ApiError ? e.message : pesanError(0));
     } finally {
@@ -65,6 +78,7 @@ export function HasilView() {
         </h1>
         <p className="text-text-muted">Peta skill dari CV-mu dibandingkan dengan kebutuhan posisi.</p>
       </div>
+      <SimpanHasil />
 
       {/* Ponsel: skor → perlu ditingkatkan → radar → kekuatan. Desktop: bento 3 kolom. */}
       <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start">
@@ -107,11 +121,21 @@ export function HasilView() {
         <h2 id="judul-roadmap" className="text-[20px]">
           Roadmap belajar 4 minggu
         </h2>
+        {state.roadmapAdaptif && (
+          <div className="flex flex-col gap-1 rounded-btn border-2 border-ink bg-accent-soft p-3">
+            <p className="font-semibold">{state.roadmapAdaptif.catatan}</p>
+            {state.savedId && state.roadmapAdaptif.diperbarui && Object.keys(state.roadmapItemIds).length === 0 && (
+              <p className="text-[13px] text-text-muted">Roadmap baru ini belum tersimpan, jadi centangnya hanya tercatat di browser ini.</p>
+            )}
+          </div>
+        )}
+        {syncError && <ErrorCard message={syncError} />}
         {roadmap ? (
           <RoadmapList
             roadmap={roadmap}
             done={state.roadmapDone}
-            onToggle={(key, v) => update((s) => ({ roadmapDone: { ...s.roadmapDone, [key]: v } }))}
+            onToggle={toggle}
+            sorot={state.roadmapAdaptif?.diperbarui && state.roadmapAdaptif.fokus_ulang.length ? [1, 2] : []}
           />
         ) : roadmapLoading ? (
           <StageLoading tahap={TAHAP_LOADING.roadmap} />

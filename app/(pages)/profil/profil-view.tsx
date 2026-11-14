@@ -4,13 +4,15 @@ import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, FileText, ShieldCheck, Upload } from "lucide-react";
-import { useFlow } from "@/components/flow-provider";
+import { RESET_ANALISIS, useFlow } from "@/components/flow-provider";
+import { JalurPicker } from "@/components/profil/jalur-picker";
 import { EmptyState, ErrorCard, StageLoading, Steps } from "@/components/ui";
 import { api, ApiError } from "@/lib/api-client";
 import { CV_DEMO_RANI } from "@/lib/demo-data";
 import { MAX_CV_CHARS } from "@/lib/limits";
-import { CV_TIDAK_VALID, PDF_GAGAL, PRIVASI_CV, TAHAP_LOADING, pesanError } from "@/lib/pesan-template";
+import { CV_TIDAK_VALID, EKSPLORASI, PDF_GAGAL, PRIVASI_CV, TAHAP_LOADING, pesanError } from "@/lib/pesan-template";
 import { redact } from "@/lib/redact";
+import type { JalurKarier, PosisiPreset, Profile } from "@/lib/schemas";
 
 type Tab = "tempel" | "pdf";
 type Stage = keyof typeof TAHAP_LOADING;
@@ -21,14 +23,14 @@ export function ProfilView() {
   const [tab, setTab] = useState<Tab>("tempel");
   // Teks CV hanya di state komponen ini, tidak pernah ke sessionStorage.
   const [cv, setCv] = useState("");
-  const [stage, setStage] = useState<Stage | null>(null);
+  const [stage, setStage] = useState<Stage | "eksplorasi" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pdfInfo, setPdfInfo] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const id = useId();
 
   const intent = state.intent;
-  if (!intent || !state.confirmed || !intent.tahap || !intent.posisi_target) {
+  if (!intent || !state.confirmed || !intent.tahap) {
     return (
       <div className="flex flex-col gap-5">
         <Steps aktif={2} />
@@ -40,12 +42,16 @@ export function ProfilView() {
             </Link>
           }
         >
-          Kira perlu tahu posisi dan tahapmu sebelum membaca CV.
+          Kira perlu tahu tujuan dan tahapmu sebelum membaca CV.
         </EmptyState>
       </div>
     );
   }
-  const { tahap, posisi_target: posisi, posisi_preset, tujuan } = intent;
+  const { tahap, posisi_target, posisi_preset, tujuan } = intent;
+  const posisi = posisi_target?.trim() ?? "";
+  // Mode eksplorasi: tujuan "eksplorasi" atau belum ada posisi → usulkan jalur setelah profil terbaca.
+  const modeEksplorasi = tujuan === "eksplorasi" || !posisi;
+  const demo = state.demo || undefined;
 
   async function bacaPdf(file: File) {
     setError(null);
@@ -63,9 +69,34 @@ export function ProfilView() {
     }
   }
 
+  const gagal = (e: unknown) => {
+    setStage(null);
+    setError(e instanceof ApiError ? e.message : pesanError(0));
+  };
+
+  /** profil → gap → roadmap → layar Hasil. */
+  async function lanjutGap(profile: Profile, pos: string, preset: PosisiPreset | null) {
+    setStage("gap");
+    const gap = await api.gap({
+      profile,
+      posisi: pos,
+      posisi_preset: preset,
+      tahap,
+      jobDescription: preset ? undefined : state.jobDescription.trim() || undefined,
+      demo,
+    });
+    update({ ...RESET_ANALISIS, profile, gap, jalur: null });
+    setStage("roadmap");
+    try {
+      update({ roadmap: await api.roadmap({ gap, tahap, posisi: pos, tujuan, demo }) });
+    } catch {
+      // Hasil tetap tampil; layar Hasil menyediakan tombol susun ulang roadmap.
+    }
+    router.push("/hasil");
+  }
+
   async function analisis() {
     setError(null);
-    const demo = state.demo || undefined;
     try {
       setStage("profil");
       const profile = await api.profile({ cvText: redact(cv).slice(0, MAX_CV_CHARS), demo });
@@ -74,31 +105,38 @@ export function ProfilView() {
         setError(CV_TIDAK_VALID);
         return;
       }
-      setStage("gap");
-      const gap = await api.gap({
-        profile,
-        posisi,
-        posisi_preset,
-        tahap,
-        jobDescription: state.jobDescription.trim() || undefined,
-        demo,
-      });
-      update({ profile, gap, roadmap: null, roadmapDone: {}, questions: null, answers: {}, savedId: null });
-      setStage("roadmap");
-      try {
-        const roadmap = await api.roadmap({ gap, tahap, posisi, tujuan, demo });
-        update({ roadmap });
-      } catch {
-        // Hasil tetap tampil; layar Hasil menyediakan tombol susun ulang roadmap.
+      if (modeEksplorasi) {
+        setStage("eksplorasi");
+        const { jalur } = await api.eksplorasi({ profile, demo });
+        update({ ...RESET_ANALISIS, profile, gap: null, jalur });
+        setStage(null);
+        return;
       }
-      router.push("/hasil");
+      await lanjutGap(profile, posisi, posisi_preset);
     } catch (e) {
-      setStage(null);
-      setError(e instanceof ApiError ? e.message : pesanError(0));
+      gagal(e);
+    }
+  }
+
+  async function pilihJalur(j: JalurKarier) {
+    if (!state.profile) return;
+    setError(null);
+    update((s) => ({ intent: s.intent && { ...s.intent, posisi_target: j.posisi, posisi_preset: j.posisi_preset } }));
+    try {
+      await lanjutGap(state.profile, j.posisi, j.posisi_preset);
+    } catch (e) {
+      gagal(e);
     }
   }
 
   if (stage) {
+    if (stage === "eksplorasi")
+      return (
+        <div className="flex flex-col gap-5">
+          <Steps aktif={2} />
+          <StageLoading tahap={EKSPLORASI.tahap} lines={4} />
+        </div>
+      );
     return (
       <div className="flex flex-col gap-5">
         <Steps aktif={2} />
@@ -118,6 +156,24 @@ export function ProfilView() {
     );
   }
 
+  // Usulan jalur menunggu dipilih (bertahan saat muat ulang).
+  if (state.jalur && state.profile && !state.gap) {
+    return (
+      <div className="flex flex-col gap-5">
+        <Steps aktif={2} />
+        <JalurPicker jalur={state.jalur} onPilih={pilihJalur} />
+        {error && <ErrorCard message={error} />}
+        <button
+          type="button"
+          className="min-h-11 self-start font-bold text-primary-text underline underline-offset-2"
+          onClick={() => update({ jalur: null, profile: null })}
+        >
+          Ganti CV
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <Steps aktif={2} />
@@ -126,9 +182,16 @@ export function ProfilView() {
           Tunjukkan <span className="hl">CV</span>-mu
         </h1>
         <p className="max-w-[65ch] text-text-muted">
-          Target: <strong className="text-text">{posisi}</strong>. Kira akan mencari skill beserta buktinya di CV-mu.
+          {modeEksplorasi ? (
+            <>Kira akan mencari skill beserta buktinya di CV-mu, lalu mengusulkan jalur TI yang paling cocok.</>
+          ) : (
+            <>
+              Target: <strong className="text-text">{posisi}</strong>. Kira akan mencari skill beserta buktinya di CV-mu.
+            </>
+          )}
         </p>
       </div>
+
 
       <div className="card flex flex-col gap-4">
         <div role="tablist" aria-label="Cara memasukkan CV" className="grid grid-cols-2 gap-2">

@@ -1,6 +1,10 @@
 // Satu pintu fetch ke API same-origin. Tipe dari lib/schemas.ts (type-only: zod tidak ikut ke bundle klien).
 import type { z } from "zod";
 import type {
+  AdaptiveRoadmap,
+  AdaptiveRoadmapRequest,
+  ExplorationRequest,
+  ExplorationResult,
   AnalysisCreate,
   AnalysisDetail,
   AnalysisSummary,
@@ -63,6 +67,8 @@ export const api = {
   roadmap: (b: In<typeof RoadmapRequest>) => post<Roadmap>("/api/roadmap", b),
   questions: (b: In<typeof QuestionsRequest>) => post<QuestionsResponse>("/api/interview/questions", b),
   grade: (b: In<typeof GradeRequest>) => post<Grade>("/api/interview/grade", b),
+  roadmapAdaptif: (b: In<typeof AdaptiveRoadmapRequest>) => post<AdaptiveRoadmap>("/api/roadmap/adaptif", b),
+  eksplorasi: (b: In<typeof ExplorationRequest>) => post<ExplorationResult>("/api/eksplorasi", b),
 
   // ---------- Akun ----------
   register: (b: { email: string; password: string }) =>

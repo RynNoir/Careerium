@@ -3,7 +3,9 @@ import { Bricolage_Grotesque, Inter } from "next/font/google";
 import { Suspense } from "react";
 import Link from "next/link";
 import { BottomNav, Sidebar } from "@/components/app-nav";
+import { AuthProvider } from "@/components/auth-provider";
 import { FlowProvider } from "@/components/flow-provider";
+import { HeaderAkun } from "@/components/header-akun";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
@@ -25,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="id" className={`${inter.variable} ${bricolage.variable} h-full antialiased`}>
       <body className="min-h-full">
+        <AuthProvider>
         <FlowProvider>
           <Suspense fallback={null}>
             <Sidebar />
@@ -34,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/mulai" className="font-display text-[19px] font-extrabold">
                 Careerium
               </Link>
+              <HeaderAkun />
             </header>
             <main className="flex flex-1 flex-col">{children}</main>
           </div>
@@ -41,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <BottomNav />
           </Suspense>
         </FlowProvider>
+        </AuthProvider>
       </body>
     </html>
   );

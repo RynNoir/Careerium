@@ -3,12 +3,14 @@
 // Store alur (mode tamu): satu context, disimpan ke sessionStorage agar muat ulang tidak menghapus hasil.
 // Teks CV mentah TIDAK disimpan di sini (CLAUDE.md §5).
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import type { GapResult, Grade, Intent, Profile, Question, Roadmap } from "@/lib/schemas";
+import type { AdaptiveRoadmap, GapResult, Grade, Intent, JalurKarier, Profile, Question, Roadmap } from "@/lib/schemas";
 
 export type Tahap = NonNullable<Intent["tahap"]>;
 export type Tujuan = Intent["tujuan"];
 
-export type JawabanWawancara = { jawaban: string; grade: Grade };
+/** `sebelumnya` = skor_total percobaan sebelumnya untuk pertanyaan yang sama (setelah "Coba jawab ulang"). */
+export type JawabanWawancara = { jawaban: string; grade: Grade; sebelumnya?: number };
+export type CatatanAdaptif = Pick<AdaptiveRoadmap, "catatan" | "fokus_ulang" | "diperbarui">;
 
 export type FlowState = {
   demo: boolean;
@@ -25,8 +27,18 @@ export type FlowState = {
   questions: Question[] | null;
   /** jawaban terakhir per indeks pertanyaan */
   answers: Record<number, JawabanWawancara>;
+  /** pertanyaan yang sedang tampil (0–4); 5 = ringkasan */
+  wawancaraIdx: number;
+  /** true setelah sesi wawancara ini dikirim ke riwayat (login) */
+  attemptSaved: boolean;
+  /** hasil roadmap adaptif terakhir (catatan ditampilkan di atas roadmap) */
+  roadmapAdaptif: CatatanAdaptif | null;
+  /** usulan jalur karier (mode eksplorasi) sebelum pengguna memilih */
+  jalur: JalurKarier[] | null;
   /** id analisis tersimpan (login) */
   savedId: string | null;
+  /** kunci centang roadmap → id butir di server (untuk PATCH) */
+  roadmapItemIds: Record<string, number>;
 };
 
 const INITIAL: FlowState = {
@@ -41,7 +53,25 @@ const INITIAL: FlowState = {
   roadmapDone: {},
   questions: null,
   answers: {},
+  wawancaraIdx: 0,
+  attemptSaved: false,
+  roadmapAdaptif: null,
+  jalur: null,
   savedId: null,
+  roadmapItemIds: {},
+};
+
+/** Field turunan yang harus dikosongkan saat analisis baru dibuat (profil/gap baru). */
+export const RESET_ANALISIS: Partial<FlowState> = {
+  roadmap: null,
+  roadmapDone: {},
+  questions: null,
+  answers: {},
+  wawancaraIdx: 0,
+  attemptSaved: false,
+  roadmapAdaptif: null,
+  savedId: null,
+  roadmapItemIds: {},
 };
 
 const KEY = "careerium:alur:v1";
