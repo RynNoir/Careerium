@@ -26,8 +26,13 @@ async function main() {
   const gap = await analyzeGap({ profile, posisi: "Web Developer", posisi_preset: "web_frontend" });
   console.log(`       skor ${gap.skor}, kekuatan: ${gap.kekuatan.map((k) => k.nama).join(", ")}`);
   console.log(`       gap: ${gap.gap.map((g) => `${g.nama}(${g.prioritas})`).join(", ")}`);
-  cek("gap: skor 0–100, ada gap & kekuatan, radar 5 sumbu", gap.skor >= 0 && gap.skor <= 100 && gap.gap.length > 0 && gap.kekuatan.length > 0 && gap.radar.length === 5);
+  cek("gap: skor 0–100, ada gap & kekuatan, radar >= 4 sumbu", gap.skor >= 0 && gap.skor <= 100 && gap.gap.length > 0 && gap.kekuatan.length > 0 && gap.radar.length >= 4);
   cek("gap: label sumber jujur (tanpa data lowongan -> perkiraanUmum)", gap.sumberLowongan.perkiraanUmum === true || gap.sumberLowongan.jumlah > 0, gap.sumberLowongan);
+
+  cek("gap web: memakai data lowongan asli (bukan perkiraan)", !gap.sumberLowongan.perkiraanUmum && gap.sumberLowongan.jumlah > 0, gap.sumberLowongan);
+  cek("radar memakai label sumbu dari data", gap.radar.every((p) => p.label.length > 0), gap.radar);
+  const gapQa = await analyzeGap({ profile, posisi: "QA Tester", posisi_preset: "qa" });
+  cek("posisi tanpa data (QA) -> perkiraanUmum + sumbu umum", gapQa.sumberLowongan.perkiraanUmum && gapQa.radar.length === 5, gapQa.sumberLowongan);
 
   const roadmap = await makeRoadmap({ gap, tahap: "semester_akhir", posisi: "Web Developer", tujuan: "magang" });
   const teks = JSON.stringify(roadmap);
@@ -35,7 +40,9 @@ async function main() {
   cek("roadmap: tanpa URL", !/https?:\/\/|www\./i.test(teks));
   const wajib = gap.gap.filter((g) => g.prioritas === "wajib").map((g) => g.nama.toLowerCase());
   const awal = JSON.stringify(roadmap.minggu.slice(0, 2)).toLowerCase();
-  cek("roadmap: gap wajib muncul di minggu 1–2", wajib.length === 0 || wajib.some((w) => awal.includes(w)), { wajib });
+  // Nama kelompok dari dataset panjang ("Bahasa/framework backend (PHP/Laravel, Node.js, ...)"): cukup salah satu kata kuncinya.
+  const kataKunci = (n: string) => n.split(/[s/,()&]+/).filter((t) => t.length >= 3 && !["dll.", "dan", "mis."].includes(t));
+  cek("roadmap: gap wajib muncul di minggu 1–2", wajib.length === 0 || wajib.some((w) => kataKunci(w).some((t) => awal.includes(t))), { wajib });
   roadmap.minggu.forEach((w) => console.log(`       M${w.minggu}: ${w.fokus}`));
 
   const { questions } = await makeQuestions(gap, "Web Developer");

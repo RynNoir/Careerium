@@ -10,8 +10,8 @@
     "posisi_target": "Web Developer",
     "posisi_preset": "web_frontend",
     "tahap": "semester_akhir",
-    "kekhawatiran": "skill apa yang masih kurang",
-    "kepercayaan": 0.99
+    "kekhawatiran": "bingung skill apa yang masih kurang",
+    "kepercayaan": 0.98
   },
   "profile": {
     "cv_valid": true,
@@ -63,17 +63,23 @@
         "jenis": "teknis",
         "tingkat": "dasar",
         "bukti": "Kursus online dasar-dasar SQL (2025)"
+      },
+      {
+        "nama": "Kerja tim",
+        "jenis": "soft_skill",
+        "tingkat": "menengah",
+        "bukti": "Berkoordinasi dengan 5 anggota tim untuk jadwal publikasi mingguan"
       }
     ],
     "proyek": [
       {
         "nama": "Website Katalog UMKM",
-        "deskripsi": "Membangun halaman katalog produk dengan React dan Tailwind CSS, mengambil data produk dari REST API sederhana.",
+        "deskripsi": "Membangun halaman katalog produk dengan React dan Tailwind CSS",
         "bukti": "Membangun halaman katalog produk dengan React dan Tailwind CSS"
       },
       {
         "nama": "Aplikasi To-Do List",
-        "deskripsi": "Membuat aplikasi to-do list dengan JavaScript dan localStorage.",
+        "deskripsi": "Membuat aplikasi to-do list dengan JavaScript dan localStorage",
         "bukti": "Membuat aplikasi to-do list dengan JavaScript dan localStorage"
       }
     ]
@@ -81,12 +87,17 @@
   "gap": {
     "kekuatan": [
       {
-        "nama": "HTML",
+        "nama": "CSS",
         "tingkat": "menengah",
         "bukti": "Mengelola website himpunan menggunakan HTML, CSS, dan JavaScript"
       },
       {
-        "nama": "CSS",
+        "nama": "Git",
+        "tingkat": "menengah",
+        "bukti": "Kode disimpan dan dikelola dengan Git dan GitHub"
+      },
+      {
+        "nama": "HTML",
         "tingkat": "menengah",
         "bukti": "Mengelola website himpunan menggunakan HTML, CSS, dan JavaScript"
       },
@@ -96,175 +107,249 @@
         "bukti": "Mengelola website himpunan menggunakan HTML, CSS, dan JavaScript"
       },
       {
-        "nama": "Git",
+        "nama": "Kerja tim",
         "tingkat": "menengah",
-        "bukti": "Kode disimpan dan dikelola dengan Git dan GitHub"
+        "bukti": "Berkoordinasi dengan 5 anggota tim untuk jadwal publikasi mingguan"
+      },
+      {
+        "nama": "Portofolio (2 proyek)",
+        "tingkat": "menengah",
+        "bukti": "Membangun halaman katalog produk dengan React dan Tailwind CSS"
+      },
+      {
+        "nama": "Tailwind CSS",
+        "tingkat": "menengah",
+        "bukti": "Membangun halaman katalog produk dengan React dan Tailwind CSS"
+      },
+      {
+        "nama": "Figma",
+        "tingkat": "dasar",
+        "bukti": "Figma (dasar)"
+      },
+      {
+        "nama": "React",
+        "tingkat": "dasar",
+        "bukti": "Membangun halaman katalog produk dengan React dan Tailwind CSS"
+      },
+      {
+        "nama": "SQL",
+        "tingkat": "dasar",
+        "bukti": "Kursus online dasar-dasar SQL (2025)"
       }
     ],
     "gap": [
       {
-        "nama": "Proyek Portofolio",
+        "nama": "REST API (membuat/integrasi)",
         "prioritas": "wajib",
-        "kategori_radar": "proyek_praktik",
-        "jumlah_muncul": 0
+        "kategori_radar": "backend",
+        "jumlah_muncul": 25
       },
       {
-        "nama": "Responsive Design",
+        "nama": "Bahasa/framework backend (PHP/Laravel, Node.js, Python, Go, dll.)",
         "prioritas": "wajib",
-        "kategori_radar": "teknologi_inti",
-        "jumlah_muncul": 0
+        "kategori_radar": "backend",
+        "jumlah_muncul": 23
       },
       {
-        "nama": "Problem Solving",
+        "nama": "Problem solving & debugging",
         "prioritas": "penting",
-        "kategori_radar": "soft_skill",
-        "jumlah_muncul": 0
+        "kategori_radar": "profesional",
+        "jumlah_muncul": 11
       },
       {
-        "nama": "Teamwork",
-        "prioritas": "penting",
-        "kategori_radar": "soft_skill",
-        "jumlah_muncul": 0
-      },
-      {
-        "nama": "VS Code",
-        "prioritas": "penting",
-        "kategori_radar": "tools_workflow",
-        "jumlah_muncul": 0
-      },
-      {
-        "nama": "Basic SEO",
+        "nama": "Deployment, server Linux, CI/CD",
         "prioritas": "nilai_tambah",
-        "kategori_radar": "teknologi_inti",
-        "jumlah_muncul": 0
+        "kategori_radar": "tools",
+        "jumlah_muncul": 10
       },
       {
-        "nama": "Bootstrap",
+        "nama": "Kemauan belajar",
         "prioritas": "nilai_tambah",
-        "kategori_radar": "teknologi_inti",
-        "jumlah_muncul": 0
+        "kategori_radar": "profesional",
+        "jumlah_muncul": 10
       },
       {
-        "nama": "Code Review",
+        "nama": "TypeScript",
         "prioritas": "nilai_tambah",
-        "kategori_radar": "tools_workflow",
-        "jumlah_muncul": 0
+        "kategori_radar": "frontend",
+        "jumlah_muncul": 8
+      },
+      {
+        "nama": "Desain web responsif",
+        "prioritas": "nilai_tambah",
+        "kategori_radar": "frontend",
+        "jumlah_muncul": 7
+      },
+      {
+        "nama": "Docker",
+        "prioritas": "nilai_tambah",
+        "kategori_radar": "tools",
+        "jumlah_muncul": 6
+      },
+      {
+        "nama": "Autentikasi & keamanan web (JWT, secure coding)",
+        "prioritas": "nilai_tambah",
+        "kategori_radar": "backend",
+        "jumlah_muncul": 5
+      },
+      {
+        "nama": "Database NoSQL (MongoDB/Redis)",
+        "prioritas": "nilai_tambah",
+        "kategori_radar": "database",
+        "jumlah_muncul": 5
+      },
+      {
+        "nama": "Memakai AI coding tools (ChatGPT, Copilot, Cursor)",
+        "prioritas": "nilai_tambah",
+        "kategori_radar": "tools",
+        "jumlah_muncul": 5
+      },
+      {
+        "nama": "Bahasa Inggris (dokumentasi teknis)",
+        "prioritas": "nilai_tambah",
+        "kategori_radar": "profesional",
+        "jumlah_muncul": 3
+      },
+      {
+        "nama": "jQuery",
+        "prioritas": "nilai_tambah",
+        "kategori_radar": "frontend",
+        "jumlah_muncul": 3
+      },
+      {
+        "nama": "Software testing (unit/automated)",
+        "prioritas": "nilai_tambah",
+        "kategori_radar": "tools",
+        "jumlah_muncul": 3
+      },
+      {
+        "nama": "Konsep MVC / OOP",
+        "prioritas": "nilai_tambah",
+        "kategori_radar": "backend",
+        "jumlah_muncul": 2
       }
     ],
-    "skor": 36,
+    "skor": 31,
     "radar": [
       {
-        "kategori": "fondasi",
-        "kamu": 80,
+        "kategori": "frontend",
+        "label": "Frontend",
+        "kamu": 50,
         "target": 100
       },
       {
-        "kategori": "teknologi_inti",
+        "kategori": "backend",
+        "label": "Backend",
         "kamu": 0,
-        "target": 56
-      },
-      {
-        "kategori": "tools_workflow",
-        "kamu": 27,
         "target": 67
       },
       {
-        "kategori": "proyek_praktik",
-        "kamu": 0,
-        "target": 33
+        "kategori": "database",
+        "label": "Database",
+        "kamu": 8,
+        "target": 25
       },
       {
-        "kategori": "soft_skill",
-        "kamu": 0,
-        "target": 44
+        "kategori": "tools",
+        "label": "Tools & DevOps",
+        "kamu": 20,
+        "target": 58
+      },
+      {
+        "kategori": "profesional",
+        "label": "Profesional",
+        "kamu": 13,
+        "target": 50
       }
     ],
     "sumberLowongan": {
-      "jumlah": 0,
-      "perkiraanUmum": true
+      "jumlah": 35,
+      "perkiraanUmum": false,
+      "posisi_data": "Web Developer",
+      "diakses": "2026-11-13"
     }
   },
   "roadmap": {
     "minggu": [
       {
         "minggu": 1,
-        "fokus": "Membangun Proyek Portofolio Dasar",
+        "fokus": "Membangun REST API dasar",
         "kegiatan": [
-          "Buat repository Git baru dan inisialisasi README",
-          "Rancang struktur HTML dasar untuk landing page",
-          "Terapkan styling CSS dasar untuk tampilan bersih",
-          "Implementasikan media queries untuk responsivitas awal"
+          "Pelajari konsep REST dan HTTP methods",
+          "Implementasi endpoint CRUD dengan Node.js & Express",
+          "Uji API menggunakan Postman atau Insomnia",
+          "Dokumentasikan API di README"
         ],
-        "mini_proyek": "Halaman landing sederhana portofolio dengan bagian header, about, dan kontak."
+        "mini_proyek": "Buat API sederhana untuk manajemen tugas (CRUD) dan sertakan dokumentasi."
       },
       {
         "minggu": 2,
-        "fokus": "Responsive Design & Git Kolaborasi",
+        "fokus": "Integrasi Frontend dengan API",
         "kegiatan": [
-          "Refaktor layout memakai Flexbox atau Grid",
-          "Tambahkan breakpoints untuk perangkat mobile, tablet, desktop",
-          "Gunakan branching Git, buat pull request, dan merge dengan review",
-          "Perbarui README dengan instruksi menjalankan proyek"
+          "Hubungkan React (atau Next.js) dengan API yang dibuat",
+          "Kelola state data menggunakan React hooks",
+          "Terapkan error handling dan loading states",
+          "Push kode ke repo Git dengan commit terstruktur"
         ],
-        "mini_proyek": "Versi responsif penuh dari landing page yang di‑commit secara terstruktur."
+        "mini_proyek": "Kembangkan UI daftar tugas yang menampilkan, menambah, mengedit, dan menghapus data via API."
       },
       {
         "minggu": 3,
-        "fokus": "Problem Solving & Teamwork",
+        "fokus": "Problem solving & debugging",
         "kegiatan": [
-          "Selesaikan 3 tantangan algoritma JavaScript sederhana",
-          "Bangun form kontak dengan validasi input JavaScript",
-          "Lakukan pair code review menggunakan fitur VS Code Live Share",
-          "Pasang ekstensi VS Code untuk linting dan format otomatis"
+          "Latihan debugging di Chrome DevTools dan Node console",
+          "Selidiki dan perbaiki bug pada integrasi API‑frontend",
+          "Kerjakan soal algoritma sederhana (array, object)",
+          "Gunakan teknik break‑point dan logging terstruktur"
         ],
-        "mini_proyek": "Form kontak yang memvalidasi data dan menampilkan pesan sukses setelah submit."
+        "mini_proyek": "Perbaiki tiga bug yang disengaja pada proyek tugas sebelumnya dan tulis laporan singkat."
       },
       {
         "minggu": 4,
-        "fokus": "Nilai Tambah & Penyempurnaan Portofolio",
+        "fokus": "Penambahan nilai tambah & deploy",
         "kegiatan": [
-          "Tambahkan meta tag SEO dasar dan sitemap sederhana",
-          "Integrasikan komponen Bootstrap seperti carousel untuk showcase proyek",
-          "Lakukan review akhir kode, perbaiki duplikasi & komentar",
-          "Deploy situs ke layanan hosting gratis dan cek performa"
+          "Deploy API ke layanan gratis (mis. Render, Railway)",
+          "Setup CI sederhana dengan GitHub Actions untuk testing",
+          "Tambahkan autentikasi JWT pada endpoint protected",
+          "Optimasi UI responsif menggunakan Tailwind"
         ],
-        "mini_proyek": "Portofolio lengkap yang sudah di‑deploy dengan SEO, carousel, dan dokumentasi penggunaan."
+        "mini_proyek": "Deploy aplikasi tugas lengkap (frontend + backend) ke web, sertakan autentikasi dan responsif design."
       }
     ]
   },
   "questions": {
     "questions": [
       {
-        "pertanyaan": "Bagaimana kamu memastikan tampilan situs tetap nyaman di berbagai ukuran layar tanpa menulis kode lengkap?",
+        "pertanyaan": "Jelaskan cara kamu mengonsumsi sebuah endpoint REST API menggunakan fetch di JavaScript.",
         "jenis": "teknis",
-        "gap_asal": "Responsive Design"
+        "gap_asal": "REST API (membuat/integrasi)"
       },
       {
-        "pertanyaan": "Jelaskan cara kamu menggunakan komponen grid Bootstrap untuk membuat layout tiga kolom yang responsif.",
+        "pertanyaan": "Bagaimana kamu memilih antara PHP/Laravel atau Node.js untuk membangun backend sederhana, dan apa pertimbangan utama kamu?",
         "jenis": "teknis",
-        "gap_asal": "Bootstrap"
+        "gap_asal": "Bahasa/framework backend (PHP/Laravel, Node.js, Python, Go, dll.)"
       },
       {
-        "pertanyaan": "Apa langkah-langkah dasar yang kamu lakukan agar halaman web mudah diindeks mesin pencari?",
+        "pertanyaan": "Saat halaman tidak menampilkan data yang diharapkan, langkah-langkah debugging apa yang kamu lakukan?",
         "jenis": "teknis",
-        "gap_asal": "Basic SEO"
+        "gap_asal": "Problem solving & debugging"
       },
       {
-        "pertanyaan": "Ceritakan contoh ketika kamu bekerja dalam tim dan harus menyelesaikan konflik kode, gunakan pola STAR.",
+        "pertanyaan": "Ceritakan pengalaman ketika kamu harus belajar teknologi baru dalam waktu singkat untuk menyelesaikan proyek.",
         "jenis": "perilaku",
-        "gap_asal": "Teamwork"
+        "gap_asal": "Kemauan belajar"
       },
       {
-        "pertanyaan": "Berikan contoh situasi dimana kamu menemukan bug sulit, bagaimana kamu memecahkannya, dan apa hasilnya?",
+        "pertanyaan": "Bagaimana kamu berkolaborasi dengan desainer untuk memastikan tampilan web responsif di berbagai perangkat?",
         "jenis": "perilaku",
-        "gap_asal": "Problem Solving"
+        "gap_asal": "Desain web responsif"
       }
     ]
   },
   "contoh_jawaban": [
     {
-      "pertanyaan": "Bagaimana kamu memastikan tampilan situs tetap nyaman di berbagai ukuran layar tanpa menulis kode lengkap?",
-      "jawaban": "Situasi: Saat mengelola website himpunan, saya ingin tampilan tetap rapi di desktop, tablet, dan mobile. Tugas: Karena belum menguasai framework CSS lengkap, saya pakai teknik CSS fleksibel seperti % width, media queries sederhana, dan utility Tailwind (misalnya `md:` dan `lg:`). Aksi: Saya mendesain elemen utama dengan grid fleksibel, menguji di Chrome DevTools untuk berbagai breakpoint, lalu menyesuaikan margin serta font‑size. Hasil: Situs tetap nyaman dilihat di semua ukuran layar tanpa menulis kode CSS yang sangat panjang, dan feedback pengunjung meningkat.",
+      "pertanyaan": "Jelaskan cara kamu mengonsumsi sebuah endpoint REST API menggunakan fetch di JavaScript.",
+      "jawaban": "Situasi: Dalam proyek Website Katalog UMKM, kami harus menampilkan data produk dari REST API. Tugas saya adalah mengambil data tersebut menggunakan fetch. Aksi: Saya menulis fungsi async yang memanggil fetch('https://api.example.com/products'), lalu mem‑parsing response dengan .json() dan menangani error dengan try‑catch. Hasil: Data berhasil ditampilkan di halaman React, sehingga pengguna dapat melihat katalog secara real‑time. Pelajaran: Saya belajar pentingnya penanganan error dan loading state.",
       "grade": {
         "relevan": true,
         "skor": {
@@ -280,16 +365,16 @@
           "result": true
         },
         "saran": [
-          "Sertakan contoh kode singkat untuk media query agar penilaian lebih konkret.",
-          "Jelaskan bagaimana kamu mengatasi masalah layout yang kompleks, bukan hanya grid sederhana."
+          "Sertakan contoh kode lengkap termasuk pengecekan status response.",
+          "Jelaskan cara mengatur loading state di UI secara singkat."
         ],
         "status": "dinilai",
         "skor_total": 81
       }
     },
     {
-      "pertanyaan": "Jelaskan cara kamu menggunakan komponen grid Bootstrap untuk membuat layout tiga kolom yang responsif.",
-      "jawaban": "Situasi: Dalam proyek website katalog UMKM, kami harus menampilkan tiga kolom produk yang tetap rapi di layar lebar namun menumpuk di layar kecil. Tugas: Saya belum pernah pakai Bootstrap secara intensif, jadi saya pelajari dokumentasinya dan coba komponen grid. Aksi: Saya menambahkan kelas `container`, `row`, dan tiga `col-md-4` pada masing‑masing kartu produk, lalu menambahkan `col-12` untuk breakpoint kecil. Hasil: Layout tiga kolom responsif terbentuk otomatis, memudahkan tim menambahkan item tanpa mengubah struktur HTML.",
+      "pertanyaan": "Bagaimana kamu memilih antara PHP/Laravel atau Node.js untuk membangun backend sederhana, dan apa pertimbangan utama kamu?",
+      "jawaban": "Situasi: Saat memilih stack backend untuk sebuah prototipe aplikasi internal, tim memperdebatkan antara PHP/Laravel dan Node.js. Tugas saya membantu keputusan. Aksi: Saya membandingkan faktor-faktor seperti kecepatan pengembangan (Node.js dengan JavaScript sudah saya kuasai), ekosistem paket, serta kebutuhan skalabilitas. Hasil: Kami memutuskan menggunakan Node.js karena dapat dipakai bersama front‑end React dan mempercepat integrasi. Pertimbangan utama saya adalah kesesuaian bahasa dengan tim dan kemudahan deployment.",
       "grade": {
         "relevan": true,
         "skor": {
@@ -305,21 +390,21 @@
           "result": true
         },
         "saran": [
-          "Sertakan contoh kode lengkap agar pembaca mudah meniru.",
-          "Jelaskan bagaimana breakpoint lain (mis. col-sm-6) dapat mengubah tampilan di tablet."
+          "Berikan contoh perbandingan performa atau biaya hosting antara Laravel dan Node.js.",
+          "Sertakan pertimbangan keamanan atau dukungan komunitas untuk memperkaya analisis."
         ],
         "status": "dinilai",
         "skor_total": 69
       }
     },
     {
-      "pertanyaan": "Apa langkah-langkah dasar yang kamu lakukan agar halaman web mudah diindeks mesin pencari?",
-      "jawaban": "Situasi: Saat mengerjakan website himpunan, saya ingin halaman mudah di‑index oleh Google. Tugas: Saya belum banyak praktik SEO, jadi saya belajar dasar‑dasarnya lewat artikel dan kursus singkat. Aksi: Saya memastikan penggunaan tag heading berurutan (`h1` untuk judul, `h2` untuk sub‑judul), menambahkan meta description, mengoptimalkan gambar dengan `alt` teks, serta membuat URL bersih. Hasil: Setelah dipublikasikan, halaman muncul di hasil pencarian untuk kata kunci kampus, meningkatkan kunjungan organik.",
+      "pertanyaan": "Saat halaman tidak menampilkan data yang diharapkan, langkah-langkah debugging apa yang kamu lakukan?",
+      "jawaban": "Situasi: Pada proyek To‑Do List, halaman tidak menampilkan tugas yang baru ditambahkan. Tugas saya menemukan penyebabnya. Aksi: Saya memeriksa console untuk error, mengecek apakah data tersimpan di localStorage, men‑debug fungsi render dengan breakpoint, dan memastikan fetch atau update state dipanggil setelah penyimpanan. Hasil: Ternyata ada typo pada key localStorage, setelah diperbaiki data muncul dengan benar. Dari situ saya belajar pentingnya validasi data dan inspeksi log.",
       "grade": {
         "relevan": true,
         "skor": {
-          "kejelasan": 5,
-          "relevansi": 4,
+          "kejelasan": 4,
+          "relevansi": 5,
           "kedalaman": 4,
           "struktur": 4
         },
@@ -330,15 +415,42 @@
           "result": true
         },
         "saran": [
-          "Berikan contoh ukuran konkret, seperti persentase peningkatan traffic."
+          "Berikan contoh kode atau log yang ditemukan.",
+          "Jelaskan lebih detail langkah 'memeriksa console' dengan contoh pesan error.",
+          "Cantumkan apa yang diupdate pada state, misalnya setState atau dispatch."
         ],
         "status": "dinilai",
         "skor_total": 81
       }
     },
     {
-      "pertanyaan": "Ceritakan contoh ketika kamu bekerja dalam tim dan harus menyelesaikan konflik kode, gunakan pola STAR.",
-      "jawaban": "Situasi: Di divisi media Himpunan, kami mengalami konflik ketika dua anggota memperbarui file CSS yang sama secara bersamaan, menyebabkan tampilan halaman rusak. Tugas: Saya ditunjuk menjadi mediator dan penyelesai konflik kode. Aksi: Saya mengumpulkan perubahan masing‑masing melalui Git, mengidentifikasi bagian yang bentrok, lalu mengadakan meeting singkat untuk membahas standar penamaan kelas dan alur review pull‑request. Kami menyepakati konvensi BEM dan menambahkan review sebelum merge. Hasil: Konflik kode berkurang drastis, workflow menjadi lebih terstruktur, dan tampilan situs kembali stabil.",
+      "pertanyaan": "Ceritakan pengalaman ketika kamu harus belajar teknologi baru dalam waktu singkat untuk menyelesaikan proyek.",
+      "jawaban": "Situasi: Di Himpunan Mahasiswa Informatika, saya ditugaskan mengelola website dan harus menambahkan fitur chart interaktif dalam seminggu. Tugas: Saya belum familiar dengan library chart di JavaScript. Aksi: Saya mengikuti tutorial cepat di YouTube, membaca dokumentasi Chart.js, dan bereksperimen di sandbox. Hasil: Saya berhasil mengintegrasikan chart yang menampilkan statistik anggota, selesai tepat waktu. Saya belajar cara belajar mandiri dan memprioritaskan fitur utama dulu.",
+      "grade": {
+        "relevan": true,
+        "skor": {
+          "kejelasan": 4,
+          "relevansi": 5,
+          "kedalaman": 4,
+          "struktur": 5
+        },
+        "star": {
+          "situation": true,
+          "task": true,
+          "action": true,
+          "result": true
+        },
+        "saran": [
+          "Sebutkan secara singkat library yang dipilih untuk memperjelas konteks.",
+          "Gunakan contoh kode singkat untuk menunjukkan eksperimen yang kamu lakukan."
+        ],
+        "status": "dinilai",
+        "skor_total": 88
+      }
+    },
+    {
+      "pertanyaan": "Bagaimana kamu berkolaborasi dengan desainer untuk memastikan tampilan web responsif di berbagai perangkat?",
+      "jawaban": "Situasi: Saat mengerjakan website katalog UMKM, desainer memberikan mockup responsif di Figma. Tugas saya memastikan tampilan sesuai di semua perangkat. Aksi: Saya berkoordinasi lewat Slack, meminta spesifikasi breakpoint, lalu menggunakan Tailwind CSS utility classes serta media queries untuk menyesuaikan layout. Saya juga melakukan testing di Chrome DevTools dengan mode perangkat. Hasil: Website tampil konsisten di desktop, tablet, dan mobile, dan desainer puas dengan hasil akhir.",
       "grade": {
         "relevan": true,
         "skor": {
@@ -354,36 +466,10 @@
           "result": true
         },
         "saran": [
-          "Berikan contoh konkret kode yang terlibat agar lebih teknis.",
-          "Sertakan contoh standar BEM yang dipakai."
+          "Pastikan selalu update versi Tailwind agar kompatibel dengan browser terbaru."
         ],
         "status": "dinilai",
         "skor_total": 100
-      }
-    },
-    {
-      "pertanyaan": "Berikan contoh situasi dimana kamu menemukan bug sulit, bagaimana kamu memecahkannya, dan apa hasilnya?",
-      "jawaban": "Situasi: Saat mengembangkan aplikasi To‑Do List, saya menemukan bug dimana data tidak tersimpan setelah refresh, walaupun `localStorage` dipanggil. Tugas: Menemukan penyebabnya dan memperbaiki. Aksi: Saya menelusuri console log, menambahkan breakpoint, dan menemukan bahwa saya menimpa `localStorage` dengan string kosong setiap kali fungsi inisialisasi dipanggil. Saya memperbaiki logika dengan memeriksa keberadaan data sebelum menimpa, serta menulis fungsi `loadTasks` terpisah. Hasil: Data to‑do tetap persisten setelah reload, dan aplikasi menjadi lebih stabil bagi pengguna.",
-      "grade": {
-        "relevan": true,
-        "skor": {
-          "kejelasan": 5,
-          "relevansi": 5,
-          "kedalaman": 4,
-          "struktur": 5
-        },
-        "star": {
-          "situation": true,
-          "task": true,
-          "action": true,
-          "result": true
-        },
-        "saran": [
-          "Sertakan angka atau metrik yang menunjukkan perbaikan, misalnya waktu muat berkurang.",
-          "Jelaskan tantangan spesifik yang kamu hadapi saat debugging untuk menambah kedalaman."
-        ],
-        "status": "dinilai",
-        "skor_total": 94
       }
     }
   ]
