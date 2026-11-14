@@ -24,6 +24,22 @@ export function authError(code: keyof typeof AUTH_MESSAGES) {
   return NextResponse.json({ error: AUTH_MESSAGES[code] }, { status: STATUS[code] });
 }
 
+// Pesan untuk endpoint AI (template tetap, bukan teks LLM).
+export const AI_MESSAGES = {
+  bad_request: "Masukan tidak valid atau terlalu panjang. Periksa lagi lalu coba ulang.",
+  too_many: "Kamu sudah banyak mencoba dalam satu jam terakhir. Istirahat sebentar, lalu coba lagi ya.",
+  llm_unavailable: "Mentor AI sedang sibuk. Coba lagi sebentar lagi, atau pakai mode demo.",
+} as const;
+
+const AI_STATUS: Record<keyof typeof AI_MESSAGES, number> = { bad_request: 400, too_many: 429, llm_unavailable: 503 };
+
+export function aiError(code: keyof typeof AI_MESSAGES) {
+  return NextResponse.json({ error: AI_MESSAGES[code] }, { status: AI_STATUS[code] });
+}
+
+export const notFound = () =>
+  NextResponse.json({ error: "Data tidak ditemukan. Mungkin sudah dihapus." }, { status: 404 });
+
 export async function readJson(req: Request): Promise<unknown> {
   return req.json().catch(() => null);
 }

@@ -51,3 +51,10 @@ CREATE TABLE IF NOT EXISTS interview_attempts (
   created_at        INTEGER NOT NULL,
   UNIQUE (analysis_id, percobaan_ke)
 );
+
+-- Kuota endpoint AI. key = "s:<id sesi tamu>" | "u:<user id>" | "ip:<hash IP>". Tanpa data pribadi.
+CREATE TABLE IF NOT EXISTS llm_usage (
+  key           TEXT PRIMARY KEY,
+  calls         INTEGER NOT NULL,
+  window_start  INTEGER NOT NULL
+);
