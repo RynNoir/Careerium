@@ -4,7 +4,7 @@ Pemilik: **Frontend**. Hanya Frontend yang mengedit file ini. Backend boleh memb
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md`.
 
-**Sedang dikerjakan:** 1.4 (fondasi 0.4–0.6 selesai)
+**Sedang dikerjakan:** 5.3 (alur Mulai → Hasil selesai, teruji demo + LLM asli)
 
 ---
 
@@ -19,20 +19,20 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 > Selama `DESIGN.md` BELUM DIKUNCI: jangan membuat tampilan final. Struktur halaman, state, dan logika klien boleh dikerjakan.
 
 ### Fitur 1 — Pemahaman tujuan (tunggu serah terima `/api/intent`)
-- [ ] 1.4 Layar Mulai
-- [ ] 1.5 Kartu konfirmasi, pertanyaan lanjutan, pesan penolakan template (`lib/pesan-template.ts`)
+- [x] 1.4 Layar Mulai (`/` dan `/mulai`)
+- [x] 1.5 Kartu konfirmasi (tujuan/posisi/tahap bisa diedit, tahap null dipaksa pilih, posisi di luar preset → kolom deskripsi lowongan), pertanyaan lanjutan, pesan penolakan template. Teruji LLM asli: di_luar_topik, upaya_manipulasi, karier_non_ti
 
 ### Fitur 2 — Profil (tunggu serah terima `/api/profile`)
-- [ ] 2.3 Layar Profil: tempel teks + unggah PDF (`lib/pdf.ts`)
-- [ ] 2.4 `lib/redact.ts` + sambung `/api/profile`
+- [x] 2.3 Layar Profil: tempel teks + unggah PDF (`lib/pdf.ts`). **Unggah PDF belum diuji dengan file PDF asli**
+- [x] 2.4 `lib/redact.ts` (email, telepon, tautan profil, nama, alamat, TTL) + sambung `/api/profile`. Teruji: body request berisi placeholder, teks CV tidak masuk sessionStorage
 
 ### Fitur 3 — Hasil (tunggu serah terima `/api/gap`)
-- [ ] 3.4 Cincin skor + radar chart
-- [ ] 3.5 Daftar Kekuatan (bukti) + Perlu ditingkatkan (sumber, prioritas)
+- [x] 3.4 Ubin skor (pengganti cincin, sesuai DESIGN.md) + radar chart (sumbu dari `label`)
+- [x] 3.5 Daftar Kekuatan (bukti) + Perlu ditingkatkan (sumber, prioritas); ringkas 5 teratas + "Lihat semua"
 
 ### Fitur 4 — Roadmap (tunggu serah terima `/api/roadmap`)
-- [ ] 4.2 Roadmap 4 minggu + kotak centang
-- [ ] 4.3 Loading bertahap + tombol menempel "Mulai latihan wawancara"
+- [x] 4.2 Roadmap 4 minggu + kotak centang (state sesi; simpan ke server menunggu 6.4)
+- [x] 4.3 Loading bertahap + tombol menempel "Mulai latihan wawancara"; roadmap gagal → tombol susun ulang
 
 ### Fitur 5 — Wawancara (tunggu serah terima `/api/interview/*`)
 - [ ] 5.3 Layar Wawancara (n/5, gelembung chat, input menempel)
@@ -43,8 +43,8 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 - [ ] 6.4 Simpan hasil, centang tersimpan, layar Riwayat + grafik, perbandingan percobaan
 
 ### Fitur 7 — Mode tamu & demo (tunggu serah terima mode demo)
-- [ ] 7.3 Mode tamu (data sesi di browser)
-- [ ] 7.4 Tombol "Coba mode demo"
+- [x] 7.3 Mode tamu (data sesi di browser) — teruji: centang roadmap bertahan setelah muat ulang
+- [x] 7.4 Tombol "Coba mode demo" + "Isi CV contoh Rani" (tombol contoh jawaban wawancara menyusul di 5.3)
 
 ### Fitur 8 — Penguatan
 - [ ] 8.2 Status loading/kosong/error, uji 360 px, aksesibilitas, audit desain
