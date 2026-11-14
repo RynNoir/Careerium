@@ -1,24 +1,249 @@
 @import "tailwindcss";
 
+/* Token dari DESIGN.md §3 (Stiker Biru). Komponen memakai kelas Tailwind dari @theme, bukan hex langsung. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f5f8ff;
+  --surface: #ffffff;
+  --surface-muted: #e9f0fc;
+  --border: #0e1a3d;
+  --text: #0e1a3d;
+  --text-muted: #44507a;
+  --primary: #3ba4ff;
+  --primary-fg: #0e1a3d;
+  --primary-soft: #d6ecff;
+  --primary-text: #1e5bd8;
+  --gap: #9a4a06;
+  --gap-soft: #ffe8cc;
+  --success: #1e5bd8;
+  --error: #c81e1e;
+  --chart-user: #1e5bd8;
+  --chart-target: #6b7699;
+  --accent: #ffc24b;
+  --accent-soft: #ffefc7;
+  --lilac: #e6deff;
+  --sidebar: #0e1a3d;
+  --sidebar-fg: #ffffff;
+  --border-soft: #cfd8ea;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-ink: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-text: var(--primary-text);
+  --color-gap: var(--gap);
+  --color-gap-soft: var(--gap-soft);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-chart-user: var(--chart-user);
+  --color-chart-target: var(--chart-target);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-lilac: var(--lilac);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-fg: var(--sidebar-fg);
+  --color-border-soft: var(--border-soft);
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-inter), system-ui, sans-serif;
+
+  --radius-card: 14px;
+  --radius-btn: 10px;
+  --radius-chip: 8px;
+
+  --shadow-card: 4px 4px 0 var(--border);
+  --shadow-btn: 3px 3px 0 var(--border);
+  --shadow-btn-hover: 5px 5px 0 var(--border);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    background: var(--bg);
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 3px solid var(--primary-text);
+    outline-offset: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Judul layar (DESIGN.md §4) */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  @media (min-width: 1024px) {
+    .display {
+      font-size: 32px;
+    }
+  }
+
+  /* Sorotan stabilo emas: hanya satu kata per judul */
+  .hl {
+    background: linear-gradient(transparent 55%, var(--accent) 55%);
+    padding: 0 2px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-card);
+    padding: 16px;
+    min-width: 0;
+  }
+
+  /* Tombol stiker: ditekan = geser 3px dan bayangan hilang */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 10px 18px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow-btn);
+    color: var(--text);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.2;
+    text-align: center;
+    cursor: pointer;
+    transition:
+      transform 140ms var(--ease),
+      box-shadow 140ms var(--ease);
+  }
+  .btn:active:not(:disabled) {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--border);
+  }
+  @media (hover: hover) {
+    .btn:hover:not(:disabled) {
+      box-shadow: var(--shadow-btn-hover);
+    }
+  }
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: var(--primary-fg);
+  }
+  .btn-secondary {
+    background: var(--surface);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 6px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--primary-soft);
+  }
+
+  .field {
+    width: 100%;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow-btn);
+    padding: 10px 12px;
+    color: var(--text);
+    font-size: 16px;
+  }
+  .field::placeholder {
+    color: var(--text-muted);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.4;
+  }
+  .badge-wajib {
+    background: var(--gap);
+    color: #ffffff;
+  }
+  .badge-penting {
+    background: var(--gap-soft);
+    color: var(--gap);
+  }
+  .badge-nilai {
+    background: var(--lilac);
+    color: var(--text);
+  }
+
+  .label-caps {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .skeleton {
+    background: var(--surface-muted);
+    border: 1.5px solid var(--border-soft);
+    border-radius: 10px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .skeleton {
+      animation: pulse-soft 1.4s var(--ease) infinite;
+    }
+  }
+}
+
+@keyframes pulse-soft {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
