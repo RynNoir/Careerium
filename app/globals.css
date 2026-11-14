@@ -260,3 +260,25 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Ekspor PDF (dialog cetak): warna token ikut tercetak, tanpa bayangan, kartu tidak terpotong */
+@media print {
+  @page {
+    margin: 12mm;
+  }
+  html,
+  body {
+    background: #ffffff;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .card,
+  .btn,
+  .field {
+    box-shadow: none;
+  }
+  .card,
+  li {
+    break-inside: avoid;
+  }
+}
