@@ -1,0 +1,27 @@
+// Kerangka bersama semua endpoint AI: validasi -> kuota -> handler -> pesan template / data demo.
+import { NextResponse } from "next/server";
+import type { z } from "zod";
+import { aiError, readJson } from "./http";
+import { LLMUnavailableError } from "./llm";
+import { consumeAiQuota } from "./quota";
+
+export function aiRoute<S extends z.ZodType<{ demo?: boolean }>, R>(
+  schema: S,
+  handler: (body: z.infer<S>) => Promise<R>,
+  demoFallback?: (body: z.infer<S>) => R | null,
+) {
+  return async function POST(req: Request): Promise<Response> {
+    const parsed = schema.safeParse(await readJson(req));
+    if (!parsed.success) return aiError("bad_request");
+    const body = parsed.data;
+    const demo = body.demo && demoFallback ? demoFallback(body) : null;
+
+    if (!(await consumeAiQuota())) return demo ? NextResponse.json(demo) : aiError("too_many");
+    try {
+      return NextResponse.json(await handler(body));
+    } catch (err) {
+      if (!(err instanceof LLMUnavailableError)) console.error("[ai-route]", err);
+      return demo ? NextResponse.json(demo) : aiError("llm_unavailable");
+    }
+  };
+}
