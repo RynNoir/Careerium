@@ -9,4 +9,5 @@ export const POST = aiRoute(
   GradeRequest,
   (body) => gradeAnswer(body.question, body.answer),
   (body) => demoGrade(body.question.pertanyaan, body.answer),
+  (body) => demoGrade(body.question.pertanyaan, body.answer), // contoh jawaban Rani: nilai tersimpan, selalu sama
 );
