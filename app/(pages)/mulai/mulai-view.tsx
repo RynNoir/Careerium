@@ -9,6 +9,7 @@ import { api, ApiError } from "@/lib/api-client";
 import { demoRani } from "@/lib/demo-data";
 import { MAX_GOAL_CHARS, MAX_JOB_DESC_CHARS } from "@/lib/limits";
 import {
+  CATATAN_EKSPLORASI,
   CATATAN_PERKIRAAN,
   CONTOH_TUJUAN,
   LABEL_POSISI,
@@ -80,7 +81,10 @@ export function MulaiView() {
           <button
             type="button"
             className="min-h-11 font-bold text-primary-text underline underline-offset-2"
-            onClick={() => reset({ goalText: "" })}
+            onClick={() => {
+              setText("");
+              reset({ goalText: "" });
+            }}
           >
             Matikan
           </button>
@@ -223,7 +227,9 @@ function KartuKonfirmasi({
   const [lainnya, setLainnya] = useState(intent.posisi_target !== null && intent.posisi_preset === null);
   const id = useId();
   const posisiOk = !!intent.posisi_target?.trim();
-  const siap = posisiOk && intent.tahap !== null;
+  // Tanpa posisi, atau tujuan eksplorasi: Kira mengusulkan jalur setelah membaca CV (mode eksplorasi).
+  const eksplorasi = intent.tujuan === "eksplorasi" || !posisiOk;
+  const siap = intent.tahap !== null;
 
   return (
     <section className="card flex flex-col gap-4" aria-labelledby={`${id}-judul`}>
@@ -257,8 +263,8 @@ function KartuKonfirmasi({
 
         <Baris
           label="Posisi"
-          nilai={intent.posisi_target ?? "Belum ada, pilih dulu"}
-          editing={edit === "posisi" || !posisiOk}
+          nilai={intent.posisi_target?.trim() || "Belum tahu, Kira usulkan"}
+          editing={edit === "posisi"}
           onEdit={() => setEdit(edit === "posisi" ? null : "posisi")}
         >
           <select
@@ -326,7 +332,11 @@ function KartuKonfirmasi({
         </Baris>
       </dl>
 
-      {intent.posisi_preset === null && posisiOk && (
+      {eksplorasi && (
+        <p className="rounded-btn bg-primary-soft p-3 text-[14px]">{CATATAN_EKSPLORASI}</p>
+      )}
+
+      {intent.posisi_preset === null && posisiOk && !eksplorasi && (
         <div className="flex flex-col gap-2 rounded-btn bg-gap-soft p-3">
           <label htmlFor={`${id}-jd`} className="text-[14px] font-semibold">
             Deskripsi lowongan (opsional)
@@ -344,7 +354,7 @@ function KartuKonfirmasi({
 
       {!siap && (
         <p className="text-[14px] font-semibold text-gap" role="status">
-          Lengkapi posisi dan tahapmu dulu, ya.
+          Pilih tahapmu dulu, ya.
         </p>
       )}
       <div className="flex flex-col gap-3 sm:flex-row">
