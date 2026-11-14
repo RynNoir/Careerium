@@ -140,6 +140,29 @@ export const Grade = GradeLLM.extend({
   skor_total: z.number().int().min(0).max(100),
 });
 
+// ---------- Bonus B2. Roadmap adaptif: POST /api/roadmap/adaptif ----------
+// Setelah sesi wawancara: roadmap disusun ulang dengan fokus ke topik yang jawabannya paling lemah.
+export const HasilWawancara = z.object({
+  gap_asal: z.string().min(1).max(100),
+  status: z.enum(["dinilai", "tidak_dapat_dinilai"]),
+  skor_total: z.number().int().min(0).max(100),
+  skor: GradeLLM.shape.skor.optional(), // rubrik 1–5, untuk mencari rubrik terlemah
+});
+export const AdaptiveRoadmapRequest = z.object({
+  gap: GapResult,
+  tahap: Tahap,
+  posisi: z.string().min(1).max(100).optional(),
+  tujuan: Tujuan.optional(),
+  hasil_wawancara: z.array(HasilWawancara).min(1).max(10),
+  roadmap_lama: Roadmap.optional(), // dipakai sebagai cadangan mode demo bila AI gagal
+  demo: Demo,
+});
+export const AdaptiveRoadmap = Roadmap.extend({
+  fokus_ulang: z.array(z.string()).max(3), // topik yang diprioritaskan ulang (dihitung kode)
+  catatan: z.string(), // penjelasan perubahan, template kode
+  diperbarui: z.boolean(), // false = AI gagal, roadmap lama dikembalikan (mode demo)
+});
+
 // ---------- Bonus B1. Mode eksplorasi: POST /api/eksplorasi ----------
 // Untuk pengguna yang belum punya target (tujuan "eksplorasi"): bandingkan profil ke semua posisi berdata.
 export const ExplorationRequest = z.object({ profile: Profile, demo: Demo });
@@ -223,6 +246,8 @@ export type GradeLLM = z.infer<typeof GradeLLM>;
 export type Grade = z.infer<typeof Grade>;
 export type AnalysisSummary = z.infer<typeof AnalysisSummary>;
 export type JalurKarier = z.infer<typeof JalurKarier>;
+export type HasilWawancara = z.infer<typeof HasilWawancara>;
+export type AdaptiveRoadmap = z.infer<typeof AdaptiveRoadmap>;
 export type ExplorationResult = z.infer<typeof ExplorationResult>;
 export type AnalysisCreate = z.infer<typeof AnalysisCreate>;
 export type AnalysisDetail = z.infer<typeof AnalysisDetail>;
