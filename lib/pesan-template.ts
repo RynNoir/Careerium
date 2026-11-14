@@ -122,6 +122,17 @@ export function sumberLowongan(s: GapResult["sumberLowongan"]): string {
   return `Berdasarkan ${s.jumlah} lowongan${posisi}${diakses}.`;
 }
 
+/** Rincian pembentuk skor (dari lib/scoring.ts): "Wajib 3/4 · Penting 3/4 · Nilai tambah 4/16". */
+export function rincianSkor(r: GapResult["skor_rincian"]): string | null {
+  if (!r) return null;
+  const bagian = [
+    r.wajib.total > 0 && `Wajib ${r.wajib.terpenuhi}/${r.wajib.total}`,
+    r.penting.total > 0 && `Penting ${r.penting.terpenuhi}/${r.penting.total}`,
+    r.nilai_tambah.total > 0 && `Nilai tambah ${r.nilai_tambah.terpenuhi}/${r.nilai_tambah.total}`,
+  ].filter(Boolean);
+  return bagian.length ? bagian.join(" · ") : null;
+}
+
 export function sumberGap(jumlahMuncul: number, s: GapResult["sumberLowongan"]): string {
   if (s.perkiraanUmum) return "Perkiraan umum";
   return `Muncul di ${jumlahMuncul} dari ${s.jumlah} lowongan`;
