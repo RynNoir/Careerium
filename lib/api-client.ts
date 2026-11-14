@@ -30,6 +30,10 @@ export class ApiError extends Error {
   constructor(
     message: string,
     public status: number,
+    /** Kode error AI dari server: llm_kuota | llm_lambat | llm_unavailable | too_many | bad_request (bila ada). */
+    public kode?: string,
+    /** Perkiraan detik sebelum boleh mencoba lagi (dari server, bila ada). */
+    public cobaLagiDetik?: number,
   ) {
     super(message);
     this.name = "ApiError";
@@ -50,8 +54,11 @@ async function request<T>(url: string, method: string, body?: unknown): Promise<
   }
   const data: unknown = await res.json().catch(() => null);
   if (!res.ok) {
-    const msg = data && typeof data === "object" && "error" in data && typeof data.error === "string" ? data.error : "";
-    throw new ApiError(msg || pesanError(res.status), res.status);
+    const obj = data && typeof data === "object" ? (data as Record<string, unknown>) : {};
+    const msg = typeof obj.error === "string" ? obj.error : "";
+    const kode = typeof obj.kode === "string" ? obj.kode : undefined;
+    const tunggu = typeof obj.cobaLagiDetik === "number" && obj.cobaLagiDetik > 0 ? Math.min(Math.ceil(obj.cobaLagiDetik), 300) : undefined;
+    throw new ApiError(msg || pesanError(res.status), res.status, kode, tunggu);
   }
   return data as T;
 }

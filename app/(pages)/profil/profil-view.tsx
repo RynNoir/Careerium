@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, FileText, ShieldCheck, Upload } from "lucide-react";
+import { AiErrorAksi } from "@/components/ai-error-aksi";
 import { RESET_ANALISIS, useFlow } from "@/components/flow-provider";
 import { JalurPicker } from "@/components/profil/jalur-picker";
 import { EmptyState, ErrorCard, StageLoading, Steps } from "@/components/ui";
@@ -25,6 +26,7 @@ export function ProfilView() {
   const [cv, setCv] = useState("");
   const [stage, setStage] = useState<Stage | "eksplorasi" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [errorObj, setErrorObj] = useState<unknown>(null); // ApiError asli: kode & waktu tunggu untuk arahan "Coba lagi"
   const [pdfInfo, setPdfInfo] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const id = useId();
@@ -70,6 +72,7 @@ export function ProfilView() {
   }
 
   const gagal = (e: unknown) => {
+    setErrorObj(e);
     setStage(null);
     setError(e instanceof ApiError ? e.message : pesanError(0));
   };
@@ -82,6 +85,7 @@ export function ProfilView() {
       posisi: pos,
       posisi_preset: preset,
       tahap,
+      tujuan, // standar penilaian AI asesor: magang vs kerja
       jobDescription: preset ? undefined : state.jobDescription.trim() || undefined,
       demo,
     });
@@ -97,6 +101,7 @@ export function ProfilView() {
 
   async function analisis() {
     setError(null);
+    setErrorObj(null);
     try {
       setStage("profil");
       const profile = await api.profile({ cvText: redact(cv).slice(0, MAX_CV_CHARS), demo });
@@ -273,7 +278,7 @@ export function ProfilView() {
         </p>
       </div>
 
-      {error && <ErrorCard message={error} />}
+      {error && <ErrorCard message={error} action={<AiErrorAksi error={errorObj} onRetry={analisis} />} />}
 
       <button type="button" className="btn btn-primary w-full sm:w-auto sm:self-start" disabled={cv.trim().length < 30} onClick={analisis}>
         Analisis CV-ku <ArrowRight className="size-4" aria-hidden="true" />

@@ -115,6 +115,13 @@ export const TAHAP_LOADING = {
 // ---------- Layar Hasil ----------
 export const KETERANGAN_SKOR = "Alat refleksi, bukan penilaian resmi.";
 
+// Penilaian AI per kebutuhan (rubrik 0–4 dari GapResult.penilaian). 3 = "cukup untuk tahapmu" sudah bernilai penuh.
+export const LABEL_NILAI = ["Belum ada", "Baru disebut", "Mulai dipelajari", "Cukup untuk tahapmu", "Menonjol"] as const;
+export const JUDUL_PENILAIAN = "Penilaian mentor AI";
+export const CATATAN_METODE_AI = "Dinilai AI dengan rubrik, tiap nilai berbukti dari CV-mu dan diperiksa kode.";
+export const CATATAN_METODE_ATURAN = "AI sedang sibuk, jadi skor dihitung otomatis dari skill yang terbaca di CV-mu.";
+export const TANPA_BUKTI_CV = "Belum ada kalimat di CV-mu yang membuktikan ini.";
+
 export function sumberLowongan(s: GapResult["sumberLowongan"]): string {
   if (s.perkiraanUmum) return "Perkiraan umum, bukan data lowongan.";
   const posisi = s.posisi_data ? ` ${s.posisi_data}` : "";
