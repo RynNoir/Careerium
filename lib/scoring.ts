@@ -1,7 +1,6 @@
 // Perhitungan skor kecocokan & radar (PRD §8.3). Deterministik: input sama -> hasil sama. BUKAN di prompt.
 import type { z } from "zod";
-import type { GapItem, KategoriRadar, Prioritas, Tingkat } from "./schemas";
-import { KategoriRadar as KategoriRadarEnum } from "./schemas";
+import type { GapItem, Prioritas, Tingkat } from "./schemas";
 
 type PrioritasT = z.infer<typeof Prioritas>;
 type TingkatT = z.infer<typeof Tingkat>;
@@ -13,12 +12,22 @@ const URUTAN: Record<PrioritasT, number> = { wajib: 0, penting: 1, nilai_tambah:
 export type Kebutuhan = {
   nama: string;
   prioritas: PrioritasT;
-  kategori_radar: KategoriRadar;
+  kategori_radar: string;
   jumlah_muncul: number;
 };
+export type Sumbu = { id: string; label: string };
+
+// Sumbu untuk kebutuhan "perkiraan umum" (tanpa data lowongan).
+export const SUMBU_UMUM: Sumbu[] = [
+  { id: "fondasi", label: "Fondasi" },
+  { id: "teknologi_inti", label: "Teknologi inti" },
+  { id: "tools_workflow", label: "Tools & alur kerja" },
+  { id: "proyek_praktik", label: "Proyek & praktik" },
+  { id: "soft_skill", label: "Soft skill" },
+];
 
 /** tingkatDimiliki: nama kebutuhan -> tingkat skill pengguna (tidak ada = tidak dimiliki). */
-export function hitungSkor(kebutuhan: Kebutuhan[], tingkatDimiliki: Map<string, TingkatT>) {
+export function hitungSkor(kebutuhan: Kebutuhan[], tingkatDimiliki: Map<string, TingkatT>, sumbu: Sumbu[]) {
   const nilai = (k: Kebutuhan) => {
     const t = tingkatDimiliki.get(k.nama);
     return BOBOT[k.prioritas] * (t ? FAKTOR[t] : 0);
@@ -28,13 +37,14 @@ export function hitungSkor(kebutuhan: Kebutuhan[], tingkatDimiliki: Map<string, 
 
   // Radar: target = bobot kategori relatif terhadap kategori terberat (bentuk khas posisi);
   // kamu = capaian di kategori itu pada skala yang sama, jadi selalu <= target.
-  const perKat = KategoriRadarEnum.options.map((kat) => {
-    const ks = kebutuhan.filter((k) => k.kategori_radar === kat);
-    return { kat, bobot: ks.reduce((s, k) => s + BOBOT[k.prioritas], 0), capai: ks.reduce((s, k) => s + nilai(k), 0) };
+  const perKat = sumbu.map((sb) => {
+    const ks = kebutuhan.filter((k) => k.kategori_radar === sb.id);
+    return { sb, bobot: ks.reduce((s, k) => s + BOBOT[k.prioritas], 0), capai: ks.reduce((s, k) => s + nilai(k), 0) };
   });
   const maks = Math.max(0, ...perKat.map((p) => p.bobot));
   const radar = perKat.map((p) => ({
-    kategori: p.kat,
+    kategori: p.sb.id,
+    label: p.sb.label,
     kamu: maks === 0 ? 0 : Math.round((p.capai / maks) * 100),
     target: maks === 0 ? 0 : Math.round((p.bobot / maks) * 100),
   }));

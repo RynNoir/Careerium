@@ -36,21 +36,24 @@ async function main() {
 
   // ---- Gap (fixture uji, BUKAN data lowongan asli) ----
   const fixture = LowonganFile.parse({
-    posisi: {
-      web_frontend: {
-        nama: "Frontend (fixture uji)",
+    versi: 2,
+    posisi: [
+      {
+        id: "web_developer",
+        nama: "Web Developer (fixture uji)",
         jumlah_lowongan: 10,
-        sumber: [{ situs: "fixture", diakses: "2026-11-14" }],
-        skills: [
-          { nama: "JavaScript", sinonim: ["JS"], kategori_radar: "teknologi_inti", jumlah_muncul: 9 },
-          { nama: "React", sinonim: ["React.js", "ReactJS"], kategori_radar: "teknologi_inti", jumlah_muncul: 7 },
-          { nama: "Git", kategori_radar: "tools_workflow", jumlah_muncul: 6 },
-          { nama: "TypeScript", kategori_radar: "teknologi_inti", jumlah_muncul: 4 },
-          { nama: "Testing", kategori_radar: "tools_workflow", jumlah_muncul: 2 },
-          { nama: "Kerja tim", sinonim: ["Teamwork"], kategori_radar: "soft_skill", jumlah_muncul: 5 },
+        kategori_radar: { frontend: "Frontend", tools: "Tools & DevOps", profesional: "Profesional" },
+        sumber: { tanggal_akses: "2026-11-13", platform: ["fixture"] },
+        skill: [
+          { id: "javascript", nama: "JavaScript (ES6+)", kategori_radar: "frontend", jumlah_muncul: 9, persen_muncul: 90, prioritas: "wajib" },
+          { id: "fe_framework", nama: "Framework frontend (React/Vue)", kategori_radar: "frontend", jumlah_muncul: 7, persen_muncul: 70, prioritas: "wajib", opsi_teknologi: [{ nama: "React", jumlah: 6 }] },
+          { id: "git", nama: "Git & GitHub/GitLab", kategori_radar: "tools", jumlah_muncul: 6, persen_muncul: 60, prioritas: "wajib" },
+          { id: "typescript", nama: "TypeScript", kategori_radar: "frontend", jumlah_muncul: 4, persen_muncul: 40, prioritas: "penting" },
+          { id: "testing", nama: "Software testing (unit/automated)", kategori_radar: "tools", jumlah_muncul: 2, persen_muncul: 20, prioritas: "nilai_tambah" },
+          { id: "teamwork_comm", nama: "Kerja tim & komunikasi", kategori_radar: "profesional", jumlah_muncul: 5, persen_muncul: 50, prioritas: "penting" },
         ],
       },
-    },
+    ],
   });
   // Profil tetap (bukan rani.json, yang berubah tiap build-demo) agar hasil uji deterministik.
   const profile = {
@@ -68,10 +71,12 @@ async function main() {
   // JS menengah(3×0,8) + React dasar(3×0,5) + Git menengah(3×0,8) + TS 0 + Testing 0 + Kerja tim menengah(2×0,8)
   // = (2,4+1,5+2,4+0+0+1,6)/(3+3+3+2+1+2) = 7,9/14 = 56
   cek("skor Rani vs fixture = 56 (tanpa LLM, cocok nama/sinonim)", r.skor === 56, r.skor);
-  cek("gap = TypeScript, Testing (urut prioritas)", JSON.stringify(r.gap.map((g) => g.nama)) === '["TypeScript","Testing"]', r.gap);
+  cek("gap = TypeScript, Software testing (urut prioritas)", JSON.stringify(r.gap.map((g) => g.nama)) === '["TypeScript","Software testing (unit/automated)"]', r.gap);
   cek("kekuatan punya bukti dari CV", r.kekuatan.length === 4 && r.kekuatan.every((k) => k.bukti.length > 0), r.kekuatan);
   cek("sumber: 10 lowongan, bukan perkiraan", r.sumberLowongan.jumlah === 10 && !r.sumberLowongan.perkiraanUmum);
-  cek("radar 5 sumbu, kamu <= target", r.radar.length === 5 && r.radar.every((p) => p.kamu <= p.target), r.radar);
+  cek("radar mengikuti sumbu data (3) dengan label, kamu <= target", r.radar.length === 3 && r.radar[1].label === "Tools & DevOps" && r.radar.every((p) => p.kamu <= p.target), r.radar);
+  cek("sumber menyebut posisi data & tanggal akses", r.sumberLowongan.posisi_data === "Web Developer (fixture uji)" && r.sumberLowongan.diakses === "2026-11-13");
+  cek("alias kelompok cocok (\"Kerja tim\" -> \"Kerja tim & komunikasi\")", r.kekuatan.some((k) => k.nama === "Kerja tim"));
 
   console.log(gagal ? `\n${gagal} gagal` : "\nSemua lulus");
   process.exit(gagal ? 1 : 0);
