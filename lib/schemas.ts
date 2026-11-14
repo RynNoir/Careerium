@@ -1,5 +1,5 @@
 // KONTRAK BERSAMA backend <-> frontend (PRD §12).
-// Status: DRAF v1 — disepakati tim di Fase 0. Perubahan wajib diberitahukan ke track lain sebelum di-commit.
+// Status: v2 (radar per posisi) — disepakati tim di Fase 0. Perubahan wajib diberitahukan ke track lain sebelum di-commit.
 import { z } from "zod";
 import { MAX_ANSWER_CHARS, MAX_CV_CHARS, MAX_GOAL_CHARS, MAX_JOB_DESC_CHARS } from "./limits";
 
@@ -11,8 +11,9 @@ export const Tingkat = z.enum(["dasar", "menengah", "mahir"]);
 export const Prioritas = z.enum(["wajib", "penting", "nilai_tambah"]);
 export const JenisSkill = z.enum(["teknis", "tools", "soft_skill"]);
 export const JenisPertanyaan = z.enum(["teknis", "perilaku"]);
-// 5 sumbu radar, sama untuk semua posisi (usulan v1, perlu konfirmasi FE di langkah 0.2).
-export const KategoriRadar = z.enum(["fondasi", "teknologi_inti", "tools_workflow", "proyek_praktik", "soft_skill"]);
+// Sumbu radar mengikuti posisi (dari data/lowongan.json), mis. web: frontend, backend, database, tools, profesional.
+// id kategori = string; teks tampilan ada di RadarPoint.label.
+export const KategoriRadar = z.string().min(1).max(40);
 // Kunci posisi preset di data/lowongan.json. null = posisi TI di luar preset.
 export const PosisiPreset = z.enum([
   "web_frontend",
@@ -77,6 +78,7 @@ export const GapItem = z.object({
 });
 export const RadarPoint = z.object({
   kategori: KategoriRadar,
+  label: z.string(), // teks sumbu untuk UI, mis. "Tools & DevOps"
   kamu: z.number().min(0).max(100),
   target: z.number().min(0).max(100),
 });
@@ -88,6 +90,8 @@ export const GapResult = z.object({
   sumberLowongan: z.object({
     jumlah: z.number().int().min(0), // M lowongan
     perkiraanUmum: z.boolean(), // true = posisi di luar preset tanpa deskripsi lowongan
+    posisi_data: z.string().optional(), // nama posisi di dataset, mis. "Web Developer"
+    diakses: z.string().optional(), // tanggal akses data lowongan (YYYY-MM-DD)
   }),
 });
 
