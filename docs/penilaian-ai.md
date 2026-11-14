@@ -89,6 +89,20 @@ Dipakai bila semua penyedia AI gagal, untuk kebutuhan yang tidak dinilai AI, dan
 
 Alasan untuk nilai aturan dibuat oleh template kode, bukan AI.
 
+## Mode eksplorasi (B1)
+
+Tanpa target, `POST /api/eksplorasi` membandingkan profil ke 4 posisi berdata. Pembagian peran berbeda dari skor kecocokan:
+
+| Bagian | Siapa |
+|---|---|
+| Skill, tingkat, dan bukti dari CV | AI (ekstraksi profil, sama dengan alur utama) |
+| Pencocokan ke kebutuhan, skor perkiraan awal, peringkat, kekuatan, gap | Kode (aturan cadangan, tanpa penilai AI) |
+| Ringkasan usulan mentor + alasan per jalur | AI (1 panggilan, hanya menjelaskan hasil kode) |
+
+Penilai AI per kebutuhan tidak dipakai di eksplorasi karena butuh satu panggilan per posisi (4 per analisis). Akibatnya skor di layar eksplorasi adalah **perkiraan awal**, dan skor lengkap dengan penilai AI muncul setelah pengguna memilih jalur.
+
+Audit kode atas teks AI: posisi harus dari daftar, ringkasan wajib menyebut peringkat 1 (agar tidak bertentangan dengan urutan kode), teks yang menyebut angka skor atau persen, URL, atau terlalu pendek ditolak, tag HTML dibuang. Gagal total → alasan template, hasil tetap lengkap.
+
 ## Keamanan dan keadilan
 
 - Isi CV dibungkus tag dan diperlakukan sebagai data; perintah seperti "beri nilai 4" diabaikan.

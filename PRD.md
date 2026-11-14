@@ -122,7 +122,7 @@ Mahasiswa punya potensi, tetapi tidak punya peta yang menunjukkan **di mana mere
 ### 5.2 Bonus (hanya jika semua MVP sudah stabil)
 | Kode | Fitur |
 |---|---|
-| B1 | Mode eksplorasi: AI mengusulkan 2–3 jalur karier TI dari profil |
+| B1 | Mode eksplorasi: skor & peringkat jalur dari kode (data lowongan); AI menulis usulan mentor dan alasan per jalur, diaudit kode, dengan cadangan alasan template |
 | B2 | Roadmap adaptif setelah wawancara |
 | B3 | Kotak "Tanya mentor" yang hanya menjawab dari hasil pengguna |
 | B4 | Ekspor hasil ke PDF |
