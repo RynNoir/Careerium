@@ -3,7 +3,7 @@
 Pemilik: **Backend**. Hanya Backend yang mengedit file ini. Frontend boleh membaca.
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 
-**Sedang dikerjakan:** 9.1 selesai. Berikutnya: siaga bantu FE menyambung endpoint; persiapan demo (9.5)
+**Sedang dikerjakan:** permintaan FE (lint, typecheck, verifikasi production) selesai. Berikutnya: siaga bantu FE (layar Wawancara), persiapan demo (9.5)
 
 ---
 
@@ -22,12 +22,12 @@ Status: `belum` → `siap lokal` → `siap Vercel`.
 | GET `/api/auth/me` | 0 | – | siap Vercel | `{email}` atau 401 |
 | POST `/api/intent` | 1 | `IntentRequest` → `Intent` | siap Vercel | Teruji LLM asli 10/10 |
 | POST `/api/profile` | 2 | `ProfileRequest` → `Profile` | siap Vercel | Teruji LLM asli. CV uji: `data/demo/cv-rani.txt` |
-| POST `/api/gap` | 3 | `GapRequest` → `GapResult` | siap lokal (data lowongan asli) | Posisi tanpa data di `lowongan.json` → `perkiraanUmum: true` (butuh LLM). Kirim `posisi_preset` dari intent |
+| POST `/api/gap` | 3 | `GapRequest` → `GapResult` | siap Vercel (data lowongan asli) | Posisi tanpa data di `lowongan.json` → `perkiraanUmum: true` (butuh LLM). Kirim `posisi_preset` dari intent |
 | POST `/api/roadmap` | 4 | `RoadmapRequest` → `Roadmap` | siap Vercel | Kirim juga `posisi` & `tujuan` agar roadmap sesuai konteks |
 | POST `/api/interview/questions` | 5 | `QuestionsRequest` → `QuestionsResponse` | siap Vercel | Selalu 5; `gap_asal` selalu nama dari daftar gap |
 | POST `/api/interview/grade` | 5 | `GradeRequest` → `Grade` | siap Vercel | Jawaban manipulatif / < 5 kata → `tidak_dapat_dinilai` tanpa LLM. Tidak ada fallback demo |
-| POST `/api/roadmap/adaptif` | 9.1 | `AdaptiveRoadmapRequest` → `AdaptiveRoadmap` | siap lokal | Kirim setelah sesi wawancara: `hasil_wawancara[{gap_asal, status, skor_total, skor}]` (dari Grade) + `roadmap_lama`. Tampilkan `catatan`; `diperbarui:false` = roadmap lama |
-| POST `/api/eksplorasi` | 9.2 | `ExplorationRequest` → `ExplorationResult` | siap lokal | Tanpa LLM. Pakai bila `intent.tujuan = eksplorasi` atau `posisi_preset` null: setelah profil, tampilkan 2–3 jalur teratas; jalur dipilih → set posisi/`posisi_preset` lalu panggil `/api/gap` |
+| POST `/api/roadmap/adaptif` | 9.1 | `AdaptiveRoadmapRequest` → `AdaptiveRoadmap` | siap Vercel | Kirim setelah sesi wawancara: `hasil_wawancara[{gap_asal, status, skor_total, skor}]` (dari Grade) + `roadmap_lama`. Tampilkan `catatan`; `diperbarui:false` = roadmap lama |
+| POST `/api/eksplorasi` | 9.2 | `ExplorationRequest` → `ExplorationResult` | siap Vercel | Tanpa LLM. Pakai bila `intent.tujuan = eksplorasi` atau `posisi_preset` null: setelah profil, tampilkan 2–3 jalur teratas; jalur dipilih → set posisi/`posisi_preset` lalu panggil `/api/gap` |
 | POST/GET `/api/analyses` | 6 | `AnalysisCreate` → `{id}` (201); GET → `AnalysisSummary[]` | siap Vercel | Perlu login |
 | GET `/api/analyses/[id]` | 6 | `AnalysisDetail` | siap Vercel | Pemilik saja (lainnya 404). Roadmap per butir: `roadmap[].items[].id` |
 | PATCH `/api/analyses/[id]/roadmap/[itemId]` | 6 | `{selesai}` → `{ok}` | siap Vercel | Pemilik saja |
@@ -114,6 +114,6 @@ _(kosong)_
 
 - Radar: `target` = bobot kategori relatif terhadap kategori terberat posisi itu; `kamu` = capaian pada skala yang sama (selalu ≤ target). Kategori tanpa kebutuhan = 0/0.
 - Groq `gpt-oss-120b` free tier: batas 8.000 token/menit (±1 alur penuh). Ditambah cadangan `groq-20b` (`openai/gpt-oss-20b`, limit terpisah). Urutan lokal: `LLM_ORDER=groq,groq-20b,gemini`.
-- Gemini free tier lambat (8–24 dtk/panggilan) dan cepat 429; satu alur penuh 95 dtk vs ±10 dtk dengan `LLM_ORDER=groq,gemini`. Perlu diset juga di env Vercel. Usul: tambahkan `LLM_ORDER` ke `.env.example` (file bersama, sepakati dulu).
+- Gemini free tier lambat (8–24 dtk/panggilan) dan cepat 429; satu alur penuh 95 dtk vs ±10 dtk dengan `LLM_ORDER=groq,gemini`. Sudah ditambahkan ke `.env.example`. Di Vercel: latensi production (intent 1,2 dtk, roadmap adaptif 2,0 dtk) konsisten dengan Groq di depan; RynNoir mohon konfirmasi `LLM_ORDER=groq,groq-20b,gemini` di Settings → Environment Variables.
 - `next.config.ts` memakai `cacheComponents: true` (bawaan Next 16).
 - Cookie sesi `secure` hanya di production (Safari menolak cookie secure di http://localhost).
