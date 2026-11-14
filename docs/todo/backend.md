@@ -3,7 +3,7 @@
 Pemilik: **Backend**. Hanya Backend yang mengedit file ini. Frontend boleh membaca.
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 
-**Sedang dikerjakan:** FEATURE FREEZE. Demo Rani kini konsisten (skor selalu sama, instan). Sisa 9.5: RynNoir konfirmasi env Vercel; bersihkan akun uji Turso (`scripts/akun-uji.ts`)
+**Sedang dikerjakan:** Penilaian skor oleh **AI asesor** (branch `be/penilai-ai`, alur: `docs/penilaian-ai.md`). Sisa 9.5: RynNoir konfirmasi env Vercel; bersihkan akun uji Turso (`scripts/akun-uji.ts`)
 
 ---
 
@@ -40,6 +40,8 @@ Endpoint AI: 400 masukan tidak valid, 429 kuota habis (40 permintaan/jam/sesi), 
 **Batas waktu AI:** `askJSON` (lib/llm.ts) punya batas total 40 dtk untuk semua penyedia & putaran. Sebelumnya 3 penyedia × 2 putaran × 30 dtk bisa membuat layar "Menyusun roadmap" menunggu ~3 menit saat Groq kena rate limit. Lewat batas → pesan template / data demo.
 
 **Audit & gagal cepat AI:** setiap panggilan `askJSON` mencatat satu baris JSON `{"t":"llm-audit",label,hasil,alasan,penyedia,totalMs,percobaan[]}` (cari `llm-audit` di Vercel Logs). Alasan: `kuota_habis | kunci_ditolak | waktu_habis | output_tidak_valid | server_penyedia | jaringan`. Kuota habis / kunci ditolak tidak diulang dan penyedia diistirahatkan (retry-after, maks 120 dtk; kunci 300 dtk) agar permintaan berikutnya langsung ke cadangan atau langsung gagal. Uji: `scripts/test-llm-audit.ts`.
+
+**AI asesor (skor v3):** `/api/gap` kini memakai satu panggilan AI (`gap-penilaian`, menggantikan `gap-cocok`) yang menilai SETIAP kebutuhan dengan rubrik 0–4 sesuai tahap/tujuan + alasan + kutipan bukti + ringkasan mentor. Kode mengaudit (`auditPenilaian`: nama dari daftar, nilai 0–4, nilai tanpa bukti → 0, label `[wajib]` yang ikut tersalin dibuang), kebutuhan yang cocok nama tidak turun ke 0, sisanya aturan cadangan (`nilaiDariTingkat`). Agregasi `lib/scoring.ts`: kredit 0/0,4/0,7/1/1 × bobot. Uji: `test-scoring.ts` (22), `test-penilaian.ts` (14), `test-ai-logic.ts`. Demo Rani dibangun ulang. **Uji ulang (14 Nov, kuota Groq habis → Gemini flash-lite):** guardrail 26/26 (intent 18, profil 4, penilaian 4); bias 4 putaran/varian lulus (83,0 vs 80,5), tapi skor bervariasi sampai 8 poin pada CV yang sama (ekstraksi Gemini tidak deterministik walau temperature 0). Bukti keadilan deterministik: teks ke AI identik untuk dua CV beda nama/gender/kampus berlabel (`test-profile.ts`). Baris berlabel kampus kini dihapus sebelum ke AI. **Belum:** penilai AI dengan `gpt-oss-120b` (jatah token harian habis), laporan lengkap `docs/hasil-uji-backend.md` masih hasil lama; jalankan `test-guardrail.ts` penuh setelah kuota Groq pulih (`HANYA=…` untuk sebagian, tidak menimpa laporan).
 Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang dikirim **persis** untuk pertanyaan ke-i yang mendapat nilai (nilai asli AI saat build). Jawaban lain tetap 503 — tidak ada nilai karangan. FE: sediakan tombol "Isi contoh jawaban Rani" di mode demo.
 
 ---
@@ -102,6 +104,7 @@ Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang di
 
 | Tanggal | Perubahan | Dampak ke FE |
 |---|---|---|
+| 2026-11-14 | Tambahan (non-breaking) **skor v3, AI asesor**: `GapResult.penilaian[]` `{nama, prioritas, nilai 0–4, alasan, bukti?, sumber: "ai"|"aturan"}`, `GapResult.ringkasan_ai?`, `GapResult.metode_skor?` (`ai_rubrik`|`aturan`); `GapRequest.tujuan?`. Arti `skor` tetap 0–100, angkanya umumnya lebih tinggi (rubrik relatif terhadap tahap). Demo Rani dibangun ulang | Kirim `tujuan: intent.tujuan` ke `/api/gap`. Tampilkan `ringkasan_ai` di bawah skor ("Penilaian mentor AI"), dan `alasan` + `bukti` per kebutuhan (cocokkan `penilaian[].nama` dengan `gap[].nama`/kebutuhan). Teks/tangkapan layar dengan skor Rani lama perlu diperbarui |
 | 2026-11-14 | Tambahan (non-breaking) **respons error AI**: `{ error, kode, cobaLagiDetik? }` + header `Retry-After`. `kode`: `bad_request | too_many | llm_unavailable | llm_kuota | llm_lambat`. `error` tetap teks siap tampil (kini menyebut penyebab & waktu tunggu) | Opsional: baca `kode`; untuk `llm_kuota`/`llm_lambat`/`llm_unavailable` tampilkan tombol "Coba lagi" (aktif setelah `cobaLagiDetik`) dan "Pakai mode demo" |
 | 2026-11-14 | Draf v0: Intent, Profile, GapResult, Roadmap, Question, Grade, AnalysisSummary | Mulai membuat mock dari tipe ini |
 | 2026-11-14 | **Rumus skor direvisi** (kontrak tetap 0–100): skor = inti (wajib + penting) + bonus nilai_tambah maks 10. Field opsional baru `GapResult.skor_rincian` `{wajib, penting, nilai_tambah: {terpenuhi, total}}`. Skor Rani 31 → 51; `data/demo/rani.json` dibangun ulang | Angka skor lebih tinggi dari sebelumnya; opsional tampilkan "Wajib 3/4 · Penting 3/4" dari `skor_rincian` di ubin skor. Mode demo memakai data baru (pertanyaan & contoh jawaban ikut berubah) |

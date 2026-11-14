@@ -10,7 +10,7 @@ skor kecocokan berdasarkan data lowongan asli, roadmap belajar 4 minggu, dan sim
 
 1. **Pemahaman tujuan**: kalimat bebas → tujuan, posisi, dan tahap kuliah, dengan kartu konfirmasi yang bisa diedit.
 2. **Peta skill dari CV**: setiap skill punya **kutipan bukti dari CV** yang diverifikasi kode.
-3. **Skor kecocokan & gap**: dibandingkan dengan **75 lowongan asli** (Web Developer 35, Data Analyst 15, UI/UX Designer 14, Mobile Developer 11). Skor dihitung kode, bukan AI.
+3. **Skor kecocokan & gap**: dibandingkan dengan **75 lowongan asli** (Web Developer 35, Data Analyst 15, UI/UX Designer 14, Mobile Developer 11). **AI asesor menilai** setiap kebutuhan dengan rubrik 0–4 (beserta alasan dan kutipan bukti) sesuai tahap kuliah; kode mengaudit buktinya lalu menjumlahkan dengan bobot dari data lowongan.
 4. **Roadmap 4 minggu** sesuai tahap kuliah dan tujuan (magang/kerja).
 5. **Simulasi wawancara** 5 pertanyaan dari gap pengguna, dinilai dengan rubrik (kejelasan, relevansi, kedalaman, struktur/STAR).
 6. **Roadmap adaptif**: setelah wawancara, roadmap disusun ulang dengan fokus ke topik yang jawabannya paling lemah.
@@ -24,7 +24,7 @@ skor kecocokan berdasarkan data lowongan asli, roadmap belajar 4 minggu, dan sim
 |---|---|---|---|
 | Tujuan | `POST /api/intent` | Klasifikasi ke nilai enum | Normalisasi enum, tolak pola manipulasi, pesan penolakan template |
 | Profil | `POST /api/profile` | Ekstraksi skill + kutipan | Hapus atribut sensitif, validasi kutipan ada di CV, pemindai skill deterministik |
-| Gap | `POST /api/gap` | Pencocokan sisa skill | Kebutuhan dari `data/lowongan.json`, skor & radar (`lib/scoring.ts`) |
+| Gap | `POST /api/gap` | **Asesor**: nilai rubrik 0–4 + alasan + bukti per kebutuhan, ringkasan mentor | Kebutuhan dari `data/lowongan.json`, batalkan nilai tanpa bukti, aturan cadangan, agregasi skor & radar (`lib/scoring.ts`) |
 | Roadmap | `POST /api/roadmap`, `/api/roadmap/adaptif` | Menyusun 4 minggu | Cek 4 minggu, gap wajib di minggu 1–2, hapus URL |
 | Wawancara | `POST /api/interview/questions`, `/grade` | Pertanyaan & rubrik 1–5 | Cek 5 pertanyaan + gap asal, hitung skor total, batasi jawaban tidak relevan |
 | Eksplorasi | `POST /api/eksplorasi` | — | Sepenuhnya deterministik |
@@ -63,7 +63,8 @@ Tanpa kunci API pun aplikasi bisa dicoba lewat **mode demo**.
 ```bash
 npm run typecheck && npm run lint
 npm run test:smoke                                   # auth (15 uji)
-npx tsx scripts/test-scoring.ts                      # rumus skor
+npx tsx scripts/test-scoring.ts                      # rumus skor (kredit rubrik, agregasi, radar)
+npx tsx scripts/test-penilaian.ts                    # audit hasil AI asesor (tanpa kuota)
 npx tsx scripts/test-ai-logic.ts                     # logika kode di sekitar AI (tanpa kunci API)
 npx tsx scripts/test-profile.ts                      # validasi bukti, atribut sensitif, pemindai skill
 npx tsx scripts/test-eksplorasi.ts                   # mode eksplorasi
