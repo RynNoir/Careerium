@@ -24,8 +24,15 @@ export function aiRoute<S extends z.ZodType<{ demo?: boolean }>, R>(
     try {
       return NextResponse.json(await handler(body));
     } catch (err) {
-      if (!(err instanceof LLMUnavailableError)) console.error("[ai-route]", err);
-      return demo ? NextResponse.json(demo) : aiError("llm_unavailable");
+      if (demo) return NextResponse.json(demo);
+      if (!(err instanceof LLMUnavailableError)) {
+        console.error("[ai-route]", err);
+        return aiError("llm_unavailable");
+      }
+      // Pesan sesuai penyebab, agar pengguna tahu harus menunggu berapa lama atau beralih ke mode demo.
+      if (err.alasan === "kuota_habis") return aiError("llm_kuota", err.cobaLagiDetik ?? 60);
+      if (err.alasan === "waktu_habis") return aiError("llm_lambat", 30);
+      return aiError("llm_unavailable", 30);
     }
   };
 }

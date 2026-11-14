@@ -36,6 +36,10 @@ Status: `belum` → `siap lokal` → `siap Vercel`.
 Semua error berbentuk `{ "error": string }` (pesan Bahasa Indonesia, siap ditampilkan).
 Endpoint AI: 400 masukan tidak valid, 429 kuota habis (40 permintaan/jam/sesi), 503 semua LLM gagal. Request dengan `demo: true` tidak pernah 429/503 (kecuali grade): dapat data persona Rani.
 **Demo konsisten:** `demo: true` + input PERSIS data Rani (kalimat tujuan, CV `rani.input.cv`, profil/gap Rani, 5 contoh jawaban) → hasil tersimpan langsung, tanpa AI & tanpa kuota (30–800 ms; skor selalu `rani.gap.skor`). Input lain tetap diproses AI. Roadmap adaptif tetap memakai AI.
+
+**Batas waktu AI:** `askJSON` (lib/llm.ts) punya batas total 40 dtk untuk semua penyedia & putaran. Sebelumnya 3 penyedia × 2 putaran × 30 dtk bisa membuat layar "Menyusun roadmap" menunggu ~3 menit saat Groq kena rate limit. Lewat batas → pesan template / data demo.
+
+**Audit & gagal cepat AI:** setiap panggilan `askJSON` mencatat satu baris JSON `{"t":"llm-audit",label,hasil,alasan,penyedia,totalMs,percobaan[]}` (cari `llm-audit` di Vercel Logs). Alasan: `kuota_habis | kunci_ditolak | waktu_habis | output_tidak_valid | server_penyedia | jaringan`. Kuota habis / kunci ditolak tidak diulang dan penyedia diistirahatkan (retry-after, maks 120 dtk; kunci 300 dtk) agar permintaan berikutnya langsung ke cadangan atau langsung gagal. Uji: `scripts/test-llm-audit.ts`.
 Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang dikirim **persis** untuk pertanyaan ke-i yang mendapat nilai (nilai asli AI saat build). Jawaban lain tetap 503 — tidak ada nilai karangan. FE: sediakan tombol "Isi contoh jawaban Rani" di mode demo.
 
 ---
@@ -98,6 +102,7 @@ Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang di
 
 | Tanggal | Perubahan | Dampak ke FE |
 |---|---|---|
+| 2026-11-14 | Tambahan (non-breaking) **respons error AI**: `{ error, kode, cobaLagiDetik? }` + header `Retry-After`. `kode`: `bad_request | too_many | llm_unavailable | llm_kuota | llm_lambat`. `error` tetap teks siap tampil (kini menyebut penyebab & waktu tunggu) | Opsional: baca `kode`; untuk `llm_kuota`/`llm_lambat`/`llm_unavailable` tampilkan tombol "Coba lagi" (aktif setelah `cobaLagiDetik`) dan "Pakai mode demo" |
 | 2026-11-14 | Draf v0: Intent, Profile, GapResult, Roadmap, Question, Grade, AnalysisSummary | Mulai membuat mock dari tipe ini |
 | 2026-11-14 | **Rumus skor direvisi** (kontrak tetap 0–100): skor = inti (wajib + penting) + bonus nilai_tambah maks 10. Field opsional baru `GapResult.skor_rincian` `{wajib, penting, nilai_tambah: {terpenuhi, total}}`. Skor Rani 31 → 51; `data/demo/rani.json` dibangun ulang | Angka skor lebih tinggi dari sebelumnya; opsional tampilkan "Wajib 3/4 · Penting 3/4" dari `skor_rincian` di ubin skor. Mode demo memakai data baru (pertanyaan & contoh jawaban ikut berubah) |
 | 2026-11-14 | Tambahan (non-breaking): `HasilWawancara`, `AdaptiveRoadmapRequest`, `AdaptiveRoadmap` (= Roadmap + `fokus_ulang`, `catatan`, `diperbarui`) | Tombol "Perbarui roadmap" di ringkasan wawancara |
