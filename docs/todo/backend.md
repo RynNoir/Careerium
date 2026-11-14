@@ -3,7 +3,7 @@
 Pemilik: **Backend**. Hanya Backend yang mengedit file ini. Frontend boleh membaca.
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 
-**Sedang dikerjakan:** FEATURE FREEZE (9.5). Semua langkah MVP BE tercentang; tinggal konfirmasi env Vercel (RynNoir) + bersihkan akun uji Turso (`scripts/akun-uji.ts`). 10 menit sebelum presentasi: buka situs sekali untuk membangunkan server & DB
+**Sedang dikerjakan:** FEATURE FREEZE. Demo Rani kini konsisten (skor selalu sama, instan). Sisa 9.5: RynNoir konfirmasi env Vercel; bersihkan akun uji Turso (`scripts/akun-uji.ts`)
 
 ---
 
@@ -35,6 +35,7 @@ Status: `belum` → `siap lokal` → `siap Vercel`.
 
 Semua error berbentuk `{ "error": string }` (pesan Bahasa Indonesia, siap ditampilkan).
 Endpoint AI: 400 masukan tidak valid, 429 kuota habis (40 permintaan/jam/sesi), 503 semua LLM gagal. Request dengan `demo: true` tidak pernah 429/503 (kecuali grade): dapat data persona Rani.
+**Demo konsisten:** `demo: true` + input PERSIS data Rani (kalimat tujuan, CV `rani.input.cv`, profil/gap Rani, 5 contoh jawaban) → hasil tersimpan langsung, tanpa AI & tanpa kuota (30–800 ms; skor selalu `rani.gap.skor`). Input lain tetap diproses AI. Roadmap adaptif tetap memakai AI.
 Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang dikirim **persis** untuk pertanyaan ke-i yang mendapat nilai (nilai asli AI saat build). Jawaban lain tetap 503 — tidak ada nilai karangan. FE: sediakan tombol "Isi contoh jawaban Rani" di mode demo.
 
 ---
