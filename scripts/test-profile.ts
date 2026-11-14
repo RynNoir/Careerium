@@ -3,7 +3,8 @@
 import { loadEnvConfig } from "@next/env";
 import { readFileSync } from "node:fs";
 import { evidenceInText, normalizeForMatch } from "../lib/evidence";
-import { cleanProfile } from "../lib/prompts/profile";
+import { cleanProfile, hapusAtributSensitif } from "../lib/prompts/profile";
+import { lengkapiSkill } from "../lib/skill-scan";
 
 let gagal = 0;
 function cek(nama: string, ok: boolean) {
@@ -40,6 +41,21 @@ cek("jenis di luar enum dibuang (Python)", !p.skills.some((s) => s.nama === "Pyt
 cek("tingkat di luar enum dibuang (React)", !p.skills.some((s) => s.nama === "React"));
 cek("proyek dengan bukti palsu dibuang", p.proyek.length === 0);
 cek("cv_valid false -> kosong", cleanProfile({ ...raw, cv_valid: false }, cvText).skills.length === 0);
+
+const disensor = hapusAtributSensitif(
+  "Nama: Budi\nJenis Kelamin: Laki-laki\nAgama: Islam\nTempat, Tanggal Lahir: Padang, 1 Jan 2004\nStatus: Belum menikah\nPENDIDIKAN\nS1 Informatika\nSKILL: Status code HTTP, React",
+);
+cek("atribut sensitif dihapus (nama, gender, agama, TTL, status)", !/budi|laki|islam|padang|menikah/i.test(disensor));
+cek("isi CV lain tetap utuh (pendidikan, skill)", /S1 Informatika/.test(disensor) && /Status code HTTP, React/.test(disensor));
+
+// Pemindai deterministik: LLM yang melewatkan skill tetap menghasilkan profil lengkap.
+const minim = lengkapiSkill({ cv_valid: true, proyek: [], skills: [{ nama: "Git", jenis: "tools", tingkat: "menengah", bukti: "dikelola dengan Git dan GitHub" }] }, cvText);
+const nama = minim.skills.map((s) => s.nama);
+cek("pemindai melengkapi skill teknis yang terlewat LLM", ["REST API", "React", "JavaScript", "HTML", "SQL", "Figma"].every((n) => nama.includes(n)));
+cek("pemindai: semua bukti ada di CV", minim.skills.every((s) => evidenceInText(s.bukti, cv)));
+cek("pemindai: tingkat yang ditulis CV dihormati (React dasar)", minim.skills.find((s) => s.nama === "React")?.tingkat === "dasar");
+cek("pemindai: tidak menambah kata umum / skill dari kurung", !nama.some((n) => /^(membuat|integrasi|api|database)$/i.test(n)));
+cek("pemindai: tidak dipakai jika cv_valid false", lengkapiSkill({ cv_valid: false, skills: [], proyek: [] }, cvText).skills.length === 0);
 
 const rani = JSON.parse(readFileSync("data/demo/rani.json", "utf8"));
 const semuaBukti = [...rani.profile.skills, ...rani.profile.proyek].map((s: { bukti: string }) => s.bukti);

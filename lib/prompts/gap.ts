@@ -85,7 +85,7 @@ Jangan memasangkan yang hanya mirip bidang. Salin nama persis dari daftar. Isi t
 
 type SkillCV = Profile["skills"][number];
 
-async function cocokkan(kebutuhan: Kebutuhan[], profile: Profile, sinonim: Map<string, string[]>) {
+async function cocokkan(kebutuhan: Kebutuhan[], profile: Profile, sinonim: Map<string, string[]>, pakaiLLM = true) {
   const hasil = new Map<string, SkillCV[]>(); // nama kebutuhan -> skill CV yang membuktikannya
   const tambah = (k: string, s: SkillCV) => {
     const daftar = hasil.get(k) ?? [];
@@ -102,10 +102,11 @@ async function cocokkan(kebutuhan: Kebutuhan[], profile: Profile, sinonim: Map<s
   const terpakai = new Set([...hasil.values()].flat());
   const sisaK = kebutuhan.filter((k) => !hasil.has(k.nama));
   const sisaS = profile.skills.filter((s) => !terpakai.has(s));
-  if (sisaK.length && sisaS.length) {
+  if (pakaiLLM && sisaK.length && sisaS.length) {
     try {
       const raw = await askJSON({
         label: "gap-cocok",
+    deterministic: true,
         schema: MatchLLM,
         instructions: MATCH_INSTRUCTIONS,
         prompt: `<kebutuhan>\n${sisaK.map((k) => `- ${k.nama}`).join("\n")}\n</kebutuhan>\n<skill_kandidat>\n${sisaS.map((s) => `- ${s.nama.replace(/[<>]/g, "")}`).join("\n")}\n</skill_kandidat>`,
@@ -133,12 +134,13 @@ export async function analyzeGap(input: {
   posisi: string;
   posisi_preset?: PosisiPreset | null;
   jobDescription?: string;
+  pakaiLLM?: boolean; // false = hanya pencocokan alias deterministik (mode eksplorasi)
 }, file = lowongan): Promise<GapResult> {
   const jd = input.jobDescription?.trim();
   const dariData = !jd && input.posisi_preset ? kebutuhanDariData(file, input.posisi_preset) : null;
 
   const kebutuhan = dariData?.kebutuhan ?? (await kebutuhanDariLLM(input.posisi, jd || undefined));
-  const cocok = await cocokkan(kebutuhan, input.profile, dariData?.sinonim ?? new Map());
+  const cocok = await cocokkan(kebutuhan, input.profile, dariData?.sinonim ?? new Map(), input.pakaiLLM !== false);
   // Proyek berbukti di CV = bukti portofolio (deterministik, bukan tebakan LLM).
   const proyek = input.profile.proyek;
   if (proyek.length > 0) {
