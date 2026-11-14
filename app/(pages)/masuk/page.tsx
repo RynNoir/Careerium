@@ -55,7 +55,7 @@ export default function MasukPage() {
       </form>
       <p className="text-[15px]">
         Belum punya akun?{" "}
-        <Link href="/daftar" className="font-bold text-primary-text underline underline-offset-2">
+        <Link href="/daftar" className="inline-flex min-h-11 items-center font-bold text-primary-text underline underline-offset-2">
           Daftar
         </Link>
       </p>

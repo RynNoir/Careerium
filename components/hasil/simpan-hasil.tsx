@@ -21,7 +21,7 @@ export function SimpanHasil() {
   if (!user)
     return (
       <p className="text-[14px] text-text-muted">
-        <Link href="/masuk" className="font-bold text-primary-text underline underline-offset-2">
+        <Link href="/masuk" className="inline-flex min-h-11 items-center font-bold text-primary-text underline underline-offset-2">
           Masuk
         </Link>{" "}
         untuk menyimpan hasil dan melihat riwayat progresmu.

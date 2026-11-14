@@ -4,7 +4,7 @@ Pemilik: **Frontend**. Hanya Frontend yang mengedit file ini. Backend boleh memb
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md`.
 
-**Sedang dikerjakan:** 8.2 (wawancara, akun, riwayat, roadmap adaptif, eksplorasi selesai dan teruji)
+**Sedang dikerjakan:** 9.6 (8.2 selesai; C4 demo 3x di production lolos)
 
 ---
 
@@ -23,7 +23,7 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 - [x] 1.5 Kartu konfirmasi (tujuan/posisi/tahap bisa diedit, tahap null dipaksa pilih, posisi di luar preset → kolom deskripsi lowongan), pertanyaan lanjutan, pesan penolakan template. Teruji LLM asli: di_luar_topik, upaya_manipulasi, karier_non_ti
 
 ### Fitur 2 — Profil (tunggu serah terima `/api/profile`)
-- [x] 2.3 Layar Profil: tempel teks + unggah PDF (`lib/pdf.ts`). **Unggah PDF belum diuji dengan file PDF asli**
+- [x] 2.3 Layar Profil: tempel teks + unggah PDF (`lib/pdf.ts`). Teruji dengan PDF berteks: terbaca, lalu nama/email/telepon/alamat teredaksi sebelum dikirim
 - [x] 2.4 `lib/redact.ts` (email, telepon, tautan profil, nama, alamat, TTL) + sambung `/api/profile`. Teruji: body request berisi placeholder, teks CV tidak masuk sessionStorage
 
 ### Fitur 3 — Hasil (tunggu serah terima `/api/gap`)
@@ -47,7 +47,7 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 - [x] 7.4 Tombol "Coba mode demo" + "Isi CV contoh Rani" + "Isi contoh jawaban Rani"
 
 ### Fitur 8 — Penguatan
-- [ ] 8.2 Status loading/kosong/error, uji 360 px, aksesibilitas, audit desain
+- [x] 8.2 Status loading/kosong/error, uji 360 px, aksesibilitas, audit desain. Teruji otomatis (Chrome + axe-core) di 15 keadaan layar, 360 px & 1280 px: tanpa gulir horizontal, 0 pelanggaran WCAG 2.1 A/AA, semua target sentuh ≥44 px, fokus keyboard terlihat, reduced-motion dihormati, `lang="id"`, Kira `alt=""`. Error: offline, 503, respons bukan JSON → pesan template. **C4:** demo Rani 3x berturut-turut di production tanpa error (Hasil dalam 14–35 dtk)
 
 ### Fitur 9 — Bonus & finalisasi
 - [x] 9.1 (bonus) Roadmap adaptif — UI (tombol di ringkasan wawancara, catatan + sorot minggu 1–2 di Hasil)
@@ -70,3 +70,4 @@ _(kosong: permintaan eslint & typecheck sudah dikerjakan BE di PR #7)_
 - Kelas token Tailwind: `bg-bg`, `bg-surface`, `border-ink` (= token `border`), `text-text`, `text-text-muted`, `bg-primary`, `text-primary-text`, `bg-gap-soft`, dst. Kelas komponen: `.btn .btn-primary .btn-secondary .card .chip .field .badge-* .skeleton .hl .display .label-caps`.
 - Next 16 mempertahankan halaman lama di DOM (`<Activity>`): form akun mengosongkan password/kode pemulihan setelah sukses agar tidak tersisa saat kembali.
 - Roadmap adaptif mengganti roadmap di browser; bila hasil sudah tersimpan, roadmap baru belum ikut tersimpan (catatan ditampilkan di Hasil).
+- Mode demo dengan AI aktif: pertanyaan wawancara dibuat AI (bukan pertanyaan Rani), jadi tombol "Isi contoh jawaban Rani" hanya muncul saat AI gagal. Saat presentasi, siapkan jawaban sendiri atau minta FE memakai pertanyaan Rani tetap di mode demo.

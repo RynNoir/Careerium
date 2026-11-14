@@ -71,7 +71,7 @@ export default function DaftarPage() {
           </form>
           <p className="text-[15px]">
             Sudah punya akun?{" "}
-            <Link href="/masuk" className="font-bold text-primary-text underline underline-offset-2">
+            <Link href="/masuk" className="inline-flex min-h-11 items-center font-bold text-primary-text underline underline-offset-2">
               Masuk
             </Link>
           </p>

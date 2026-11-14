@@ -38,9 +38,12 @@ export function Sidebar() {
       <Link
         href="/mulai"
         aria-label="Careerium, ke halaman Mulai"
-        className="mb-2.5 grid size-[38px] place-items-center rounded-[12px] border-2 border-sidebar-fg bg-primary font-display text-lg font-extrabold text-primary-fg"
+        className="mb-1.5 grid size-11 place-items-center"
       >
-        C
+        {/* Kotak 38 px sesuai DESIGN.md, area klik 44 px */}
+        <span className="grid size-9.5 place-items-center rounded-xl border-2 border-sidebar-fg bg-primary font-display text-lg font-extrabold text-primary-fg">
+          C
+        </span>
       </Link>
       {items.map(({ href, label, icon: Icon }) => {
         const on = isActive(path, href);

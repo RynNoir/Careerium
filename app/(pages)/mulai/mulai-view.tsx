@@ -154,7 +154,7 @@ export function MulaiView() {
         <>
           <div className="flex items-start justify-between gap-3 rounded-btn border-2 border-dashed border-border-soft px-3 py-2">
             <p className="text-[15px] text-text-muted">&ldquo;{state.goalText}&rdquo;</p>
-            <button type="button" className="min-h-11 shrink-0 font-bold text-primary-text" onClick={ubahKalimat}>
+            <button type="button" className="min-h-11 min-w-11 shrink-0 px-1 font-bold text-primary-text" onClick={ubahKalimat}>
               Ubah
             </button>
           </div>
