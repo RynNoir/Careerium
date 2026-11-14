@@ -20,6 +20,7 @@ export class LLMUnavailableError extends Error {
 
 type Provider = {
   name: string;
+  modelId: string; // dicatat di log audit agar jelas model mana yang menjawab
   temp0?: boolean; // aman memakai temperature 0 (Gemini 3 disarankan memakai default)
   model: () => LanguageModel;
   providerOptions?: Parameters<typeof generateText>[0]["providerOptions"];
@@ -32,6 +33,9 @@ function providers(): Provider[] {
     // Tugas ekstraksi/klasifikasi tidak butuh penalaran panjang; "minimal" paling cepat.
     list.push({
       name: "gemini",
+      modelId: geminiModel,
+      // Selain Gemini 3 (yang menyarankan temperature bawaan), temperature 0 menekan variasi ekstraksi antar-panggilan.
+      temp0: !/gemini-3/i.test(geminiModel),
       model: () => google(geminiModel),
       providerOptions: { google: { thinkingConfig: { thinkingLevel: "minimal" } } },
     });
@@ -40,6 +44,7 @@ function providers(): Provider[] {
     // Groq: structured output tidak bisa digabung streaming; di sini memang tidak streaming.
     list.push({
       name: "groq",
+      modelId: "openai/gpt-oss-120b",
       model: () => groq("openai/gpt-oss-120b"),
       temp0: true,
       providerOptions: { groq: { reasoningEffort: "low" } },
@@ -47,6 +52,7 @@ function providers(): Provider[] {
     // Cadangan kedua: limit token/menit Groq berlaku per model, jadi model lain menambah kapasitas.
     list.push({
       name: "groq-20b",
+      modelId: "openai/gpt-oss-20b",
       model: () => groq("openai/gpt-oss-20b"),
       temp0: true,
       providerOptions: { groq: { reasoningEffort: "low" } },
@@ -180,7 +186,7 @@ export async function askJSON<T>(opts: {
         const problem = opts.check?.(output);
         if (problem) throw new Error(`cek gagal: ${problem}`);
         istirahatSampai.delete(p.name);
-        audit({ label, hasil: "berhasil", penyedia: p.name, ms: Date.now() - started, totalMs: Date.now() - mulai, ...(percobaan.length ? { percobaan } : {}) });
+        audit({ label, hasil: "berhasil", penyedia: p.name, model: p.modelId, ms: Date.now() - started, totalMs: Date.now() - mulai, ...(percobaan.length ? { percobaan } : {}) });
         return output;
       } catch (err) {
         const k = klasifikasi(err);

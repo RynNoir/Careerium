@@ -67,9 +67,15 @@ async function main() {
       { nama: "Kerja tim", jenis: "soft_skill" as const, tingkat: "menengah" as const, bukti: "Berkoordinasi dengan 5 anggota tim" },
     ],
   };
-  const r = await analyzeGap({ profile, posisi: "Web Developer", posisi_preset: "web_frontend" }, fixture);
-  // Inti: wajib 3×(JS 0,8 + React 0,5 + Git 0,8) + penting 2×(TS 0 + Kerja tim 0,8) = 7,9 / 13 = 60,8; bonus 0 -> 61
-  cek("skor profil vs fixture = 61 (tanpa LLM, cocok nama/sinonim)", r.skor === 61, r.skor);
+  const r = await analyzeGap({ profile, posisi: "Web Developer", posisi_preset: "web_frontend", pakaiLLM: false }, fixture);
+  // Aturan cadangan (tanpa AI): menengah = 3 (kredit 1), dasar = 2 (kredit 0,7).
+  // Inti: wajib 3×(JS 1 + React 0,7 + Git 1) + penting 2×(TS 0 + Kerja tim 1) = 10,1 / 13 = 77,7; bonus 0 -> 78
+  cek("skor profil vs fixture = 78 (tanpa AI, aturan cadangan)", r.skor === 78, r.skor);
+  cek("metode_skor = aturan, tanpa ringkasan AI", r.metode_skor === "aturan" && r.ringkasan_ai === undefined, r.metode_skor);
+  cek("penilaian mencakup semua kebutuhan, beralasan, sumber aturan", r.penilaian?.length === 6 && r.penilaian.every((p) => p.alasan && p.sumber === "aturan"), r.penilaian);
+  cek("penilaian TypeScript = 0 (belum ada bukti)", r.penilaian?.find((p) => p.nama === "TypeScript")?.nilai === 0);
+  const rAwal = await analyzeGap({ profile, posisi: "Web Developer", posisi_preset: "web_frontend", pakaiLLM: false, tahap: "semester_awal" }, fixture);
+  cek("semester awal: React (dasar) dianggap cukup -> skor 85", rAwal.skor === 85, rAwal.skor);
   cek("skor_rincian ada: wajib 3/3, penting 1/2", r.skor_rincian?.wajib.terpenuhi === 3 && r.skor_rincian?.penting.terpenuhi === 1, r.skor_rincian);
   cek("gap = TypeScript, Software testing (urut prioritas)", JSON.stringify(r.gap.map((g) => g.nama)) === '["TypeScript","Software testing (unit/automated)"]', r.gap);
   cek("kekuatan punya bukti dari CV", r.kekuatan.length === 4 && r.kekuatan.every((k) => k.bukti.length > 0), r.kekuatan);

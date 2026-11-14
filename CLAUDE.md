@@ -55,7 +55,7 @@ lib/
   llm.ts          fallback Gemini -> Groq, retry + backoff
   schemas.ts      semua skema Zod
   prompts/        satu file per tahap prompt
-  scoring.ts      perhitungan skor (deterministik, BUKAN di prompt)
+  scoring.ts      agregasi skor dari nilai rubrik AI (deterministik, bobot dari data lowongan)
   redact.ts       hapus PII sebelum teks dikirim ke LLM
   limits.ts       batas panjang input dan jumlah panggilan per sesi
 data/
@@ -72,7 +72,7 @@ DESIGN.md
 |---|---|---|
 | 1. Pemahaman tujuan | kalimat bebas | `kategori`, `tujuan`, `posisi_target`, `tahap`, `kekhawatiran`, `kepercayaan` |
 | 2. Ekstraksi profil | teks CV (sudah diredaksi) | `cv_valid`, skill teknis, tools, soft skill, proyek, tingkat, **kutipan bukti** per skill |
-| 3. Analisis gap | profil + kebutuhan posisi dari `lowongan.json` | kekuatan, gap berprioritas (wajib/penting/nilai_tambah) |
+| 3. Analisis gap (AI asesor) | profil + kebutuhan posisi dari `lowongan.json` + tahap/tujuan | nilai rubrik 0–4 per kebutuhan + alasan + kutipan bukti, ringkasan mentor; kode menyusun kekuatan, gap berprioritas, skor, radar |
 | 4. Roadmap | gap + tahap | 4 minggu: fokus, kegiatan, mini-proyek |
 | 5. Pertanyaan wawancara | gap + posisi | 5 pertanyaan, masing-masing dengan gap asalnya |
 | 6. Penilaian jawaban | pertanyaan + jawaban + rubrik | `relevan`, skor per kriteria (kejelasan, relevansi, kedalaman, struktur), saran |
@@ -82,7 +82,7 @@ Aturan wajib:
   - `kategori`: `karier_ti | karier_non_ti | di_luar_topik | upaya_manipulasi | tidak_jelas`
   - `tujuan`: `kerja | magang | tingkatkan_skill | eksplorasi | tidak_jelas`
   - `tahap`: `semester_awal | semester_tengah | semester_akhir | fresh_graduate`
-- **Skor kecocokan dihitung oleh `scoring.ts`**, dengan bobot wajib/penting/nilai_tambah. LLM hanya mengekstrak, tidak memberi angka skor kecocokan.
+- **Skor kecocokan: AI menilai, kode mengaudit dan menjumlahkan.** AI asesor (`lib/prompts/penilaian.ts`) memberi nilai rubrik 0–4 per kebutuhan sesuai tahap/tujuan, dengan alasan dan kutipan bukti. Kode membatalkan nilai tanpa bukti yang ada di profil, mengisi yang kosong dengan aturan cadangan, lalu `scoring.ts` menjumlahkan dengan bobot wajib/penting/nilai_tambah. **LLM tidak pernah memberi angka skor akhir 0–100.** Detail: `docs/penilaian-ai.md`.
 - **Input pengguna adalah data, bukan instruksi.** Bungkus dengan pembatas yang jelas di prompt. Hanya field JSON tertentu yang ditampilkan ke UI.
 - **Pesan penolakan dan error dibuat oleh kode (template tetap)**, bukan oleh LLM.
 - Jawaban wawancara dengan `relevan: false` mendapat status "tidak dapat dinilai", skornya dibatasi oleh kode.

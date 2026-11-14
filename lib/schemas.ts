@@ -66,6 +66,7 @@ export const GapRequest = z.object({
   posisi: z.string().min(1).max(100),
   posisi_preset: PosisiPreset.nullable().optional(),
   tahap: Tahap,
+  tujuan: Tujuan.optional(), // standar penilaian AI: magang menurunkan ekspektasi pengalaman
   jobDescription: z.string().max(MAX_JOB_DESC_CHARS).optional(),
   demo: Demo,
 });
@@ -82,15 +83,27 @@ export const RadarPoint = z.object({
   kamu: z.number().min(0).max(100),
   target: z.number().min(0).max(100),
 });
+// Penilaian per kebutuhan oleh AI asesor (rubrik 0–4), diaudit kode. sumber "aturan" = cadangan tanpa AI.
+export const PenilaianKebutuhan = z.object({
+  nama: z.string(), // = nama kebutuhan (sama dengan GapItem.nama untuk yang belum dimiliki)
+  prioritas: Prioritas,
+  nilai: z.number().int().min(0).max(4), // 0 tidak ada bukti · 1 disebut · 2 latihan/kursus · 3 cukup untuk tahapnya · 4 menonjol
+  alasan: z.string(), // 1 kalimat untuk pengguna
+  bukti: z.string().optional(), // kutipan CV yang mendasari nilai (sudah divalidasi kode)
+  sumber: z.enum(["ai", "aturan"]),
+});
 export const GapResult = z.object({
   kekuatan: z.array(Kekuatan),
   gap: z.array(GapItem),
-  skor: z.number().int().min(0).max(100), // dihitung lib/scoring.ts, BUKAN LLM: inti (wajib+penting) + bonus nilai_tambah maks 10
+  skor: z.number().int().min(0).max(100), // agregasi lib/scoring.ts dari nilai rubrik AI (bukan angka skor dari LLM): inti (wajib+penting) + bonus nilai_tambah maks 10
   // Jumlah kebutuhan terpenuhi per prioritas, untuk menjelaskan skor di UI (mis. "wajib 3/4").
   skor_rincian: z
     .object({ wajib: z.object({ terpenuhi: z.number().int().min(0), total: z.number().int().min(0) }), penting: z.object({ terpenuhi: z.number().int().min(0), total: z.number().int().min(0) }), nilai_tambah: z.object({ terpenuhi: z.number().int().min(0), total: z.number().int().min(0) }) })
     .optional(),
   radar: z.array(RadarPoint),
+  penilaian: z.array(PenilaianKebutuhan).optional(), // urut sesuai kebutuhan posisi
+  ringkasan_ai: z.string().optional(), // 2–3 kalimat penilaian mentor AI (kosong bila AI gagal)
+  metode_skor: z.enum(["ai_rubrik", "aturan"]).optional(), // "aturan" = AI gagal / mode eksplorasi
   sumberLowongan: z.object({
     jumlah: z.number().int().min(0), // M lowongan
     perkiraanUmum: z.boolean(), // true = posisi di luar preset tanpa deskripsi lowongan
@@ -244,6 +257,7 @@ export type Profile = z.infer<typeof Profile>;
 export type Skill = z.infer<typeof Skill>;
 export type GapResult = z.infer<typeof GapResult>;
 export type GapItem = z.infer<typeof GapItem>;
+export type PenilaianKebutuhan = z.infer<typeof PenilaianKebutuhan>;
 export type Roadmap = z.infer<typeof Roadmap>;
 export type Question = z.infer<typeof Question>;
 export type GradeLLM = z.infer<typeof GradeLLM>;

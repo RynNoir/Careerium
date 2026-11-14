@@ -47,7 +47,7 @@ Careerium adalah aplikasi web yang bekerja sebagai mentor karier berbasis AI unt
 4. **Simulasi wawancara** 5 pertanyaan yang dibuat dari gap pengguna sendiri, dinilai dengan rubrik eksplisit.
 5. **Riwayat progres** untuk pengguna yang login, termasuk perbandingan skor wawancara antar percobaan.
 
-**Posisi pembeda:** *skill gap berbasis bukti*. Setiap skill ditautkan ke kutipan CV, setiap kebutuhan ditautkan ke sumber lowongan, dan skor dihitung oleh kode, bukan ditebak AI. Hasil wawancara menutup siklus dengan memperbarui riwayat progres.
+**Posisi pembeda:** *skill gap berbasis bukti*. Setiap skill ditautkan ke kutipan CV, setiap kebutuhan ditautkan ke sumber lowongan, dan skor dinilai AI dengan rubrik berbukti lalu diaudit dan dijumlahkan oleh kode, bukan angka tebakan AI. Hasil wawancara menutup siklus dengan memperbarui riwayat progres.
 
 ---
 
@@ -111,7 +111,7 @@ Mahasiswa punya potensi, tetapi tidak punya peta yang menunjukkan **di mana mere
 | F1 | Ketik bebas tujuan + kartu konfirmasi yang bisa diedit |
 | F2 | Input profil: tempel teks CV atau unggah PDF (dibaca di browser) |
 | F3 | Ekstraksi skill dengan bukti kutipan |
-| F4 | Analisis gap + skor kecocokan (dihitung kode) + radar chart |
+| F4 | Analisis gap + skor kecocokan (AI asesor dengan rubrik, diaudit & dijumlahkan kode) + alasan per kebutuhan + ringkasan mentor + radar chart |
 | F5 | Roadmap 4 minggu dengan kotak centang |
 | F6 | Simulasi wawancara 5 pertanyaan + penilaian rubrik + saran |
 | F7 | Daftar, masuk, keluar, lupa password (kode pemulihan), hapus akun |
@@ -179,10 +179,11 @@ Format: kebutuhan, lalu kriteria penerimaan (KP).
 ### F4 – Analisis gap dan skor
 - FR4.1 Kebutuhan skill diambil dari `data/lowongan.json` sesuai posisi; atau dari deskripsi lowongan yang ditempel pengguna.
 - FR4.2 Output: kekuatan, dan gap berprioritas `wajib | penting | nilai_tambah`, masing-masing dengan jumlah lowongan sumber.
-- FR4.3 **Skor dihitung oleh `lib/scoring.ts`** (lihat 8.3).
+- FR4.3 **AI asesor menilai setiap kebutuhan dengan rubrik 0–4** relatif terhadap tahap & tujuan pengguna, disertai alasan dan kutipan bukti; kode mengaudit lalu `lib/scoring.ts` menjumlahkan (lihat 8.3).
 - FR4.4 Radar chart 5 kategori: skill kamu vs kebutuhan posisi.
 - FR4.5 Keterangan "alat refleksi, bukan penilaian resmi" dan "berdasarkan N lowongan".
-- **KP:** input sama menghasilkan skor sama; posisi di luar preset tanpa deskripsi lowongan diberi label "perkiraan umum".
+- FR4.6 Tampilkan alasan AI per kebutuhan dan ringkasan penilaian mentor (2–3 kalimat). Jika AI gagal, nilai dari aturan cadangan dengan alasan template.
+- **KP:** nilai tanpa kutipan bukti selalu 0; agregasi deterministik (nilai sama → skor sama); demo Rani selalu sama; posisi di luar preset tanpa deskripsi lowongan diberi label "perkiraan umum".
 
 ### F5 – Roadmap
 - FR5.1 4 minggu, masing-masing: fokus skill, kegiatan belajar, satu mini-proyek.
@@ -238,18 +239,22 @@ Fallback otomatis di `lib/llm.ts`: coba Gemini → jika 429, timeout, atau gagal
 |---|---|---|---|
 | 1 Pemahaman tujuan | `/api/intent` | kalimat bebas | JSON intent |
 | 2 Ekstraksi profil | `/api/profile` | teks CV teredaksi | JSON profil + bukti |
-| 3 Analisis gap | `/api/gap` | profil + kebutuhan posisi | kekuatan + gap (skor oleh kode) |
+| 3 Analisis gap | `/api/gap` | profil + kebutuhan posisi + tahap/tujuan | nilai rubrik 0–4 + alasan + bukti per kebutuhan, ringkasan mentor (skor diagregasi kode) |
 | 4 Roadmap | `/api/roadmap` | gap + tahap | 4 minggu |
 | 5 Pertanyaan | `/api/interview/questions` | gap + posisi | 5 pertanyaan |
 | 6 Penilaian | `/api/interview/grade` | pertanyaan + jawaban + rubrik | skor per kriteria + saran |
 
 Teknik: structured output dengan skema tetap (Zod), nilai enum terbatas, blok konteks per tujuan (magang menurunkan ekspektasi pengalaman, kerja menekankan proyek nyata), rubrik eksplisit, batasan sumber (tidak menambah fakta di luar masukan), input pengguna dibungkus pembatas sebagai data.
 
-### 8.3 Rumus skor (usulan awal, di `lib/scoring.ts`)
+### 8.3 Penilaian & rumus skor (v3: AI asesor + agregasi kode)
+Alur lengkap: `docs/penilaian-ai.md`.
+- **AI asesor** (`lib/prompts/penilaian.ts`) menilai SETIAP kebutuhan posisi dengan rubrik 0–4, relatif terhadap tahap & tujuan: 0 tidak ada bukti · 1 hanya disebut · 2 kursus/latihan/proyek kecil · 3 dipakai nyata dan **cukup untuk tahapnya** · 4 menonjol. Setiap nilai > 0 wajib menyertakan kutipan bukti, alasan 1 kalimat, plus ringkasan mentor.
+- **Audit kode:** nama kebutuhan harus dari daftar; nilai dibatasi 0–4; nilai tanpa kutipan yang ada di profil → 0 (alasan diganti template); kebutuhan yang cocok nama/alias tidak boleh turun ke 0; kebutuhan yang tidak dinilai AI → aturan cadangan.
+- **Aturan cadangan** (AI gagal / mode eksplorasi): mahir = 4, menengah = 3, dasar = 3 untuk semester awal/tengah dan 2 untuk lainnya.
+- **Kredit per nilai:** 0 → 0 · 1 → 0,4 · 2 → 0,7 · 3 → 1 · 4 → 1 (pemula tidak perlu "mahir" untuk nilai penuh).
 - Bobot prioritas: wajib = 3, penting = 2, nilai_tambah = 1.
-- Faktor tingkat skill yang dimiliki: dasar = 0,5, menengah = 0,8, mahir = 1,0; tidak dimiliki = 0.
-- `skor = round( Σ(bobot × faktor) / Σ(bobot) × 100 )` untuk semua kebutuhan posisi.
-- Skor radar per kategori dihitung dengan rumus yang sama per kategori.
+- `skor_inti = Σ(bobot × kredit) / Σ(bobot) × 100` untuk kebutuhan wajib + penting; `bonus = kredit rata-rata nilai_tambah × 10`; `skor = min(100, round(skor_inti + bonus))`.
+- Skor radar per kategori dihitung dari kredit yang sama per kategori.
 
 ### 8.4 Guardrail
 | Kategori / kasus | Respons (template kode) |
@@ -344,7 +349,7 @@ Semua body JSON. Error: `{ "error": string }` dengan status HTTP sesuai. Skema Z
 | GET `/api/auth/me` | – | `{email}` atau 401 | – |
 | POST `/api/intent` | `{text}` | `Intent` | – |
 | POST `/api/profile` | `{cvText}` (teredaksi) | `Profile` | – |
-| POST `/api/gap` | `{profile, posisi, tahap, jobDescription?}` | `GapResult` (termasuk `skor`, `radar`, `sumberLowongan`) | – |
+| POST `/api/gap` | `{profile, posisi, tahap, tujuan?, jobDescription?}` | `GapResult` (termasuk `skor`, `radar`, `sumberLowongan`, `penilaian[]`, `ringkasan_ai`, `metode_skor`) | – |
 | POST `/api/roadmap` | `{gap, tahap}` | `Roadmap` | – |
 | POST `/api/interview/questions` | `{gap, posisi}` | `{questions: Question[5]}` | – |
 | POST `/api/interview/grade` | `{question, answer}` | `Grade` | – |
@@ -393,7 +398,7 @@ Semua body JSON. Error: `{ "error": string }` dengan status HTTP sesuai. Skema Z
 | Rate limit / API LLM gagal | Fallback Gemini → Groq, retry + backoff, cache demo |
 | Kuota habis oleh percobaan berulang | Batas panjang input dan jumlah panggilan per sesi |
 | Halusinasi skill | JSON + bukti kutipan wajib; validasi Zod |
-| Skor tidak konsisten | Skor dihitung kode, bukan LLM |
+| Skor tidak konsisten | AI hanya memberi nilai rubrik 0–4 berbukti (temperature 0); kode mengaudit dan menjumlahkan dengan bobot tetap; demo Rani memakai hasil tersimpan |
 | Prompt injection lewat CV/jawaban | Input dibungkus sebagai data; pesan penolakan dari template kode |
 | PDF berantakan | Opsi tempel teks |
 | Input tak terduga dari juri | Kartu konfirmasi + guardrail + pertanyaan lanjutan |
@@ -510,7 +515,7 @@ Contoh commit: `feat(ai): tambah fallback Gemini ke Groq di llm.ts` · `feat(api
 **Backend**
 1. Masukkan `data/lowongan.json` (sudah dikurasi sebelum hari H).
 2. `lib/scoring.ts` sesuai rumus 8.3 + skor radar per kategori.
-3. Endpoint `/api/gap` (LLM mencocokkan skill, kode menghitung skor).
+3. Endpoint `/api/gap` (AI asesor menilai tiap kebutuhan dengan rubrik, kode mengaudit dan menghitung skor).
 4. Endpoint `/api/roadmap` dengan blok konteks per tahap.
 
 **Frontend**
