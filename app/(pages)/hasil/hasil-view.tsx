@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, Check, RotateCcw } from "lucide-react";
 import { useFlow } from "@/components/flow-provider";
+import { PenilaianCard } from "@/components/hasil/penilaian-card";
 import { RadarCard } from "@/components/hasil/radar-card";
 import { RoadmapList } from "@/components/hasil/roadmap-list";
 import { ScoreTile } from "@/components/hasil/score-tile";
@@ -108,6 +109,8 @@ export function HasilView() {
           <KekuatanList gap={gap} />
         </div>
       </div>
+
+      <PenilaianCard gap={gap} />
 
       {/* Bar CTA: desktop bar emas; ponsel tombol menempel di atas navigasi bawah. */}
       <div className="lg:flex lg:items-center lg:justify-between lg:gap-4 lg:rounded-xl lg:border-2 lg:border-ink lg:bg-accent lg:p-3 lg:pl-4 lg:shadow-(--shadow-card) print:hidden">

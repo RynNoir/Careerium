@@ -53,6 +53,7 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 - [x] 9.1 (bonus) Roadmap adaptif — UI (tombol di ringkasan wawancara, catatan + sorot minggu 1–2 di Hasil)
 - [x] 9.2 (bonus) Mode eksplorasi — UI (konfirmasi boleh tanpa posisi; 3 kartu jalur setelah profil)
 - [x] 9.3 (bonus) Ekspor PDF: tombol "Simpan sebagai PDF" di Hasil (dialog cetak browser, tanpa dependensi). Cetak: tanpa navigasi/tombol, semua gap & kekuatan + bukti, radar, roadmap + status centang
+- [x] 9.7 Penilaian AI asesor — UI (dikerjakan BE saat FE offline, **mohon FE tinjau**): kartu "Penilaian mentor AI" di Hasil (`components/hasil/penilaian-card.tsx`: ringkasan mentor, badge Dinilai AI/otomatis, per kebutuhan: 4 titik + label + alasan + kutipan bukti, "Lihat semua N kebutuhan"), kirim `tujuan` ke `/api/gap`, `ApiError` membawa `kode` & `cobaLagiDetik`, arahan "Coba lagi (hitung mundur)" + "Pakai mode demo" di Mulai & Profil (`components/ai-error-aksi.tsx`)
 - [ ] 9.4 (bonus) Tanya mentor — UI
 - [ ] 9.6 Video demo cadangan, screenshot, slide — screenshot 16 berkas (`docs/presentasi/screenshots/`) + kerangka slide & naskah demo (`docs/presentasi/kerangka-slide.md`) selesai; video & slide final belum
 
@@ -63,6 +64,8 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 - Hapus akun uji yatim di Turso production: email `uji-slide-%@contoh.test` (±2 akun). Terbuat saat koneksi laptop ke Turso timeout sehingga "hapus akun" gagal. Contoh SQL: `DELETE FROM users WHERE email LIKE 'uji-%@contoh.test';` (pastikan data turunannya ikut terhapus sesuai skema).
 
 ## Catatan / blocker
+
+- 9.7 diuji: mode demo penuh di browser desktop (kartu tampil, skor 75, bukti per kebutuhan) dan komponen arahan error untuk semua kode (`llm_kuota`, `llm_lambat`, `llm_unavailable`, `too_many`, tanpa kode). **Belum dicek:** tampilan di lebar ponsel (≤ 390 px), hasil cetak PDF dengan kartu baru, dan riwayat (hasil lama tanpa field baru: kartu disembunyikan). Arahan error di halaman Hasil (roadmap), Wawancara, dan Riwayat belum dipasang.
 
 - Font Geist bawaan scaffold dilepas (gagal diunduh saat build, dan belum ada di `DESIGN.md`).
 - Cache Components aktif: halaman yang membaca data dinamis perlu dibungkus `<Suspense>`.

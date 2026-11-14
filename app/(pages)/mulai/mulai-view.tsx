@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Pencil, Sparkles } from "lucide-react";
+import { AiErrorAksi } from "@/components/ai-error-aksi";
 import { useFlow, type Tahap, type Tujuan } from "@/components/flow-provider";
 import { EmptyState, ErrorCard, Kira, StageLoading, Steps } from "@/components/ui";
 import { api, ApiError } from "@/lib/api-client";
@@ -30,6 +31,7 @@ export function MulaiView() {
   const [text, setText] = useState(state.goalText);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorObj, setErrorObj] = useState<unknown>(null); // ApiError asli: kode & waktu tunggu untuk arahan "Coba lagi"
   const inputId = useId();
   const intent = state.intent;
 
@@ -37,12 +39,14 @@ export function MulaiView() {
     const t = kalimat.trim();
     if (!t) return;
     setError(null);
+    setErrorObj(null);
     setLoading(true);
     reset({ goalText: t, demo });
     try {
       const intent = await api.intent({ text: t, demo: demo || undefined });
       update({ intent });
     } catch (e) {
+      setErrorObj(e);
       setError(e instanceof ApiError ? e.message : pesanError(0));
     } finally {
       setLoading(false);
@@ -147,7 +151,7 @@ export function MulaiView() {
               </button>
             </div>
           )}
-          {error && <ErrorCard message={error} />}
+          {error && <ErrorCard message={error} action={<AiErrorAksi error={errorObj} onRetry={() => void pahami(text, state.demo)} />} />}
           <p className="text-[13px] text-text-muted">Bisa tanpa akun. Hasilmu tersimpan di browser ini selama sesi.</p>
         </form>
       ) : (
