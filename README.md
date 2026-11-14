@@ -14,7 +14,7 @@ skor kecocokan berdasarkan data lowongan asli, roadmap belajar 4 minggu, dan sim
 4. **Roadmap 4 minggu** sesuai tahap kuliah dan tujuan (magang/kerja).
 5. **Simulasi wawancara** 5 pertanyaan dari gap pengguna, dinilai dengan rubrik (kejelasan, relevansi, kedalaman, struktur/STAR).
 6. **Roadmap adaptif**: setelah wawancara, roadmap disusun ulang dengan fokus ke topik yang jawabannya paling lemah.
-7. **Mode eksplorasi**: untuk yang belum punya target, CV dibandingkan ke semua posisi berdata.
+7. **Mode eksplorasi**: untuk yang belum punya target, CV dibandingkan ke semua posisi berdata, lalu **AI menulis usulan mentor** dan alasan per jalur.
 8. **Akun & riwayat** (opsional): simpan hasil, centang roadmap, bandingkan percobaan wawancara, ekspor hasil ke PDF.
 9. **Mode tamu & mode demo** persona Rani (fiktif), tetap berjalan walau semua penyedia AI gagal.
 
@@ -27,7 +27,7 @@ skor kecocokan berdasarkan data lowongan asli, roadmap belajar 4 minggu, dan sim
 | Gap | `POST /api/gap` | **Asesor**: nilai rubrik 0–4 + alasan + bukti per kebutuhan, ringkasan mentor | Kebutuhan dari `data/lowongan.json`, batalkan nilai tanpa bukti, aturan cadangan, agregasi skor & radar (`lib/scoring.ts`) |
 | Roadmap | `POST /api/roadmap`, `/api/roadmap/adaptif` | Menyusun 4 minggu | Cek 4 minggu, gap wajib di minggu 1–2, hapus URL |
 | Wawancara | `POST /api/interview/questions`, `/grade` | Pertanyaan & rubrik 1–5 | Cek 5 pertanyaan + gap asal, hitung skor total, batasi jawaban tidak relevan |
-| Eksplorasi | `POST /api/eksplorasi` | — | Sepenuhnya deterministik |
+| Eksplorasi | `POST /api/eksplorasi` | Ringkasan usulan mentor + alasan per jalur (1 panggilan) | Skor & peringkat dari data lowongan (deterministik), audit teks AI (tanpa angka skor/URL), alasan template bila AI gagal |
 
 Penyedia LLM: Groq (`openai/gpt-oss-120b` → `openai/gpt-oss-20b`) lalu Gemini, dengan fallback otomatis dan
 data demo bila semua gagal. Detail kontrak API ada di `lib/schemas.ts`; status endpoint di `docs/todo/backend.md`.
