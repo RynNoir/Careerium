@@ -47,3 +47,8 @@ next-env.d.ts
 *.db-wal
 *.db-shm
 /careerium/
+
+__pycache__/
+*.pyc
+.claude/settings.local.json
+
