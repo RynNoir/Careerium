@@ -33,7 +33,7 @@ export function Sidebar() {
   return (
     <nav
       aria-label="Navigasi utama"
-      className="fixed inset-y-[26px] left-0 z-20 hidden w-[76px] flex-col items-center gap-2.5 rounded-r-[30px] bg-sidebar py-[18px] lg:flex"
+      className="fixed inset-y-[26px] left-0 z-20 hidden print:hidden w-[76px] flex-col items-center gap-2.5 rounded-r-[30px] bg-sidebar py-[18px] lg:flex"
     >
       <Link
         href="/mulai"
@@ -73,7 +73,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Navigasi utama"
-      className="fixed inset-x-4 bottom-3 z-20 flex justify-around rounded-[22px] bg-sidebar px-1 py-1.5 lg:hidden"
+      className="fixed inset-x-4 bottom-3 z-20 flex justify-around rounded-[22px] bg-sidebar px-1 py-1.5 lg:hidden print:hidden"
     >
       {items.map(({ href, label, icon: Icon }) => {
         const on = isActive(path, href);

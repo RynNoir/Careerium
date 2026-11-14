@@ -37,7 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/mulai" className="inline-flex min-h-11 items-center font-display text-[19px] font-extrabold">
                 Careerium
               </Link>
-              <HeaderAkun />
+              <div className="print:hidden">
+                <HeaderAkun />
+              </div>
             </header>
             <main className="flex flex-1 flex-col">{children}</main>
           </div>

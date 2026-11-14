@@ -7,6 +7,7 @@ import { useFlow } from "@/components/flow-provider";
 import { RadarCard } from "@/components/hasil/radar-card";
 import { RoadmapList } from "@/components/hasil/roadmap-list";
 import { ScoreTile } from "@/components/hasil/score-tile";
+import { EksporPdf } from "@/components/hasil/ekspor-pdf";
 import { SimpanHasil } from "@/components/hasil/simpan-hasil";
 import { EmptyState, ErrorCard, Kira, KiraBubble, PrioritasBadge, StageLoading, Steps } from "@/components/ui";
 import { api, ApiError } from "@/lib/api-client";
@@ -78,7 +79,10 @@ export function HasilView() {
         </h1>
         <p className="text-text-muted">Peta skill dari CV-mu dibandingkan dengan kebutuhan posisi.</p>
       </div>
-      <SimpanHasil />
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start print:hidden">
+        <SimpanHasil />
+        <EksporPdf posisi={posisi} />
+      </div>
 
       {/* Ponsel: skor → perlu ditingkatkan → radar → kekuatan. Desktop: bento 3 kolom. */}
       <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start">
@@ -106,7 +110,7 @@ export function HasilView() {
       </div>
 
       {/* Bar CTA: desktop bar emas; ponsel tombol menempel di atas navigasi bawah. */}
-      <div className="lg:flex lg:items-center lg:justify-between lg:gap-4 lg:rounded-xl lg:border-2 lg:border-ink lg:bg-accent lg:p-3 lg:pl-4 lg:shadow-(--shadow-card)">
+      <div className="lg:flex lg:items-center lg:justify-between lg:gap-4 lg:rounded-xl lg:border-2 lg:border-ink lg:bg-accent lg:p-3 lg:pl-4 lg:shadow-(--shadow-card) print:hidden">
         <p className="hidden font-semibold lg:block">
           {roadmap ? `Roadmap 4 minggu siap. Minggu 1: ${roadmap.minggu[0].fokus}` : "Latih jawabanmu untuk gap di atas."}
         </p>
@@ -155,12 +159,13 @@ export function HasilView() {
 }
 
 const RINGKAS = 5;
+const tersembunyi = (i: number, open: boolean) => !open && i >= RINGKAS;
 
 /** Tombol buka/tutup daftar panjang (gap & kekuatan bisa >10 item). */
 function LihatSemua({ total, open, onToggle, label }: { total: number; open: boolean; onToggle: () => void; label: string }) {
   if (total <= RINGKAS) return null;
   return (
-    <button type="button" className="min-h-11 self-start font-bold text-primary-text" aria-expanded={open} onClick={onToggle}>
+    <button type="button" className="min-h-11 self-start font-bold text-primary-text print:hidden" aria-expanded={open} onClick={onToggle}>
       {open ? "Tampilkan lebih sedikit" : `Lihat semua ${total} ${label}`}
     </button>
   );
@@ -168,7 +173,6 @@ function LihatSemua({ total, open, onToggle, label }: { total: number; open: boo
 
 function GapList({ gap }: { gap: GapResult }) {
   const [open, setOpen] = useState(false);
-  const items = open ? gap.gap : gap.gap.slice(0, RINGKAS);
   return (
     <section className="card flex flex-col gap-1" aria-labelledby="judul-gap">
       <div className="flex items-baseline justify-between gap-2">
@@ -181,8 +185,11 @@ function GapList({ gap }: { gap: GapResult }) {
         <p className="py-2 text-text-muted">Tidak ada gap utama. Kebutuhan posisi ini sudah terpenuhi.</p>
       ) : (
         <ul className="flex flex-col">
-          {items.map((g) => (
-            <li key={g.nama} className="flex items-start gap-3 border-t-[1.5px] border-ink py-2.5 first:border-t-0">
+          {gap.gap.map((g, i) => (
+            <li
+              key={g.nama}
+              className={`items-start gap-3 border-t-[1.5px] border-ink py-2.5 first:border-t-0 ${tersembunyi(i, open) ? "hidden print:flex" : "flex"}`}
+            >
               <div className="flex min-w-0 flex-1 flex-col">
                 <span className="font-semibold wrap-break-word">{g.nama}</span>
                 <span className="text-[13px] text-text-muted">{sumberGap(g.jumlah_muncul, gap.sumberLowongan)}</span>
@@ -199,7 +206,6 @@ function GapList({ gap }: { gap: GapResult }) {
 
 function KekuatanList({ gap }: { gap: GapResult }) {
   const [open, setOpen] = useState(false);
-  const items = open ? gap.kekuatan : gap.kekuatan.slice(0, RINGKAS);
   return (
     <section className="card flex flex-col gap-1" aria-labelledby="judul-kekuatan">
       <div className="flex items-baseline justify-between gap-2">
@@ -212,8 +218,8 @@ function KekuatanList({ gap }: { gap: GapResult }) {
         <p className="py-2 text-text-muted">Belum ada skill yang cocok dengan kebutuhan posisi. Roadmap di bawah membantumu memulai.</p>
       ) : (
         <ul className="flex flex-col">
-          {items.map((k) => (
-            <li key={k.nama} className="border-t-[1.5px] border-ink py-2.5 first:border-t-0">
+          {gap.kekuatan.map((k, i) => (
+            <li key={k.nama} className={`border-t-[1.5px] border-ink py-2.5 first:border-t-0 ${tersembunyi(i, open) ? "hidden print:block" : ""}`}>
               <details className="group">
                 <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
                   <Check className="size-5 shrink-0 text-success" strokeWidth={3} aria-hidden="true" />
@@ -221,12 +227,14 @@ function KekuatanList({ gap }: { gap: GapResult }) {
                     <span className="font-semibold wrap-break-word">{k.nama}</span>
                     <span className="text-[13px] text-text-muted">Tingkat: {LABEL_TINGKAT[k.tingkat]}</span>
                   </span>
-                  <span className="text-[13px] font-bold whitespace-nowrap text-primary-text">
+                  <span className="text-[13px] font-bold whitespace-nowrap text-primary-text print:hidden">
                     Bukti di CV <span className="inline-block transition-transform group-open:rotate-90">›</span>
                   </span>
                 </summary>
                 <blockquote className="mt-2 ml-8 rounded-[8px] bg-surface-muted px-3 py-2 text-[14px]">&ldquo;{k.bukti}&rdquo;</blockquote>
               </details>
+              {/* <details> tertutup tidak tercetak: bukti ditulis ulang khusus untuk PDF */}
+              <p className="hidden pl-8 text-[13px] print:block">Bukti di CV: &ldquo;{k.bukti}&rdquo;</p>
             </li>
           ))}
         </ul>
