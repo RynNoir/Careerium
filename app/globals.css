@@ -232,6 +232,19 @@
   }
 }
 
+/* Transisi antar pertanyaan wawancara (200 ms masuk, DESIGN.md §5) */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-masuk {
+    animation: masuk 200ms var(--ease);
+  }
+}
+@keyframes masuk {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
 @keyframes pulse-soft {
   50% {
     opacity: 0.55;

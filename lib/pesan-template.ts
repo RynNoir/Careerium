@@ -85,6 +85,20 @@ export const PERTANYAAN_LANJUTAN = "Supaya sarannya pas, apa yang paling kamu ca
 export const CATATAN_PERKIRAAN =
   "Posisi ini belum ada di data lowongan kami. Tempel deskripsi lowongan agar hasilnya lebih tepat. Tanpa itu, hasilnya berupa perkiraan umum, bukan data lowongan.";
 
+export const CATATAN_EKSPLORASI =
+  "Belum yakin posisinya? Tidak apa-apa. Setelah membaca CV-mu, Kira akan mengusulkan 2–3 jalur TI yang paling cocok untuk kamu pilih.";
+
+// ---------- Mode eksplorasi ----------
+export const EKSPLORASI = {
+  judul: "Jalur yang cocok untukmu",
+  isi: "Diurutkan dari yang paling cocok dengan skill di CV-mu. Pilih satu untuk melihat analisis lengkapnya.",
+  tahap: "Membandingkan CV-mu dengan semua posisi…",
+};
+
+export function sumberJalur(jumlah: number, diakses: string): string {
+  return `Berdasarkan ${jumlah} lowongan (diakses ${formatTanggal(diakses)})`;
+}
+
 // ---------- Layar Profil ----------
 export const PRIVASI_CV = "CV tidak disimpan. Email, nomor telepon, nama, dan alamat dihapus sebelum diproses.";
 export const CV_TIDAK_VALID =
@@ -113,22 +127,74 @@ export function sumberGap(jumlahMuncul: number, s: GapResult["sumberLowongan"]):
   return `Muncul di ${jumlahMuncul} dari ${s.jumlah} lowongan`;
 }
 
+/** Nama gap tanpa keterangan dalam kurung, untuk tempat sempit: "Bahasa/framework backend (PHP/…)" → "Bahasa/framework backend". */
+export function namaPendek(nama: string): string {
+  return nama.split(" (")[0].trim() || nama;
+}
+
 /** Kalimat Kira di layar Hasil. Tidak pernah menyebut skor. */
 export function kiraHasil(gap: GapResult): string {
   const wajib = gap.gap.find((g) => g.prioritas === "wajib");
-  if (wajib) return `Mulai dari "${pendek(wajib.nama)}" dulu, ya. Itu yang paling sering diminta.`;
-  if (gap.gap.length > 0) return `Fondasimu sudah ada. Tambah "${pendek(gap.gap[0].nama)}" supaya makin siap.`;
+  if (wajib) return `Mulai dari ${namaPendek(wajib.nama)} dulu, ya. Itu yang paling sering diminta.`;
+  if (gap.gap.length > 0) return `Fondasimu sudah ada. Tambah ${namaPendek(gap.gap[0].nama)} supaya makin siap.`;
   return "Kebutuhan utama posisi ini sudah kamu punya. Saatnya latihan wawancara!";
 }
 
 export const ROADMAP_GAGAL = "Roadmap belum berhasil disusun. Coba susun ulang sebentar lagi.";
 
-function pendek(s: string, max = 40) {
-  return s.length > max ? `${s.slice(0, max - 1)}…` : s;
+// ---------- Wawancara ----------
+export const TAHAP_PERTANYAAN = "Kira sedang menyiapkan 5 pertanyaan dari gap kamu…";
+export const TAHAP_MENILAI = "Kira sedang menilai jawabanmu…";
+
+export const STAR = [
+  { kunci: "situation", huruf: "S", nama: "Situation", arti: "konteks atau latar ceritamu" },
+  { kunci: "task", huruf: "T", nama: "Task", arti: "tugas atau tanggung jawabmu" },
+  { kunci: "action", huruf: "A", nama: "Action", arti: "langkah yang kamu ambil" },
+  { kunci: "result", huruf: "R", nama: "Result", arti: "hasil atau dampaknya" },
+] as const;
+
+export const RUBRIK = [
+  { kunci: "kejelasan", nama: "Kejelasan" },
+  { kunci: "relevansi", nama: "Relevansi" },
+  { kunci: "kedalaman", nama: "Kedalaman" },
+  { kunci: "struktur", nama: "Struktur" },
+] as const;
+
+export const TIDAK_DAPAT_DINILAI = {
+  judul: "Tidak dapat dinilai",
+  isi: "Jawabanmu belum menjawab pertanyaan, atau terlalu singkat. Coba ceritakan pengalaman nyata dengan pola STAR:",
+};
+
+export const DEMO_JAWABAN_GAGAL =
+  "Di mode demo, penilaian hanya tersedia untuk contoh jawaban Rani. Tekan \"Isi contoh jawaban Rani\", lalu kirim.";
+
+export function ringkasanWawancara(rata: number, jumlahDinilai: number): string {
+  if (jumlahDinilai === 0) return "Belum ada jawaban yang bisa dinilai. Coba ulangi dengan pola STAR, ya.";
+  if (rata >= 75) return "Jawabanmu sudah kuat. Pertahankan struktur ceritamu!";
+  if (rata >= 50) return "Fondasinya sudah ada. Tambah detail langkah dan hasil supaya makin meyakinkan.";
+  return "Tidak apa-apa, ini justru gunanya latihan. Fokus ke pola STAR di topik yang skornya rendah.";
 }
+
+// ---------- Roadmap adaptif ----------
+export const TAHAP_ADAPTIF = "Kira sedang menyusun ulang roadmap dari hasil latihanmu…";
+
+// ---------- Akun ----------
+export const AKUN = {
+  kodePemulihanJudul: "Simpan kode pemulihan ini",
+  kodePemulihanIsi:
+    "Kode ini hanya tampil sekali. Kamu membutuhkannya jika lupa password, karena Careerium tidak mengirim email. Salin dan simpan di tempat aman.",
+  hapusKonfirmasi:
+    "Semua data akunmu (email, hasil analisis, roadmap, dan riwayat wawancara) akan dihapus permanen. Tindakan ini tidak bisa dibatalkan.",
+  perluMasuk: "Masuk dulu untuk menyimpan hasil dan melihat riwayat progresmu.",
+  tersimpan: "Hasil tersimpan. Centang roadmap dan latihan wawancaramu akan ikut tercatat.",
+};
 
 function formatTanggal(iso: string) {
   const d = new Date(`${iso}T00:00:00`);
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+}
+
+export function formatWaktu(ms: number): string {
+  return new Date(ms).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
