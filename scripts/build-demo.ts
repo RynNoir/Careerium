@@ -58,7 +58,7 @@ async function main() {
 
   const out = {
     _catatan: `Persona demo Rani (fiktif). Dibangun dari hasil asli oleh scripts/build-demo.ts pada ${new Date().toISOString().slice(0, 10)}. Jangan diedit manual; jalankan ulang skripnya.`,
-    input: { tujuan, posisi },
+    input: { tujuan, posisi, cv: cv.replace(/\r\n/g, "\n") }, // cv dipakai server untuk mencocokkan input demo persis
     intent: S.Intent.parse(intent),
     profile: S.Profile.parse(profile),
     gap: S.GapResult.parse(gap),

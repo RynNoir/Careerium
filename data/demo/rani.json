@@ -2,7 +2,8 @@
   "_catatan": "Persona demo Rani (fiktif). Dibangun dari hasil asli oleh scripts/build-demo.ts pada 2026-11-14. Jangan diedit manual; jalankan ulang skripnya.",
   "input": {
     "tujuan": "Aku mahasiswa TI semester 6, pengen magang jadi web developer tapi bingung skill apa yang masih kurang.",
-    "posisi": "Web Developer"
+    "posisi": "Web Developer",
+    "cv": "[NAMA]\n[EMAIL] | [TELEPON] | [KOTA]\n\nPENDIDIKAN\nS1 Teknik Informatika, semester 6 (IPK 3,52)\n\nPENGALAMAN ORGANISASI\nStaf Divisi Media, Himpunan Mahasiswa Informatika (2024 - sekarang)\n- Mengelola website himpunan menggunakan HTML, CSS, dan JavaScript\n- Berkoordinasi dengan 5 anggota tim untuk jadwal publikasi mingguan\n\nPROYEK\nWebsite Katalog UMKM (tugas kuliah Pemrograman Web, 2025)\n- Membangun halaman katalog produk dengan React dan Tailwind CSS\n- Mengambil data produk dari REST API sederhana buatan teman satu tim\n- Kode disimpan dan dikelola dengan Git dan GitHub\n\nAplikasi To-Do List (belajar mandiri)\n- Membuat aplikasi to-do list dengan JavaScript dan localStorage\n\nSKILL\nHTML, CSS, JavaScript, React (dasar), Tailwind CSS, Git, Figma (dasar)\n\nKURSUS\nKursus online dasar-dasar SQL (2025)\n"
   },
   "intent": {
     "kategori": "karier_ti",

@@ -37,9 +37,12 @@ async function main() {
   const intent = await post("/api/intent", { text: rani.input.tujuan, demo: true });
   cek(`intent 200 (${intent.ms}ms)`, intent.status === 200 && intent.json?.kategori === "karier_ti", intent.json);
   const profile = await post("/api/profile", { cvText: cv, demo: true });
+  const pertanyaanDemo = await post("/api/interview/questions", { gap: rani.gap, posisi: "Web Developer", demo: true });
+  cek("questions demo = 5 pertanyaan Rani", JSON.stringify(pertanyaanDemo.json?.questions) === JSON.stringify(rani.questions.questions));
   cek(`profile 200 (${profile.ms}ms)`, profile.status === 200 && profile.json?.cv_valid === true, profile.json);
   const gap = await post("/api/gap", { profile: profile.json, posisi: "Web Developer", posisi_preset: "web_frontend", tahap: "semester_akhir", demo: true });
   cek(`gap 200, skor ${gap.json?.skor} (${gap.ms}ms)`, gap.status === 200 && typeof gap.json?.skor === "number", gap.json);
+  cek(`demo konsisten: skor = rani.json (${rani.gap.skor})`, gap.json?.skor === rani.gap.skor, { dapat: gap.json?.skor });
   const roadmap = await post("/api/roadmap", { gap: gap.json, tahap: "semester_akhir", posisi: "Web Developer", tujuan: "magang", demo: true });
   cek(`roadmap 200 (${roadmap.ms}ms)`, roadmap.status === 200 && roadmap.json?.minggu?.length === 4, roadmap.json);
 
@@ -47,7 +50,7 @@ async function main() {
   const hasil: unknown[] = [];
   for (const [i, c] of (rani.contoh_jawaban as { jawaban: string }[]).entries()) {
     const g = await post("/api/interview/grade", { question: qs[i], answer: c.jawaban, demo: true });
-    cek(`grade contoh jawaban ${i + 1}: 200, ${g.json?.status} ${g.json?.skor_total} (${g.ms}ms)`, g.status === 200 && typeof g.json?.skor_total === "number", g.json);
+    cek(`grade contoh jawaban ${i + 1}: 200, ${g.json?.status} ${g.json?.skor_total} (${g.ms}ms)`, g.status === 200 && g.json?.skor_total === rani.contoh_jawaban[i].grade.skor_total, { dapat: g.json?.skor_total, harap: rani.contoh_jawaban[i].grade.skor_total });
     hasil.push({ gap_asal: qs[i].gap_asal, status: g.json?.status ?? "dinilai", skor_total: g.json?.skor_total ?? 0, skor: g.json?.skor });
   }
   const adaptif = await post("/api/roadmap/adaptif", {
