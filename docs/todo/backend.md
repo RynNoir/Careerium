@@ -3,7 +3,7 @@
 Pemilik: **Backend**. Hanya Backend yang mengedit file ini. Frontend boleh membaca.
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 
-**Sedang dikerjakan:** 7.1 selesai. Berikutnya: 0.3 Turso + Vercel, lalu 3.1 `data/lowongan.json` (setelah itu jalankan ulang `npx tsx scripts/build-demo.ts`)
+**Sedang dikerjakan:** 3.1 selesai (dataset 75 lowongan, 4 posisi). Berikutnya: 8.1 uji prompt & bias
 
 ---
 
@@ -14,22 +14,22 @@ Status: `belum` → `siap lokal` → `siap Vercel`.
 
 | Endpoint | Fitur | Skema (`lib/schemas.ts`) | Status | Catatan |
 |---|---|---|---|---|
-| POST `/api/auth/register` | 0 | – | siap lokal | `{ok, recoveryCode}` |
-| POST `/api/auth/login` | 0 | – | siap lokal | |
-| POST `/api/auth/reset` | 0 | – | siap lokal | `{ok, recoveryCode}` (kode baru) |
-| POST `/api/auth/logout` | 0 | – | siap lokal | |
-| POST `/api/auth/delete` | 0 | – | siap lokal | Perlu login |
-| GET `/api/auth/me` | 0 | – | siap lokal | `{email}` atau 401 |
-| POST `/api/intent` | 1 | `IntentRequest` → `Intent` | siap lokal | Teruji LLM asli 10/10 |
-| POST `/api/profile` | 2 | `ProfileRequest` → `Profile` | siap lokal | Teruji LLM asli. CV uji: `data/demo/cv-rani.txt` |
-| POST `/api/gap` | 3 | `GapRequest` → `GapResult` | siap lokal (perkiraan umum) | Posisi tanpa data di `lowongan.json` → `perkiraanUmum: true` (butuh LLM). Kirim `posisi_preset` dari intent |
-| POST `/api/roadmap` | 4 | `RoadmapRequest` → `Roadmap` | siap lokal | Kirim juga `posisi` & `tujuan` agar roadmap sesuai konteks |
-| POST `/api/interview/questions` | 5 | `QuestionsRequest` → `QuestionsResponse` | siap lokal | Selalu 5; `gap_asal` selalu nama dari daftar gap |
-| POST `/api/interview/grade` | 5 | `GradeRequest` → `Grade` | siap lokal | Jawaban manipulatif / < 5 kata → `tidak_dapat_dinilai` tanpa LLM. Tidak ada fallback demo |
-| POST/GET `/api/analyses` | 6 | `AnalysisCreate` → `{id}` (201); GET → `AnalysisSummary[]` | siap lokal | Perlu login |
-| GET `/api/analyses/[id]` | 6 | `AnalysisDetail` | siap lokal | Pemilik saja (lainnya 404). Roadmap per butir: `roadmap[].items[].id` |
-| PATCH `/api/analyses/[id]/roadmap/[itemId]` | 6 | `{selesai}` → `{ok}` | siap lokal | Pemilik saja |
-| POST `/api/analyses/[id]/interviews` | 6 | `InterviewAttemptCreate` → `{percobaan_ke, skor_total}` (201) | siap lokal | `skor_total` = rata-rata, dihitung server |
+| POST `/api/auth/register` | 0 | – | siap Vercel | `{ok, recoveryCode}` |
+| POST `/api/auth/login` | 0 | – | siap Vercel | |
+| POST `/api/auth/reset` | 0 | – | siap Vercel | `{ok, recoveryCode}` (kode baru) |
+| POST `/api/auth/logout` | 0 | – | siap Vercel | |
+| POST `/api/auth/delete` | 0 | – | siap Vercel | Perlu login |
+| GET `/api/auth/me` | 0 | – | siap Vercel | `{email}` atau 401 |
+| POST `/api/intent` | 1 | `IntentRequest` → `Intent` | siap Vercel | Teruji LLM asli 10/10 |
+| POST `/api/profile` | 2 | `ProfileRequest` → `Profile` | siap Vercel | Teruji LLM asli. CV uji: `data/demo/cv-rani.txt` |
+| POST `/api/gap` | 3 | `GapRequest` → `GapResult` | siap lokal (data lowongan asli) | Posisi tanpa data di `lowongan.json` → `perkiraanUmum: true` (butuh LLM). Kirim `posisi_preset` dari intent |
+| POST `/api/roadmap` | 4 | `RoadmapRequest` → `Roadmap` | siap Vercel | Kirim juga `posisi` & `tujuan` agar roadmap sesuai konteks |
+| POST `/api/interview/questions` | 5 | `QuestionsRequest` → `QuestionsResponse` | siap Vercel | Selalu 5; `gap_asal` selalu nama dari daftar gap |
+| POST `/api/interview/grade` | 5 | `GradeRequest` → `Grade` | siap Vercel | Jawaban manipulatif / < 5 kata → `tidak_dapat_dinilai` tanpa LLM. Tidak ada fallback demo |
+| POST/GET `/api/analyses` | 6 | `AnalysisCreate` → `{id}` (201); GET → `AnalysisSummary[]` | siap Vercel | Perlu login |
+| GET `/api/analyses/[id]` | 6 | `AnalysisDetail` | siap Vercel | Pemilik saja (lainnya 404). Roadmap per butir: `roadmap[].items[].id` |
+| PATCH `/api/analyses/[id]/roadmap/[itemId]` | 6 | `{selesai}` → `{ok}` | siap Vercel | Pemilik saja |
+| POST `/api/analyses/[id]/interviews` | 6 | `InterviewAttemptCreate` → `{percobaan_ke, skor_total}` (201) | siap Vercel | `skor_total` = rata-rata, dihitung server |
 
 Semua error berbentuk `{ "error": string }` (pesan Bahasa Indonesia, siap ditampilkan).
 Endpoint AI: 400 masukan tidak valid, 429 kuota habis (40 permintaan/jam/sesi), 503 semua LLM gagal. Request dengan `demo: true` tidak pernah 429/503 (kecuali grade): dapat data persona Rani.
@@ -42,7 +42,7 @@ Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang di
 ### Fitur 0 — Fondasi
 - [x] 0.1 Scaffold, dependensi, auth + smoke test 15/15, `schema.sql`, draf `lib/schemas.ts`
 - [ ] 0.2 (bersama FE) Sepakati `lib/schemas.ts`: 5 kategori radar + mekanisme mode demo
-- [ ] 0.3 Turso + migrasi, GitHub, Vercel + env, `GEMINI_MODEL`
+- [x] 0.3 Turso (aws-ap-southeast-1) + migrasi, GitHub, Vercel + env. Production: auth 401, intent/profile LLM asli 3–4 dtk, guardrail OK, `test-analyses` 12/12 ke Turso, demo OK, cookie Secure+HttpOnly+SameSite=lax
 
 ### Fitur 1 — Pemahaman tujuan
 - [x] 1.1 `lib/llm.ts` fallback Gemini → Groq — teruji langsung (Gemini timeout/429 → Groq menjawab). `GEMINI_MODEL=gemini-3.5-flash` (2.5-flash ditolak untuk akun baru). Opsi `LLM_ORDER`
@@ -56,9 +56,9 @@ Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang di
 - [ ] → Serah terima `/api/profile`
 
 ### Fitur 3 — Gap & skor
-- [ ] 3.1 `data/lowongan.json` — skema siap di `lib/lowongan.ts`; prioritas dihitung otomatis dari `jumlah_muncul/jumlah_lowongan`
+- [x] 3.1 `data/lowongan.json` v2: 75 lowongan (Web 35, Data Analyst 15, UI/UX 14, Mobile 11), sumber per lowongan di `data/sumber.csv`, dapat dibangun ulang dengan `python data/kurasi/build.py` (hasil identik). Alias pencocokan: nama kelompok + opsi_teknologi + `data/sinonim.json`
 - [x] 3.2 `lib/scoring.ts` + `scripts/test-scoring.ts` (11/11 lulus, contoh manual 57)
-- [ ] 3.3 `/api/gap` — kode selesai; uji logika dengan fixture lulus (skor Rani 56, tanpa LLM). Menunggu data asli 3.1
+- [x] 3.3 `/api/gap` dengan data asli: sumbu radar per posisi + label, `sumberLowongan.posisi_data`/`diakses`, proyek berbukti = portofolio. Posisi tanpa data (QA, Cybersecurity, DevOps) → perkiraan umum
 - [ ] → Serah terima `/api/gap`
 
 ### Fitur 4 — Roadmap
@@ -96,6 +96,7 @@ Grade demo: hanya `contoh_jawaban[i].jawaban` dari `data/demo/rani.json` yang di
 | Tanggal | Perubahan | Dampak ke FE |
 |---|---|---|
 | 2026-11-14 | Draf v0: Intent, Profile, GapResult, Roadmap, Question, Grade, AnalysisSummary | Mulai membuat mock dari tipe ini |
+| 2026-11-14 | **v2 radar per posisi (disepakati BE):** `KategoriRadar` enum → string (id dari dataset, mis. `frontend`, `backend`, `database`, `tools`, `profesional`); **`RadarPoint.label` baru** (teks sumbu, wajib ditampilkan FE); jumlah sumbu 4–5 tergantung posisi; `sumberLowongan.posisi_data?` & `diakses?` baru. `GapItem.nama` bisa panjang (nama kelompok, mis. "Framework frontend (React/Vue/...)") | FE: tampilkan `label` untuk sumbu radar (jangan memetakan enum lama); teks "berdasarkan {jumlah} lowongan {posisi_data}, diakses {diakses}"; potong/wrap nama gap yang panjang |
 | 2026-11-14 | Tambahan (non-breaking): `Question.pertanyaan` maks 500, `gap_asal` maks 100; `AnalysisCreate`, `AnalysisDetail`, `RoadmapItem`, `SavedRoadmapWeek`, `InterviewAttemptCreate` (`detail[]`, snake_case; beda dari PRD `skorTotal/skorDetail`), `InterviewAttempt` | Pakai tipe ini untuk layar Riwayat & simpan hasil |
 | 2026-11-14 | Draf v1 (usulan, perlu konfirmasi FE): enum `KategoriRadar` (`fondasi`, `teknologi_inti`, `tools_workflow`, `proyek_praktik`, `soft_skill`) untuk `GapItem.kategori_radar` & `RadarPoint.kategori`; enum `PosisiPreset` + field `Intent.posisi_preset`; `GapRequest.posisi_preset?`; `RoadmapRequest.posisi?` & `tujuan?`; `demo?: boolean` di semua request AI | Mock radar/gap pakai nilai enum; label tampilan sumbu dibuat FE; kirim `posisi_preset` dari intent ke `/api/gap` |
 
