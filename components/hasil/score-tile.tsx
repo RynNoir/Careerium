@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { KETERANGAN_SKOR, sumberLowongan } from "@/lib/pesan-template";
+import { KETERANGAN_SKOR, rincianSkor, sumberLowongan } from "@/lib/pesan-template";
 import type { GapResult } from "@/lib/schemas";
 
 /** Ubin skor (pengganti cincin skor, DESIGN.md §6). Angka dari lib/scoring.ts di server. */
@@ -34,6 +34,7 @@ export function ScoreTile({ gap }: { gap: GapResult }) {
         {reduced ? gap.skor : shown}
         <span className="text-[22px]">/100</span>
       </p>
+      {rincianSkor(gap.skor_rincian) && <p className="text-[13px] font-semibold">{rincianSkor(gap.skor_rincian)}</p>}
       <p className="text-[12px] font-semibold">{KETERANGAN_SKOR}</p>
       <p className="text-[12px]">{sumberLowongan(gap.sumberLowongan)}</p>
     </section>

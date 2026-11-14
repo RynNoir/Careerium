@@ -10,7 +10,7 @@ import { RoadmapList, dariTersimpan } from "@/components/hasil/roadmap-list";
 import { SkorChart } from "@/components/riwayat/skor-chart";
 import { EmptyState, ErrorCard } from "@/components/ui";
 import { api, ApiError } from "@/lib/api-client";
-import { AKUN, KETERANGAN_SKOR, LABEL_TAHAP, formatWaktu, namaPendek, pesanError, sumberLowongan } from "@/lib/pesan-template";
+import { AKUN, KETERANGAN_SKOR, LABEL_TAHAP, formatWaktu, rincianSkor, namaPendek, pesanError, sumberLowongan } from "@/lib/pesan-template";
 import type { AnalysisDetail } from "@/lib/schemas";
 
 export function DetailView() {
@@ -106,6 +106,7 @@ export function DetailView() {
             {data.skor}
             <span className="text-[20px]">/100</span>
           </p>
+          {rincianSkor(data.gap.skor_rincian) && <p className="text-[13px] font-semibold">{rincianSkor(data.gap.skor_rincian)}</p>}
           <p className="text-[12px] font-semibold">{KETERANGAN_SKOR}</p>
           <p className="text-[12px]">{sumberLowongan(data.gap.sumberLowongan)}</p>
         </section>

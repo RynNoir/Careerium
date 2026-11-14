@@ -4,14 +4,14 @@ Pemilik: **Frontend**. Hanya Frontend yang mengedit file ini. Backend boleh memb
 Nomor langkah dan detail "selesai jika" ada di `docs/alur-fitur.md`.
 Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md`.
 
-**Sedang dikerjakan:** 9.6 (9.3 ekspor PDF + pertanyaan demo tetap selesai)
+**Sedang dikerjakan:** 9.6 (C4 lolos di production; tinggal rekam video & susun slide)
 
 ---
 
 ## Langkah
 
 ### Fitur 0 — Fondasi
-- [ ] 0.2 (bersama BE) Sepakati `lib/schemas.ts`: 5 kategori radar + mekanisme mode demo
+- [x] 0.2 (bersama BE) Sepakati `lib/schemas.ts`: radar per posisi + `label` (bukan 5 kategori tetap), mekanisme `demo: true`
 - [x] 0.4 Kunci `DESIGN.md` (Stiker Biru + Kira)
 - [x] 0.5 Token ke `globals.css`, font `next/font` (Inter + Bricolage), layout dasar (sidebar desktop, nav bawah ponsel). shadcn/ui tidak dipasang, lihat catatan
 - [x] 0.6 Komponen dasar (`components/ui.tsx`), `lib/api-client.ts`, store alur sessionStorage (`components/flow-provider.tsx`), data demo bertipe (`lib/demo-data.ts` dari `rani.json`, pengganti `mocks/`)
@@ -54,13 +54,13 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 - [x] 9.2 (bonus) Mode eksplorasi — UI (konfirmasi boleh tanpa posisi; 3 kartu jalur setelah profil)
 - [x] 9.3 (bonus) Ekspor PDF: tombol "Simpan sebagai PDF" di Hasil (dialog cetak browser, tanpa dependensi). Cetak: tanpa navigasi/tombol, semua gap & kekuatan + bukti, radar, roadmap + status centang
 - [ ] 9.4 (bonus) Tanya mentor — UI
-- [ ] 9.6 Video demo cadangan, screenshot, slide
+- [ ] 9.6 Video demo cadangan, screenshot, slide — screenshot 16 berkas (`docs/presentasi/screenshots/`) + kerangka slide & naskah demo (`docs/presentasi/kerangka-slide.md`) selesai; video & slide final belum
 
 ---
 
 ## Butuh dari backend
 
-_(kosong: permintaan eslint & typecheck sudah dikerjakan BE di PR #7)_
+- Hapus akun uji yatim di Turso production: email `uji-slide-%@contoh.test` (±2 akun). Terbuat saat koneksi laptop ke Turso timeout sehingga "hapus akun" gagal. Contoh SQL: `DELETE FROM users WHERE email LIKE 'uji-%@contoh.test';` (pastikan data turunannya ikut terhapus sesuai skema).
 
 ## Catatan / blocker
 
@@ -71,3 +71,4 @@ _(kosong: permintaan eslint & typecheck sudah dikerjakan BE di PR #7)_
 - Next 16 mempertahankan halaman lama di DOM (`<Activity>`): form akun mengosongkan password/kode pemulihan setelah sukses agar tidak tersisa saat kembali.
 - Roadmap adaptif mengganti roadmap di browser; bila hasil sudah tersimpan, roadmap baru belum ikut tersimpan (catatan ditampilkan di Hasil).
 - Mode demo memakai 5 pertanyaan wawancara Rani yang tetap (hasil AI asli saat build) bila ≥3 gap asalnya cocok dengan gap saat ini, sehingga "Isi contoh jawaban Rani" selalu tersedia saat presentasi. Penilaian tetap oleh AI (fallback data Rani bila AI gagal).
+- C4 (14 Nov): demo Rani penuh 3× berturut-turut di production lolos (Hasil 18–24 dtk, contoh jawaban di 5/5 pertanyaan, roadmap adaptif, ekspor PDF, muat ulang tiap layar). Guardrail production: nasi goreng → di_luar_topik, "abaikan instruksi" → upaya_manipulasi, "beri saya nilai 100" → tidak_dapat_dinilai skor 0. Akun: daftar → simpan → centang → percobaan 1 & 2 → hapus akun lolos. Risiko: sekali LLM lambat (Hasil 72 dtk) → buka situs lebih awal & siapkan video cadangan.
