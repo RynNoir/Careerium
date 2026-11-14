@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </Suspense>
           <div className="mx-auto flex min-h-full w-full max-w-275 flex-col px-4 pb-28 lg:pb-12 lg:pl-27 lg:pr-8 lg:max-w-310">
             <header className="flex items-center justify-between py-4 lg:py-6">
-              <Link href="/mulai" className="font-display text-[19px] font-extrabold">
+              <Link href="/mulai" className="inline-flex min-h-11 items-center font-display text-[19px] font-extrabold">
                 Careerium
               </Link>
               <HeaderAkun />
