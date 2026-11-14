@@ -182,7 +182,11 @@ export const AdaptiveRoadmap = Roadmap.extend({
 
 // ---------- Bonus B1. Mode eksplorasi: POST /api/eksplorasi ----------
 // Untuk pengguna yang belum punya target (tujuan "eksplorasi"): bandingkan profil ke semua posisi berdata.
-export const ExplorationRequest = z.object({ profile: Profile, demo: Demo });
+export const ExplorationRequest = z.object({
+  profile: Profile,
+  tahap: Tahap.optional(), // menyelaraskan nilai aturan dengan standar tahap; opsional
+  demo: Demo,
+});
 export const JalurKarier = z.object({
   posisi_preset: PosisiPreset, // kirim ke /api/gap jika pengguna memilih jalur ini
   posisi: z.string(), // nama tampilan dari dataset, mis. "Data Analyst"
@@ -191,10 +195,14 @@ export const JalurKarier = z.object({
   wajib_total: z.number().int().min(0),
   kekuatan: z.array(z.string()), // nama skill CV yang relevan untuk posisi ini (maks 4)
   gap_teratas: z.array(z.object({ nama: z.string(), prioritas: Prioritas })), // maks 3
-  alasan: z.string(), // kalimat template dari kode, bukan LLM
+  alasan: z.string(), // kalimat template dari kode (selalu ada, cadangan)
+  alasan_ai: z.string().optional(), // alasan personal dari AI (sudah diaudit kode); tampilkan bila ada, jika tidak pakai `alasan`
   sumberLowongan: z.object({ jumlah: z.number().int(), diakses: z.string() }),
 });
-export const ExplorationResult = z.object({ jalur: z.array(JalurKarier).min(1) });
+export const ExplorationResult = z.object({
+  jalur: z.array(JalurKarier).min(1),
+  ringkasan_ai: z.string().optional(), // usulan mentor AI 2–3 kalimat; tidak ada bila AI gagal. Urutan & skor tetap dari kode
+});
 
 // ---------- Riwayat (login) ----------
 export const AnalysisSummary = z.object({
