@@ -156,7 +156,7 @@ export async function analyzeGap(input: {
   const tingkat = new Map(
     [...cocok].map(([k, ss]) => [k, ss.reduce((a, b) => (RANK[b.tingkat] > RANK[a.tingkat] ? b : a)).tingkat]),
   );
-  const { skor, radar } = hitungSkor(kebutuhan, tingkat, dariData?.sumbu ?? SUMBU_UMUM);
+  const { skor, radar, rincian } = hitungSkor(kebutuhan, tingkat, dariData?.sumbu ?? SUMBU_UMUM);
 
   const kekuatan = [...new Set([...cocok.values()].flat())]
     .sort((a, b) => RANK[b.tingkat] - RANK[a.tingkat] || a.nama.localeCompare(b.nama))
@@ -166,6 +166,7 @@ export async function analyzeGap(input: {
     kekuatan,
     gap: susunGap(kebutuhan, tingkat),
     skor,
+    skor_rincian: rincian,
     radar,
     sumberLowongan: {
       jumlah: dariData?.jumlah ?? (jd ? 1 : 0),

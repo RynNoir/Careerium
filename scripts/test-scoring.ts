@@ -15,10 +15,15 @@ const K: Kebutuhan[] = [
   { nama: "Testing", prioritas: "nilai_tambah", kategori_radar: "tools_workflow", jumlah_muncul: 2 },
 ];
 
-// Hitung manual: (3×0,8 + 2×0 + 1×1,0) / (3+2+1) = 3,4/6 = 0,5667 -> 57
+// Hitung manual (rumus revisi): inti = (3×0,8 + 2×0) / (3+2) = 48; bonus nilai_tambah = 1×1,0/1 × 10 = 10 -> 58
 const punya = new Map([["JavaScript", "menengah" as const], ["Testing", "mahir" as const]]);
 const r = hitungSkor(K, punya, SUMBU_UMUM);
-cek("skor contoh manual = 57", r.skor, 57);
+cek("skor contoh manual = 58 (inti 48 + bonus 10)", r.skor, 58);
+cek("rincian per prioritas", r.rincian, { wajib: { terpenuhi: 1, total: 1 }, penting: { terpenuhi: 0, total: 1 }, nilai_tambah: { terpenuhi: 1, total: 1 } });
+const tanpaBonus = hitungSkor(K, new Map([["JavaScript", "menengah" as const]]), SUMBU_UMUM);
+cek("tanpa nilai_tambah: skor = inti saja (48)", tanpaBonus.skor, 48);
+cek("nilai_tambah saja tidak menaikkan skor melewati 10", hitungSkor(K, new Map([["Testing", "mahir" as const]]), SUMBU_UMUM).skor, 10);
+cek("hanya kebutuhan nilai_tambah: dihitung penuh (bukan bonus)", hitungSkor([K[2]], new Map([["Testing", "mahir" as const]]), SUMBU_UMUM).skor, 100);
 cek("deterministik (dua kali hitung sama)", hitungSkor(K, punya, SUMBU_UMUM), r);
 // Radar: bobot teknologi_inti 3, tools_workflow 3 (maks 3). teknologi_inti kamu 2,4/3=80; tools 1/3=33.
 cek(

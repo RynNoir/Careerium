@@ -85,7 +85,11 @@ export const RadarPoint = z.object({
 export const GapResult = z.object({
   kekuatan: z.array(Kekuatan),
   gap: z.array(GapItem),
-  skor: z.number().int().min(0).max(100), // dihitung lib/scoring.ts, BUKAN LLM
+  skor: z.number().int().min(0).max(100), // dihitung lib/scoring.ts, BUKAN LLM: inti (wajib+penting) + bonus nilai_tambah maks 10
+  // Jumlah kebutuhan terpenuhi per prioritas, untuk menjelaskan skor di UI (mis. "wajib 3/4").
+  skor_rincian: z
+    .object({ wajib: z.object({ terpenuhi: z.number().int().min(0), total: z.number().int().min(0) }), penting: z.object({ terpenuhi: z.number().int().min(0), total: z.number().int().min(0) }), nilai_tambah: z.object({ terpenuhi: z.number().int().min(0), total: z.number().int().min(0) }) })
+    .optional(),
   radar: z.array(RadarPoint),
   sumberLowongan: z.object({
     jumlah: z.number().int().min(0), // M lowongan
