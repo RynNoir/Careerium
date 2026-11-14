@@ -28,6 +28,7 @@ Aturan:
 - Skill berprioritas "wajib" harus dibahas di minggu 1–2. "penting" di minggu 2–3. "nilai_tambah" hanya jika masih ada ruang.
 - Setiap minggu: fokus (maks 8 kata), 2–4 kegiatan (masing-masing maks 20 kata, konkret dan bisa dicentang), mini_proyek (1 kalimat).
 - Bangun di atas kekuatan yang sudah dimiliki.
+- Jika gap berupa kelompok dengan beberapa pilihan teknologi (di dalam kurung, mis. "PHP/Laravel, Node.js, Python, Go"), pilih SATU yang paling dekat dengan kekuatan pengguna (mis. kuat di JavaScript/React → Node.js + Express; kuat di Python → Python/FastAPI; belum ada petunjuk → yang disebut pertama). Pakai pilihan itu secara konsisten di semua minggu.
 - Sumber belajar hanya disebut umum (mis. "dokumentasi resmi", "tutorial video", "latihan soal"). DILARANG menyebut tautan/URL, nama kursus, nama platform kursus, harga, gaji, atau lowongan.`;
 
 const URL = /\b(?:https?:\/\/|www\.)\S+|\b[\w-]+\.(?:com|id|io|org|net|dev|co)\b\S*/gi;
