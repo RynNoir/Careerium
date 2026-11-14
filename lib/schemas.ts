@@ -1,5 +1,5 @@
 // KONTRAK BERSAMA backend <-> frontend (PRD §12).
-// Status: DRAF v0 — disepakati tim di Fase 0. Perubahan wajib diberitahukan ke track lain sebelum di-commit.
+// Status: DRAF v1 — disepakati tim di Fase 0. Perubahan wajib diberitahukan ke track lain sebelum di-commit.
 import { z } from "zod";
 import { MAX_ANSWER_CHARS, MAX_CV_CHARS, MAX_GOAL_CHARS, MAX_JOB_DESC_CHARS } from "./limits";
 
@@ -11,20 +11,37 @@ export const Tingkat = z.enum(["dasar", "menengah", "mahir"]);
 export const Prioritas = z.enum(["wajib", "penting", "nilai_tambah"]);
 export const JenisSkill = z.enum(["teknis", "tools", "soft_skill"]);
 export const JenisPertanyaan = z.enum(["teknis", "perilaku"]);
+// 5 sumbu radar, sama untuk semua posisi (usulan v1, perlu konfirmasi FE di langkah 0.2).
+export const KategoriRadar = z.enum(["fondasi", "teknologi_inti", "tools_workflow", "proyek_praktik", "soft_skill"]);
+// Kunci posisi preset di data/lowongan.json. null = posisi TI di luar preset.
+export const PosisiPreset = z.enum([
+  "web_frontend",
+  "web_backend",
+  "mobile",
+  "data_analyst",
+  "uiux",
+  "qa",
+  "cybersecurity",
+  "devops",
+]);
+
+// true = jalankan seperti biasa; jika semua LLM gagal, kembalikan data persona Rani.
+const Demo = z.boolean().optional();
 
 // ---------- 1. Pemahaman tujuan: POST /api/intent ----------
-export const IntentRequest = z.object({ text: z.string().trim().min(1).max(MAX_GOAL_CHARS) });
+export const IntentRequest = z.object({ text: z.string().trim().min(1).max(MAX_GOAL_CHARS), demo: Demo });
 export const Intent = z.object({
   kategori: Kategori,
   tujuan: Tujuan,
-  posisi_target: z.string().nullable(),
+  posisi_target: z.string().nullable(), // teks tampilan, mis. "Web Developer"
+  posisi_preset: PosisiPreset.nullable(),
   tahap: Tahap.nullable(),
   kekhawatiran: z.string().nullable(),
   kepercayaan: z.number().min(0).max(1),
 });
 
 // ---------- 2. Ekstraksi profil: POST /api/profile ----------
-export const ProfileRequest = z.object({ cvText: z.string().trim().min(1).max(MAX_CV_CHARS) });
+export const ProfileRequest = z.object({ cvText: z.string().trim().min(1).max(MAX_CV_CHARS), demo: Demo });
 export const Skill = z.object({
   nama: z.string(),
   jenis: JenisSkill,
@@ -46,18 +63,20 @@ export const Profile = z.object({
 export const GapRequest = z.object({
   profile: Profile,
   posisi: z.string().min(1).max(100),
+  posisi_preset: PosisiPreset.nullable().optional(),
   tahap: Tahap,
   jobDescription: z.string().max(MAX_JOB_DESC_CHARS).optional(),
+  demo: Demo,
 });
 export const Kekuatan = z.object({ nama: z.string(), tingkat: Tingkat, bukti: z.string() });
 export const GapItem = z.object({
   nama: z.string(),
   prioritas: Prioritas,
-  kategori_radar: z.string(),
+  kategori_radar: KategoriRadar,
   jumlah_muncul: z.number().int().min(0), // "muncul di N dari M lowongan"
 });
 export const RadarPoint = z.object({
-  kategori: z.string(),
+  kategori: KategoriRadar,
   kamu: z.number().min(0).max(100),
   target: z.number().min(0).max(100),
 });
@@ -73,7 +92,13 @@ export const GapResult = z.object({
 });
 
 // ---------- 4. Roadmap: POST /api/roadmap ----------
-export const RoadmapRequest = z.object({ gap: GapResult, tahap: Tahap });
+export const RoadmapRequest = z.object({
+  gap: GapResult,
+  tahap: Tahap,
+  posisi: z.string().min(1).max(100).optional(),
+  tujuan: Tujuan.optional(), // magang menurunkan ekspektasi pengalaman, kerja menekankan proyek nyata
+  demo: Demo,
+});
 export const RoadmapWeek = z.object({
   minggu: z.number().int().min(1).max(4),
   fokus: z.string(),
@@ -83,11 +108,11 @@ export const RoadmapWeek = z.object({
 export const Roadmap = z.object({ minggu: z.array(RoadmapWeek).length(4) });
 
 // ---------- 5. Pertanyaan wawancara: POST /api/interview/questions ----------
-export const QuestionsRequest = z.object({ gap: GapResult, posisi: z.string().min(1).max(100) });
+export const QuestionsRequest = z.object({ gap: GapResult, posisi: z.string().min(1).max(100), demo: Demo });
 export const Question = z.object({
-  pertanyaan: z.string(),
+  pertanyaan: z.string().min(1).max(500),
   jenis: JenisPertanyaan,
-  gap_asal: z.string(),
+  gap_asal: z.string().min(1).max(100),
 });
 export const QuestionsResponse = z.object({ questions: z.array(Question).length(5) });
 
@@ -95,6 +120,7 @@ export const QuestionsResponse = z.object({ questions: z.array(Question).length(
 export const GradeRequest = z.object({
   question: Question,
   answer: z.string().trim().min(1).max(MAX_ANSWER_CHARS),
+  demo: Demo,
 });
 const Skala = z.number().int().min(1).max(5);
 // Keluaran LLM.
@@ -119,7 +145,54 @@ export const AnalysisSummary = z.object({
   created_at: z.number().int(),
 });
 
+// POST /api/analyses -> { id }. Hanya hasil terstruktur; teks CV tidak pernah dikirim ke sini.
+export const AnalysisCreate = z.object({
+  posisi: z.string().trim().min(1).max(100),
+  tahap: Tahap,
+  profile: Profile,
+  gap: GapResult,
+  roadmap: Roadmap,
+});
+// Roadmap tersimpan per butir agar setiap kegiatan bisa dicentang (PATCH .../roadmap/[itemId]).
+export const RoadmapItem = z.object({
+  id: z.number().int(),
+  jenis: z.enum(["kegiatan", "mini_proyek"]),
+  teks: z.string(),
+  selesai: z.boolean(),
+});
+export const SavedRoadmapWeek = z.object({ minggu: z.number().int(), fokus: z.string(), items: z.array(RoadmapItem) });
+
+// POST /api/analyses/[id]/interviews -> { percobaan_ke, skor_total }. skor_total dihitung server (rata-rata).
+export const InterviewAttemptCreate = z.object({
+  detail: z
+    .array(
+      z.object({
+        pertanyaan: z.string().max(500),
+        gap_asal: z.string().max(100),
+        status: z.enum(["dinilai", "tidak_dapat_dinilai"]),
+        skor_total: z.number().int().min(0).max(100),
+      }),
+    )
+    .min(1)
+    .max(5),
+});
+export const InterviewAttempt = InterviewAttemptCreate.extend({
+  percobaan_ke: z.number().int(),
+  skor_total: z.number().int(),
+  created_at: z.number().int(),
+});
+
+// GET /api/analyses/[id]
+export const AnalysisDetail = AnalysisSummary.extend({
+  profile: Profile,
+  gap: GapResult,
+  roadmap: z.array(SavedRoadmapWeek),
+  interviews: z.array(InterviewAttempt),
+});
+
 export type Intent = z.infer<typeof Intent>;
+export type KategoriRadar = z.infer<typeof KategoriRadar>;
+export type PosisiPreset = z.infer<typeof PosisiPreset>;
 export type Profile = z.infer<typeof Profile>;
 export type Skill = z.infer<typeof Skill>;
 export type GapResult = z.infer<typeof GapResult>;
@@ -129,3 +202,9 @@ export type Question = z.infer<typeof Question>;
 export type GradeLLM = z.infer<typeof GradeLLM>;
 export type Grade = z.infer<typeof Grade>;
 export type AnalysisSummary = z.infer<typeof AnalysisSummary>;
+export type AnalysisCreate = z.infer<typeof AnalysisCreate>;
+export type AnalysisDetail = z.infer<typeof AnalysisDetail>;
+export type RoadmapItem = z.infer<typeof RoadmapItem>;
+export type InterviewAttemptCreate = z.infer<typeof InterviewAttemptCreate>;
+export type InterviewAttempt = z.infer<typeof InterviewAttempt>;
+export type QuestionsResponse = z.infer<typeof QuestionsResponse>;
