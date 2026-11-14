@@ -1,3 +1,1105 @@
 {
-  "posisi": {}
+  "versi": 2,
+  "diperbarui": "2026-11-13",
+  "aturan_prioritas": "persen_muncul >= 60 -> wajib; 30-59 -> penting; < 30 -> nilai_tambah",
+  "catatan_umum": [
+    "Satu lowongan bisa menyebut beberapa pilihan teknologi (mis. React atau Vue); kelompok skill dihitung sekali per lowongan, dan rincian pilihan ada di opsi_teknologi.",
+    "jumlah_muncul menggabungkan syarat dan nilai tambah; jumlah_sebagai_syarat hanya syarat.",
+    "Kategori radar berbeda per posisi; lihat kategori_radar di tiap posisi.",
+    "Sebagian besar lowongan sudah ditutup saat diakses; data dipakai untuk melihat pola kebutuhan skill, bukan daftar lowongan aktif.",
+    "Jumlah sampel kecil (11-35 lowongan per posisi); persentase adalah gambaran, bukan statistik pasar."
+  ],
+  "posisi": [
+    {
+      "id": "web_developer",
+      "nama": "Web Developer",
+      "cakupan": "Magang, junior, dan fresh graduate (pengalaman maks. sekitar 2 tahun) di Indonesia; peran frontend, backend, dan fullstack web.",
+      "jumlah_lowongan": 35,
+      "jumlah_data_lengkap": 28,
+      "kategori_radar": {
+        "frontend": "Frontend",
+        "backend": "Backend",
+        "database": "Database",
+        "tools": "Tools & DevOps",
+        "profesional": "Profesional"
+      },
+      "rincian_subperan": {
+        "frontend": {
+          "jumlah_lowongan": 8,
+          "skill_teratas": [
+            {
+              "id": "fe_framework",
+              "persen_muncul": 88
+            },
+            {
+              "id": "css_framework",
+              "persen_muncul": 62
+            },
+            {
+              "id": "typescript",
+              "persen_muncul": 62
+            },
+            {
+              "id": "git",
+              "persen_muncul": 50
+            },
+            {
+              "id": "javascript",
+              "persen_muncul": 50
+            },
+            {
+              "id": "responsive",
+              "persen_muncul": 38
+            }
+          ]
+        },
+        "backend": {
+          "jumlah_lowongan": 5,
+          "skill_teratas": [
+            {
+              "id": "be_language",
+              "persen_muncul": 80
+            },
+            {
+              "id": "rest_api",
+              "persen_muncul": 80
+            },
+            {
+              "id": "sql_db",
+              "persen_muncul": 60
+            },
+            {
+              "id": "auth_security",
+              "persen_muncul": 40
+            },
+            {
+              "id": "git",
+              "persen_muncul": 40
+            },
+            {
+              "id": "portfolio",
+              "persen_muncul": 40
+            }
+          ]
+        },
+        "fullstack": {
+          "jumlah_lowongan": 22,
+          "skill_teratas": [
+            {
+              "id": "be_language",
+              "persen_muncul": 86
+            },
+            {
+              "id": "rest_api",
+              "persen_muncul": 82
+            },
+            {
+              "id": "sql_db",
+              "persen_muncul": 77
+            },
+            {
+              "id": "fe_framework",
+              "persen_muncul": 73
+            },
+            {
+              "id": "git",
+              "persen_muncul": 73
+            },
+            {
+              "id": "javascript",
+              "persen_muncul": 59
+            }
+          ]
+        }
+      },
+      "skill": [
+        {
+          "id": "rest_api",
+          "nama": "REST API (membuat/integrasi)",
+          "kategori_radar": "backend",
+          "jumlah_muncul": 25,
+          "persen_muncul": 71,
+          "jumlah_sebagai_syarat": 20,
+          "prioritas": "wajib"
+        },
+        {
+          "id": "fe_framework",
+          "nama": "Framework frontend (React/Vue/Angular/Next.js/dll.)",
+          "kategori_radar": "frontend",
+          "jumlah_muncul": 24,
+          "persen_muncul": 69,
+          "jumlah_sebagai_syarat": 18,
+          "prioritas": "wajib",
+          "opsi_teknologi": [
+            {
+              "nama": "React",
+              "jumlah": 21
+            },
+            {
+              "nama": "Vue",
+              "jumlah": 10
+            },
+            {
+              "nama": "Next.js",
+              "jumlah": 9
+            },
+            {
+              "nama": "Angular",
+              "jumlah": 4
+            },
+            {
+              "nama": "Nuxt",
+              "jumlah": 1
+            },
+            {
+              "nama": "Svelte",
+              "jumlah": 1
+            }
+          ]
+        },
+        {
+          "id": "be_language",
+          "nama": "Bahasa/framework backend (PHP/Laravel, Node.js, Python, Go, dll.)",
+          "kategori_radar": "backend",
+          "jumlah_muncul": 23,
+          "persen_muncul": 66,
+          "jumlah_sebagai_syarat": 21,
+          "prioritas": "wajib",
+          "opsi_teknologi": [
+            {
+              "nama": "PHP",
+              "jumlah": 13,
+              "framework_disebut": {
+                "Laravel": 10,
+                "CodeIgniter": 1
+              }
+            },
+            {
+              "nama": "Node.js",
+              "jumlah": 12
+            },
+            {
+              "nama": "Go",
+              "jumlah": 8
+            },
+            {
+              "nama": "Python",
+              "jumlah": 7
+            },
+            {
+              "nama": "C#/.NET",
+              "jumlah": 2
+            },
+            {
+              "nama": "Java",
+              "jumlah": 1
+            }
+          ]
+        },
+        {
+          "id": "git",
+          "nama": "Git & GitHub/GitLab",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 22,
+          "persen_muncul": 63,
+          "jumlah_sebagai_syarat": 18,
+          "prioritas": "wajib"
+        },
+        {
+          "id": "sql_db",
+          "nama": "Database relasional (MySQL/PostgreSQL/SQL Server)",
+          "kategori_radar": "database",
+          "jumlah_muncul": 20,
+          "persen_muncul": 57,
+          "jumlah_sebagai_syarat": 17,
+          "prioritas": "penting",
+          "opsi_teknologi": [
+            {
+              "nama": "PostgreSQL",
+              "jumlah": 11
+            },
+            {
+              "nama": "MySQL",
+              "jumlah": 8
+            },
+            {
+              "nama": "SQL Server",
+              "jumlah": 2
+            }
+          ]
+        },
+        {
+          "id": "javascript",
+          "nama": "JavaScript (ES6+)",
+          "kategori_radar": "frontend",
+          "jumlah_muncul": 17,
+          "persen_muncul": 49,
+          "jumlah_sebagai_syarat": 17,
+          "prioritas": "penting"
+        },
+        {
+          "id": "html_css",
+          "nama": "HTML & CSS",
+          "kategori_radar": "frontend",
+          "jumlah_muncul": 12,
+          "persen_muncul": 34,
+          "jumlah_sebagai_syarat": 12,
+          "prioritas": "penting"
+        },
+        {
+          "id": "problem_solving",
+          "nama": "Problem solving & debugging",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 11,
+          "persen_muncul": 31,
+          "jumlah_sebagai_syarat": 11,
+          "prioritas": "penting"
+        },
+        {
+          "id": "deploy_linux",
+          "nama": "Deployment, server Linux, CI/CD",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 10,
+          "persen_muncul": 29,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "learning",
+          "nama": "Kemauan belajar",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 10,
+          "persen_muncul": 29,
+          "jumlah_sebagai_syarat": 10,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "portfolio",
+          "nama": "Portofolio / proyek pribadi",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 10,
+          "persen_muncul": 29,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "teamwork_comm",
+          "nama": "Kerja tim & komunikasi",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 9,
+          "persen_muncul": 26,
+          "jumlah_sebagai_syarat": 9,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "typescript",
+          "nama": "TypeScript",
+          "kategori_radar": "frontend",
+          "jumlah_muncul": 8,
+          "persen_muncul": 23,
+          "jumlah_sebagai_syarat": 6,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "responsive",
+          "nama": "Desain web responsif",
+          "kategori_radar": "frontend",
+          "jumlah_muncul": 7,
+          "persen_muncul": 20,
+          "jumlah_sebagai_syarat": 7,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "css_framework",
+          "nama": "Framework CSS (Tailwind/Bootstrap)",
+          "kategori_radar": "frontend",
+          "jumlah_muncul": 7,
+          "persen_muncul": 20,
+          "jumlah_sebagai_syarat": 6,
+          "prioritas": "nilai_tambah",
+          "opsi_teknologi": [
+            {
+              "nama": "Tailwind",
+              "jumlah": 5
+            },
+            {
+              "nama": "Bootstrap",
+              "jumlah": 4
+            }
+          ]
+        },
+        {
+          "id": "docker",
+          "nama": "Docker",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 6,
+          "persen_muncul": 17,
+          "jumlah_sebagai_syarat": 2,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "auth_security",
+          "nama": "Autentikasi & keamanan web (JWT, secure coding)",
+          "kategori_radar": "backend",
+          "jumlah_muncul": 5,
+          "persen_muncul": 14,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "nosql",
+          "nama": "Database NoSQL (MongoDB/Redis)",
+          "kategori_radar": "database",
+          "jumlah_muncul": 5,
+          "persen_muncul": 14,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "nilai_tambah",
+          "opsi_teknologi": [
+            {
+              "nama": "MongoDB",
+              "jumlah": 4
+            },
+            {
+              "nama": "Redis",
+              "jumlah": 1
+            }
+          ]
+        },
+        {
+          "id": "ai_tools",
+          "nama": "Memakai AI coding tools (ChatGPT, Copilot, Cursor)",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 5,
+          "persen_muncul": 14,
+          "jumlah_sebagai_syarat": 3,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "english",
+          "nama": "Bahasa Inggris (dokumentasi teknis)",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 3,
+          "persen_muncul": 9,
+          "jumlah_sebagai_syarat": 3,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "testing",
+          "nama": "Software testing (unit/automated)",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 3,
+          "persen_muncul": 9,
+          "jumlah_sebagai_syarat": 2,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "jquery",
+          "nama": "jQuery",
+          "kategori_radar": "frontend",
+          "jumlah_muncul": 3,
+          "persen_muncul": 9,
+          "jumlah_sebagai_syarat": 3,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "mvc_oop",
+          "nama": "Konsep MVC / OOP",
+          "kategori_radar": "backend",
+          "jumlah_muncul": 2,
+          "persen_muncul": 6,
+          "jumlah_sebagai_syarat": 2,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "ui_from_design",
+          "nama": "Menerjemahkan desain UI (Figma)",
+          "kategori_radar": "frontend",
+          "jumlah_muncul": 2,
+          "persen_muncul": 6,
+          "jumlah_sebagai_syarat": 2,
+          "prioritas": "nilai_tambah"
+        }
+      ],
+      "sumber": {
+        "file": "sumber.csv",
+        "tanggal_akses": "2026-11-13",
+        "platform": [
+          "Indeed (cuplikan)",
+          "JobLeads (cuplikan)",
+          "Karirhub Kemnaker",
+          "freehire.me (agregator)"
+        ]
+      }
+    },
+    {
+      "id": "data_analyst",
+      "nama": "Data Analyst",
+      "cakupan": "Magang, junior, dan fresh graduate data analyst di Indonesia (termasuk peran analis data di tim bisnis/operasional/SDM).",
+      "jumlah_lowongan": 15,
+      "jumlah_data_lengkap": 14,
+      "kategori_radar": {
+        "query": "Query & pemrograman",
+        "spreadsheet": "Spreadsheet",
+        "visualisasi": "Visualisasi & BI",
+        "analisis": "Analisis",
+        "profesional": "Profesional"
+      },
+      "skill": [
+        {
+          "id": "bi_viz",
+          "nama": "Visualisasi & BI (Power BI/Tableau/Looker Studio/Metabase)",
+          "kategori_radar": "visualisasi",
+          "jumlah_muncul": 13,
+          "persen_muncul": 87,
+          "jumlah_sebagai_syarat": 8,
+          "prioritas": "wajib",
+          "opsi_teknologi": [
+            {
+              "nama": "Tableau",
+              "jumlah": 7
+            },
+            {
+              "nama": "Power BI",
+              "jumlah": 7
+            },
+            {
+              "nama": "Looker Studio",
+              "jumlah": 6
+            },
+            {
+              "nama": "Metabase",
+              "jumlah": 2
+            }
+          ]
+        },
+        {
+          "id": "spreadsheet",
+          "nama": "Excel / Google Sheets (pivot, lookup, dashboard)",
+          "kategori_radar": "spreadsheet",
+          "jumlah_muncul": 12,
+          "persen_muncul": 80,
+          "jumlah_sebagai_syarat": 11,
+          "prioritas": "wajib",
+          "opsi_teknologi": [
+            {
+              "nama": "Excel",
+              "jumlah": 7
+            },
+            {
+              "nama": "Google Sheets",
+              "jumlah": 4
+            }
+          ]
+        },
+        {
+          "id": "sql",
+          "nama": "SQL (query data, mis. MySQL/BigQuery)",
+          "kategori_radar": "query",
+          "jumlah_muncul": 12,
+          "persen_muncul": 80,
+          "jumlah_sebagai_syarat": 9,
+          "prioritas": "wajib",
+          "opsi_teknologi": [
+            {
+              "nama": "BigQuery",
+              "jumlah": 2
+            },
+            {
+              "nama": "MySQL/MariaDB",
+              "jumlah": 1
+            }
+          ]
+        },
+        {
+          "id": "teamwork_comm",
+          "nama": "Kerja tim & komunikasi",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 9,
+          "persen_muncul": 60,
+          "jumlah_sebagai_syarat": 9,
+          "prioritas": "wajib"
+        },
+        {
+          "id": "python_r",
+          "nama": "Python atau R untuk analisis (pandas, dll.)",
+          "kategori_radar": "query",
+          "jumlah_muncul": 9,
+          "persen_muncul": 60,
+          "jumlah_sebagai_syarat": 6,
+          "prioritas": "wajib",
+          "opsi_teknologi": [
+            {
+              "nama": "Python",
+              "jumlah": 6
+            },
+            {
+              "nama": "R",
+              "jumlah": 4
+            }
+          ]
+        },
+        {
+          "id": "learning",
+          "nama": "Kemauan belajar",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 6,
+          "persen_muncul": 40,
+          "jumlah_sebagai_syarat": 6,
+          "prioritas": "penting"
+        },
+        {
+          "id": "data_cleaning",
+          "nama": "Data cleaning & validasi data",
+          "kategori_radar": "analisis",
+          "jumlah_muncul": 5,
+          "persen_muncul": 33,
+          "jumlah_sebagai_syarat": 5,
+          "prioritas": "penting"
+        },
+        {
+          "id": "detail",
+          "nama": "Teliti / detail-oriented",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 5,
+          "persen_muncul": 33,
+          "jumlah_sebagai_syarat": 5,
+          "prioritas": "penting"
+        },
+        {
+          "id": "problem_solving",
+          "nama": "Problem solving & berpikir analitis",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 4,
+          "persen_muncul": 27,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "statistics",
+          "nama": "Statistika & forecasting",
+          "kategori_radar": "analisis",
+          "jumlah_muncul": 4,
+          "persen_muncul": 27,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "business",
+          "nama": "Pemahaman bisnis & proses",
+          "kategori_radar": "analisis",
+          "jumlah_muncul": 3,
+          "persen_muncul": 20,
+          "jumlah_sebagai_syarat": 3,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "data_pipeline",
+          "nama": "Pipeline data / ETL / data warehouse",
+          "kategori_radar": "query",
+          "jumlah_muncul": 2,
+          "persen_muncul": 13,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah",
+          "opsi_teknologi": [
+            {
+              "nama": "Airflow",
+              "jumlah": 1
+            }
+          ]
+        },
+        {
+          "id": "portfolio",
+          "nama": "Portofolio / sertifikasi data",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 2,
+          "persen_muncul": 13,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "english",
+          "nama": "Bahasa Inggris",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 1,
+          "persen_muncul": 7,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "git",
+          "nama": "Git",
+          "kategori_radar": "query",
+          "jumlah_muncul": 1,
+          "persen_muncul": 7,
+          "jumlah_sebagai_syarat": 0,
+          "prioritas": "nilai_tambah"
+        }
+      ],
+      "sumber": {
+        "file": "sumber.csv",
+        "tanggal_akses": "2026-11-13",
+        "platform": [
+          "freehire.me (agregator)"
+        ]
+      }
+    },
+    {
+      "id": "ui_ux_designer",
+      "nama": "UI/UX Designer",
+      "cakupan": "Magang, junior, dan fresh graduate UI/UX atau product designer di Indonesia.",
+      "jumlah_lowongan": 14,
+      "jumlah_data_lengkap": 9,
+      "kategori_radar": {
+        "desain_ui": "Desain UI",
+        "riset_ux": "Riset & UX",
+        "tools": "Tools",
+        "profesional": "Profesional"
+      },
+      "skill": [
+        {
+          "id": "design_tool",
+          "nama": "Tool desain UI (Figma/Adobe XD/Sketch)",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 11,
+          "persen_muncul": 79,
+          "jumlah_sebagai_syarat": 11,
+          "prioritas": "wajib",
+          "opsi_teknologi": [
+            {
+              "nama": "Figma",
+              "jumlah": 11
+            },
+            {
+              "nama": "Adobe XD",
+              "jumlah": 5
+            },
+            {
+              "nama": "Sketch",
+              "jumlah": 3
+            },
+            {
+              "nama": "Canva",
+              "jumlah": 1
+            }
+          ]
+        },
+        {
+          "id": "portfolio",
+          "nama": "Portofolio desain",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 8,
+          "persen_muncul": 57,
+          "jumlah_sebagai_syarat": 7,
+          "prioritas": "penting"
+        },
+        {
+          "id": "wireframe_proto",
+          "nama": "Wireframe, user flow, mockup & prototype",
+          "kategori_radar": "desain_ui",
+          "jumlah_muncul": 8,
+          "persen_muncul": 57,
+          "jumlah_sebagai_syarat": 7,
+          "prioritas": "penting"
+        },
+        {
+          "id": "ux_principles",
+          "nama": "Prinsip UX, user-centered design & design thinking",
+          "kategori_radar": "riset_ux",
+          "jumlah_muncul": 7,
+          "persen_muncul": 50,
+          "jumlah_sebagai_syarat": 7,
+          "prioritas": "penting"
+        },
+        {
+          "id": "user_research",
+          "nama": "Riset pengguna & usability testing",
+          "kategori_radar": "riset_ux",
+          "jumlah_muncul": 6,
+          "persen_muncul": 43,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "penting"
+        },
+        {
+          "id": "design_system",
+          "nama": "Design system & komponen UI",
+          "kategori_radar": "desain_ui",
+          "jumlah_muncul": 5,
+          "persen_muncul": 36,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "penting"
+        },
+        {
+          "id": "learning",
+          "nama": "Kemauan belajar & menerima feedback",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 5,
+          "persen_muncul": 36,
+          "jumlah_sebagai_syarat": 5,
+          "prioritas": "penting"
+        },
+        {
+          "id": "responsive",
+          "nama": "Desain responsif / mobile-first",
+          "kategori_radar": "desain_ui",
+          "jumlah_muncul": 4,
+          "persen_muncul": 29,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "teamwork_comm",
+          "nama": "Kerja tim & komunikasi",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 4,
+          "persen_muncul": 29,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "ai_tools",
+          "nama": "AI tools untuk desain",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 2,
+          "persen_muncul": 14,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "accessibility",
+          "nama": "Aksesibilitas (a11y)",
+          "kategori_radar": "desain_ui",
+          "jumlah_muncul": 2,
+          "persen_muncul": 14,
+          "jumlah_sebagai_syarat": 2,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "html_css",
+          "nama": "Dasar HTML/CSS/JavaScript",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 2,
+          "persen_muncul": 14,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "product_collab",
+          "nama": "Kolaborasi produk (PRD, handoff ke developer)",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 1,
+          "persen_muncul": 7,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "problem_solving",
+          "nama": "Problem solving & berpikir analitis",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 1,
+          "persen_muncul": 7,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "detail",
+          "nama": "Teliti / detail-oriented",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 1,
+          "persen_muncul": 7,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "graphic_tools",
+          "nama": "Tool grafis (Photoshop/Illustrator)",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 1,
+          "persen_muncul": 7,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah",
+          "opsi_teknologi": [
+            {
+              "nama": "Photoshop",
+              "jumlah": 1
+            },
+            {
+              "nama": "Illustrator",
+              "jumlah": 1
+            }
+          ]
+        }
+      ],
+      "sumber": {
+        "file": "sumber.csv",
+        "tanggal_akses": "2026-11-13",
+        "platform": [
+          "Dealls",
+          "Indeed (cuplikan)",
+          "Semesteria",
+          "Situs karier perusahaan",
+          "Workable",
+          "freehire.me (agregator)"
+        ]
+      }
+    },
+    {
+      "id": "mobile_developer",
+      "nama": "Mobile Developer",
+      "cakupan": "Magang, junior, dan fresh graduate mobile developer (Flutter, React Native, Android native) di Indonesia; termasuk lowongan yang tidak menyebut jumlah tahun pengalaman.",
+      "jumlah_lowongan": 11,
+      "jumlah_data_lengkap": 10,
+      "kategori_radar": {
+        "pengembangan": "Pengembangan aplikasi",
+        "integrasi": "Integrasi & data",
+        "arsitektur": "Arsitektur & kualitas",
+        "tools": "Tools & rilis",
+        "profesional": "Profesional"
+      },
+      "skill": [
+        {
+          "id": "mobile_framework",
+          "nama": "Framework/bahasa mobile (Flutter, React Native, Kotlin, Swift)",
+          "kategori_radar": "pengembangan",
+          "jumlah_muncul": 11,
+          "persen_muncul": 100,
+          "jumlah_sebagai_syarat": 10,
+          "prioritas": "wajib",
+          "opsi_teknologi": [
+            {
+              "nama": "Flutter",
+              "jumlah": 8
+            },
+            {
+              "nama": "React Native",
+              "jumlah": 5
+            },
+            {
+              "nama": "Kotlin",
+              "jumlah": 4
+            },
+            {
+              "nama": "Java",
+              "jumlah": 3
+            },
+            {
+              "nama": "Swift",
+              "jumlah": 1
+            },
+            {
+              "nama": "C++",
+              "jumlah": 1
+            }
+          ]
+        },
+        {
+          "id": "git",
+          "nama": "Git & GitHub",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 8,
+          "persen_muncul": 73,
+          "jumlah_sebagai_syarat": 6,
+          "prioritas": "wajib"
+        },
+        {
+          "id": "rest_api",
+          "nama": "Integrasi REST API & JSON",
+          "kategori_radar": "integrasi",
+          "jumlah_muncul": 8,
+          "persen_muncul": 73,
+          "jumlah_sebagai_syarat": 8,
+          "prioritas": "wajib"
+        },
+        {
+          "id": "testing_debug",
+          "nama": "Testing & debugging",
+          "kategori_radar": "arsitektur",
+          "jumlah_muncul": 6,
+          "persen_muncul": 55,
+          "jumlah_sebagai_syarat": 5,
+          "prioritas": "penting"
+        },
+        {
+          "id": "architecture",
+          "nama": "Arsitektur aplikasi (MVVM/Clean Architecture/design pattern)",
+          "kategori_radar": "arsitektur",
+          "jumlah_muncul": 5,
+          "persen_muncul": 45,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "penting"
+        },
+        {
+          "id": "ui_impl",
+          "nama": "Implementasi UI dari desain & layout responsif",
+          "kategori_radar": "pengembangan",
+          "jumlah_muncul": 5,
+          "persen_muncul": 45,
+          "jumlah_sebagai_syarat": 5,
+          "prioritas": "penting",
+          "opsi_teknologi": [
+            {
+              "nama": "Jetpack Compose",
+              "jumlah": 1
+            },
+            {
+              "nama": "XML",
+              "jumlah": 1
+            }
+          ]
+        },
+        {
+          "id": "teamwork_comm",
+          "nama": "Kerja tim & komunikasi",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 4,
+          "persen_muncul": 36,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "penting"
+        },
+        {
+          "id": "state_mgmt",
+          "nama": "State management (Provider/BLoC/Redux)",
+          "kategori_radar": "arsitektur",
+          "jumlah_muncul": 4,
+          "persen_muncul": 36,
+          "jumlah_sebagai_syarat": 4,
+          "prioritas": "penting",
+          "opsi_teknologi": [
+            {
+              "nama": "BLoC",
+              "jumlah": 1
+            },
+            {
+              "nama": "setState",
+              "jumlah": 1
+            },
+            {
+              "nama": "Provider",
+              "jumlah": 1
+            }
+          ]
+        },
+        {
+          "id": "ide_sdk",
+          "nama": "Android Studio / VS Code & Android SDK",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 3,
+          "persen_muncul": 27,
+          "jumlah_sebagai_syarat": 3,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "build_release",
+          "nama": "Build & rilis ke Play Store/App Store, CI/CD",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 3,
+          "persen_muncul": 27,
+          "jumlah_sebagai_syarat": 3,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "firebase",
+          "nama": "Firebase / backend-as-a-service",
+          "kategori_radar": "integrasi",
+          "jumlah_muncul": 3,
+          "persen_muncul": 27,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "portfolio",
+          "nama": "Portofolio / aplikasi yang pernah dibuat",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 3,
+          "persen_muncul": 27,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "problem_solving",
+          "nama": "Problem solving",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 3,
+          "persen_muncul": 27,
+          "jumlah_sebagai_syarat": 3,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "detail",
+          "nama": "Teliti / detail-oriented",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 3,
+          "persen_muncul": 27,
+          "jumlah_sebagai_syarat": 3,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "prog_fundamental",
+          "nama": "Dasar pemrograman & OOP",
+          "kategori_radar": "pengembangan",
+          "jumlah_muncul": 2,
+          "persen_muncul": 18,
+          "jumlah_sebagai_syarat": 2,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "learning",
+          "nama": "Kemauan belajar",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 2,
+          "persen_muncul": 18,
+          "jumlah_sebagai_syarat": 2,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "local_db",
+          "nama": "Penyimpanan lokal (SQLite, secure storage)",
+          "kategori_radar": "integrasi",
+          "jumlah_muncul": 2,
+          "persen_muncul": 18,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah",
+          "opsi_teknologi": [
+            {
+              "nama": "SQLite",
+              "jumlah": 1
+            }
+          ]
+        },
+        {
+          "id": "auth",
+          "nama": "Autentikasi & otorisasi",
+          "kategori_radar": "integrasi",
+          "jumlah_muncul": 1,
+          "persen_muncul": 9,
+          "jumlah_sebagai_syarat": 1,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "english",
+          "nama": "Bahasa Inggris",
+          "kategori_radar": "profesional",
+          "jumlah_muncul": 1,
+          "persen_muncul": 9,
+          "jumlah_sebagai_syarat": 0,
+          "prioritas": "nilai_tambah"
+        },
+        {
+          "id": "ai_tools",
+          "nama": "Memakai AI coding tools",
+          "kategori_radar": "tools",
+          "jumlah_muncul": 1,
+          "persen_muncul": 9,
+          "jumlah_sebagai_syarat": 0,
+          "prioritas": "nilai_tambah"
+        }
+      ],
+      "sumber": {
+        "file": "sumber.csv",
+        "tanggal_akses": "2026-11-13",
+        "platform": [
+          "freehire.me (agregator)"
+        ]
+      }
+    }
+  ]
 }
