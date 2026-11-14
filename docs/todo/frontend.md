@@ -54,6 +54,7 @@ Sebelum menyambung ke API asli, cek **Status endpoint** di `docs/todo/backend.md
 - [x] 9.2 (bonus) Mode eksplorasi — UI (konfirmasi boleh tanpa posisi; 3 kartu jalur setelah profil)
 - [x] 9.3 (bonus) Ekspor PDF: tombol "Simpan sebagai PDF" di Hasil (dialog cetak browser, tanpa dependensi). Cetak: tanpa navigasi/tombol, semua gap & kekuatan + bukti, radar, roadmap + status centang
 - [x] 9.7 Penilaian AI asesor — UI (dikerjakan BE saat FE offline, **mohon FE tinjau**): kartu "Penilaian mentor AI" di Hasil (`components/hasil/penilaian-card.tsx`: ringkasan mentor, badge Dinilai AI/otomatis, per kebutuhan: 4 titik + label + alasan + kutipan bukti, "Lihat semua N kebutuhan"), kirim `tujuan` ke `/api/gap`, `ApiError` membawa `kode` & `cobaLagiDetik`, arahan "Coba lagi (hitung mundur)" + "Pakai mode demo" di Mulai & Profil (`components/ai-error-aksi.tsx`)
+- [x] 9.8 Mode eksplorasi + AI — UI (dikerjakan BE saat FE offline, **mohon FE tinjau**): kartu "Usulan mentor AI" di atas pilihan jalur, `alasan_ai ?? alasan` per kartu, catatan skor perkiraan awal, `tahap` dikirim ke `/api/eksplorasi`, state `ringkasanJalur` (`components/profil/jalur-picker.tsx`, `flow-provider.tsx`, `profil-view.tsx`)
 - [ ] 9.4 (bonus) Tanya mentor — UI
 - [ ] 9.6 Video demo cadangan, screenshot, slide — screenshot 16 berkas (`docs/presentasi/screenshots/`) + kerangka slide & naskah demo (`docs/presentasi/kerangka-slide.md`) selesai; video & slide final belum
 

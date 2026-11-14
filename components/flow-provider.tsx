@@ -35,6 +35,8 @@ export type FlowState = {
   roadmapAdaptif: CatatanAdaptif | null;
   /** usulan jalur karier (mode eksplorasi) sebelum pengguna memilih */
   jalur: JalurKarier[] | null;
+  /** ringkasan usulan mentor AI untuk jalur di atas (opsional; kosong bila AI gagal) */
+  ringkasanJalur: string | null;
   /** id analisis tersimpan (login) */
   savedId: string | null;
   /** kunci centang roadmap → id butir di server (untuk PATCH) */
@@ -57,6 +59,7 @@ const INITIAL: FlowState = {
   attemptSaved: false,
   roadmapAdaptif: null,
   jalur: null,
+  ringkasanJalur: null,
   savedId: null,
   roadmapItemIds: {},
 };

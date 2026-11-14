@@ -1,10 +1,21 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { PrioritasBadge } from "@/components/ui";
 import { EKSPLORASI, namaPendek, sumberJalur } from "@/lib/pesan-template";
 import type { JalurKarier } from "@/lib/schemas";
 
-/** Mode eksplorasi: 2–3 jalur teratas (sudah urut skor dari server, dihitung kode, tanpa LLM). */
-export function JalurPicker({ jalur, onPilih }: { jalur: JalurKarier[]; onPilih: (j: JalurKarier) => void }) {
+/**
+ * Mode eksplorasi: 2–3 jalur teratas. Skor & urutan dihitung kode (tanpa penilai AI); `ringkasan` (usulan mentor)
+ * dan `alasan_ai` ditulis AI dan bersifat opsional: bila kosong, tampil alasan template dari server.
+ */
+export function JalurPicker({
+  jalur,
+  ringkasan,
+  onPilih,
+}: {
+  jalur: JalurKarier[];
+  ringkasan?: string | null;
+  onPilih: (j: JalurKarier) => void;
+}) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
@@ -13,6 +24,17 @@ export function JalurPicker({ jalur, onPilih }: { jalur: JalurKarier[]; onPilih:
         </h1>
         <p className="max-w-[65ch] text-text-muted">{EKSPLORASI.isi}</p>
       </div>
+      {ringkasan && (
+        <section className="card flex flex-col gap-2" aria-labelledby="judul-usulan">
+          <h2 id="judul-usulan" className="flex items-center gap-2 text-[17px]">
+            <Sparkles className="size-5 shrink-0 text-primary-text" aria-hidden="true" />
+            {EKSPLORASI.judulUsulan}
+            <span className="badge bg-accent">{EKSPLORASI.ditulisAi}</span>
+          </h2>
+          <p className="rounded-btn border-2 border-ink bg-accent-soft p-3">{ringkasan}</p>
+        </section>
+      )}
+      <p className="text-[13px] text-text-muted">{EKSPLORASI.catatanSkor}</p>
       <ol className="grid gap-4 lg:grid-cols-3">
         {jalur.slice(0, 3).map((j, i) => (
           <li key={j.posisi_preset} className="card flex flex-col gap-3">
@@ -28,7 +50,7 @@ export function JalurPicker({ jalur, onPilih }: { jalur: JalurKarier[]; onPilih:
                 {j.skor}
               </span>
             </div>
-            <p className="text-[15px]">{j.alasan}</p>
+            <p className="text-[15px]">{j.alasan_ai ?? j.alasan}</p>
             <p className="text-[13px] text-text-muted">
               Kebutuhan wajib terpenuhi: {j.wajib_terpenuhi} dari {j.wajib_total}
             </p>

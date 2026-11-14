@@ -93,6 +93,9 @@ export const EKSPLORASI = {
   judul: "Jalur yang cocok untukmu",
   isi: "Diurutkan dari yang paling cocok dengan skill di CV-mu. Pilih satu untuk melihat analisis lengkapnya.",
   tahap: "Membandingkan CV-mu dengan semua posisi…",
+  judulUsulan: "Usulan mentor AI",
+  catatanSkor: "Skor di sini perkiraan awal dari skill yang terbaca di CV-mu. Skor lengkap dengan penilaian AI muncul setelah kamu memilih jalur.",
+  ditulisAi: "Ditulis AI",
 };
 
 export function sumberJalur(jumlah: number, diakses: string): string {
