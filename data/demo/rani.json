@@ -10,8 +10,8 @@
     "posisi_target": "Web Developer",
     "posisi_preset": "web_frontend",
     "tahap": "semester_akhir",
-    "kekhawatiran": "bingung skill apa yang masih kurang",
-    "kepercayaan": 0.98
+    "kekhawatiran": "skill yang masih kurang",
+    "kepercayaan": 0.95
   },
   "profile": {
     "cv_valid": true,
@@ -19,13 +19,13 @@
       {
         "nama": "HTML",
         "jenis": "teknis",
-        "tingkat": "menengah",
+        "tingkat": "dasar",
         "bukti": "Mengelola website himpunan menggunakan HTML, CSS, dan JavaScript"
       },
       {
         "nama": "CSS",
         "jenis": "teknis",
-        "tingkat": "menengah",
+        "tingkat": "dasar",
         "bukti": "Mengelola website himpunan menggunakan HTML, CSS, dan JavaScript"
       },
       {
@@ -43,7 +43,7 @@
       {
         "nama": "Tailwind CSS",
         "jenis": "teknis",
-        "tingkat": "menengah",
+        "tingkat": "dasar",
         "bukti": "Membangun halaman katalog produk dengan React dan Tailwind CSS"
       },
       {
@@ -57,6 +57,18 @@
         "jenis": "tools",
         "tingkat": "dasar",
         "bukti": "Figma (dasar)"
+      },
+      {
+        "nama": "REST API",
+        "jenis": "teknis",
+        "tingkat": "menengah",
+        "bukti": "Mengambil data produk dari REST API sederhana buatan teman satu tim"
+      },
+      {
+        "nama": "localStorage",
+        "jenis": "teknis",
+        "tingkat": "menengah",
+        "bukti": "Membuat aplikasi to-do list dengan JavaScript dan localStorage"
       },
       {
         "nama": "SQL",
@@ -87,19 +99,9 @@
   "gap": {
     "kekuatan": [
       {
-        "nama": "CSS",
-        "tingkat": "menengah",
-        "bukti": "Mengelola website himpunan menggunakan HTML, CSS, dan JavaScript"
-      },
-      {
         "nama": "Git",
         "tingkat": "menengah",
         "bukti": "Kode disimpan dan dikelola dengan Git dan GitHub"
-      },
-      {
-        "nama": "HTML",
-        "tingkat": "menengah",
-        "bukti": "Mengelola website himpunan menggunakan HTML, CSS, dan JavaScript"
       },
       {
         "nama": "JavaScript",
@@ -117,14 +119,24 @@
         "bukti": "Membangun halaman katalog produk dengan React dan Tailwind CSS"
       },
       {
-        "nama": "Tailwind CSS",
+        "nama": "REST API",
         "tingkat": "menengah",
-        "bukti": "Membangun halaman katalog produk dengan React dan Tailwind CSS"
+        "bukti": "Mengambil data produk dari REST API sederhana buatan teman satu tim"
+      },
+      {
+        "nama": "CSS",
+        "tingkat": "dasar",
+        "bukti": "Mengelola website himpunan menggunakan HTML, CSS, dan JavaScript"
       },
       {
         "nama": "Figma",
         "tingkat": "dasar",
         "bukti": "Figma (dasar)"
+      },
+      {
+        "nama": "HTML",
+        "tingkat": "dasar",
+        "bukti": "Mengelola website himpunan menggunakan HTML, CSS, dan JavaScript"
       },
       {
         "nama": "React",
@@ -135,15 +147,14 @@
         "nama": "SQL",
         "tingkat": "dasar",
         "bukti": "Kursus online dasar-dasar SQL (2025)"
+      },
+      {
+        "nama": "Tailwind CSS",
+        "tingkat": "dasar",
+        "bukti": "Membangun halaman katalog produk dengan React dan Tailwind CSS"
       }
     ],
     "gap": [
-      {
-        "nama": "REST API (membuat/integrasi)",
-        "prioritas": "wajib",
-        "kategori_radar": "backend",
-        "jumlah_muncul": 25
-      },
       {
         "nama": "Bahasa/framework backend (PHP/Laravel, Node.js, Python, Go, dll.)",
         "prioritas": "wajib",
@@ -229,18 +240,32 @@
         "jumlah_muncul": 2
       }
     ],
-    "skor": 31,
+    "skor": 51,
+    "skor_rincian": {
+      "wajib": {
+        "terpenuhi": 3,
+        "total": 4
+      },
+      "penting": {
+        "terpenuhi": 3,
+        "total": 4
+      },
+      "nilai_tambah": {
+        "terpenuhi": 4,
+        "total": 16
+      }
+    },
     "radar": [
       {
         "kategori": "frontend",
         "label": "Frontend",
-        "kamu": 50,
+        "kamu": 43,
         "target": 100
       },
       {
         "kategori": "backend",
         "label": "Backend",
-        "kamu": 0,
+        "kamu": 20,
         "target": 67
       },
       {
@@ -273,83 +298,105 @@
     "minggu": [
       {
         "minggu": 1,
-        "fokus": "Membangun REST API dasar",
+        "fokus": "Membangun Backend Node.js",
         "kegiatan": [
-          "Pelajari konsep REST dan HTTP methods",
-          "Implementasi endpoint CRUD dengan Node.js & Express",
-          "Uji API menggunakan Postman atau Insomnia",
-          "Dokumentasikan API di README"
+          "Pelajari dasar Express dan middleware",
+          "Bangun API CRUD sederhana",
+          "Implementasi validasi request"
         ],
-        "mini_proyek": "Buat API sederhana untuk manajemen tugas (CRUD) dan sertakan dokumentasi."
+        "mini_proyek": "API REST untuk daftar tugas (Task List API)"
       },
       {
         "minggu": 2,
-        "fokus": "Integrasi Frontend dengan API",
+        "fokus": "Problem Solving & Debugging",
         "kegiatan": [
-          "Hubungkan React (atau Next.js) dengan API yang dibuat",
-          "Kelola state data menggunakan React hooks",
-          "Terapkan error handling dan loading states",
-          "Push kode ke repo Git dengan commit terstruktur"
+          "Selesaikan 10 soal algoritma JavaScript",
+          "Analisis bug pada API sebelumnya",
+          "Gunakan console.log dan breakpoints"
         ],
-        "mini_proyek": "Kembangkan UI daftar tugas yang menampilkan, menambah, mengedit, dan menghapus data via API."
+        "mini_proyek": "Perbaikan bug pada Task List API"
       },
       {
         "minggu": 3,
-        "fokus": "Problem solving & debugging",
+        "fokus": "Frontend Responsif & CI/CD",
         "kegiatan": [
-          "Latihan debugging di Chrome DevTools dan Node console",
-          "Selidiki dan perbaiki bug pada integrasi API‑frontend",
-          "Kerjakan soal algoritma sederhana (array, object)",
-          "Gunakan teknik break‑point dan logging terstruktur"
+          "Terapkan Tailwind CSS untuk responsive design",
+          "Integrasi API ke React (fetch)",
+          "Set up GitHub Actions CI"
         ],
-        "mini_proyek": "Perbaiki tiga bug yang disengaja pada proyek tugas sebelumnya dan tulis laporan singkat."
+        "mini_proyek": "Dashboard tugas responsif terhubung ke API"
       },
       {
         "minggu": 4,
-        "fokus": "Penambahan nilai tambah & deploy",
+        "fokus": "Deployment & Dokumentasi",
         "kegiatan": [
-          "Deploy API ke layanan gratis (mis. Render, Railway)",
-          "Setup CI sederhana dengan GitHub Actions untuk testing",
-          "Tambahkan autentikasi JWT pada endpoint protected",
-          "Optimasi UI responsif menggunakan Tailwind"
+          "Deploy aplikasi ke Vercel atau Render",
+          "Dokumentasikan endpoint dengan Swagger",
+          "Tulis README lengkap"
         ],
-        "mini_proyek": "Deploy aplikasi tugas lengkap (frontend + backend) ke web, sertakan autentikasi dan responsif design."
+        "mini_proyek": "Aplikasi Task List live dengan dokumentasi"
       }
     ]
   },
   "questions": {
     "questions": [
       {
-        "pertanyaan": "Jelaskan cara kamu mengonsumsi sebuah endpoint REST API menggunakan fetch di JavaScript.",
-        "jenis": "teknis",
-        "gap_asal": "REST API (membuat/integrasi)"
-      },
-      {
-        "pertanyaan": "Bagaimana kamu memilih antara PHP/Laravel atau Node.js untuk membangun backend sederhana, dan apa pertimbangan utama kamu?",
+        "pertanyaan": "Jelaskan apa itu framework MVC dan bagaimana Laravel menerapkan konsep tersebut.",
         "jenis": "teknis",
         "gap_asal": "Bahasa/framework backend (PHP/Laravel, Node.js, Python, Go, dll.)"
       },
       {
-        "pertanyaan": "Saat halaman tidak menampilkan data yang diharapkan, langkah-langkah debugging apa yang kamu lakukan?",
+        "pertanyaan": "Bagaimana cara mengatasi error 404 di aplikasi web sederhana menggunakan PHP?",
         "jenis": "teknis",
         "gap_asal": "Problem solving & debugging"
       },
       {
-        "pertanyaan": "Ceritakan pengalaman ketika kamu harus belajar teknologi baru dalam waktu singkat untuk menyelesaikan proyek.",
+        "pertanyaan": "Apa itu Docker dan bagaimana kamu menggunakannya untuk mengemas aplikasi web?",
+        "jenis": "teknis",
+        "gap_asal": "Docker"
+      },
+      {
+        "pertanyaan": "Ceritakan pengalaman pertama kali kamu belajar bahasa pemrograman baru dan cara kamu menyesuaikan diri.",
         "jenis": "perilaku",
         "gap_asal": "Kemauan belajar"
       },
       {
-        "pertanyaan": "Bagaimana kamu berkolaborasi dengan desainer untuk memastikan tampilan web responsif di berbagai perangkat?",
+        "pertanyaan": "Berikan contoh situasi di mana kamu harus bekerja dengan tim untuk menyelesaikan bug kritis. Bagaimana kamu menyelesaikannya?",
         "jenis": "perilaku",
-        "gap_asal": "Desain web responsif"
+        "gap_asal": "Problem solving & debugging"
       }
     ]
   },
   "contoh_jawaban": [
     {
-      "pertanyaan": "Jelaskan cara kamu mengonsumsi sebuah endpoint REST API menggunakan fetch di JavaScript.",
-      "jawaban": "Situasi: Dalam proyek Website Katalog UMKM, kami harus menampilkan data produk dari REST API. Tugas saya adalah mengambil data tersebut menggunakan fetch. Aksi: Saya menulis fungsi async yang memanggil fetch('https://api.example.com/products'), lalu mem‑parsing response dengan .json() dan menangani error dengan try‑catch. Hasil: Data berhasil ditampilkan di halaman React, sehingga pengguna dapat melihat katalog secara real‑time. Pelajaran: Saya belajar pentingnya penanganan error dan loading state.",
+      "pertanyaan": "Jelaskan apa itu framework MVC dan bagaimana Laravel menerapkan konsep tersebut.",
+      "jawaban": "S: Saya pernah belajar konsep MVC saat mempelajari kerangka kerja PHP. T: Saya membagi aplikasi menjadi Model (data), View (frontend), dan Controller (logika) dalam tugas membuat website katalog UMKM menggunakan React. A: Saya memisahkan logika pengambilan data ke API sebagai model, menampilkan produk di komponen React sebagai view, dan menulis fungsi fetch di komponen sebagai controller. R: Hasilnya, struktur aplikasi lebih terorganisir dan mudah dirawat, sesuai prinsip MVC yang juga diterapkan Laravel.",
+      "grade": {
+        "relevan": true,
+        "skor": {
+          "kejelasan": 3,
+          "relevansi": 2,
+          "kedalaman": 2,
+          "struktur": 3
+        },
+        "star": {
+          "situation": true,
+          "task": true,
+          "action": true,
+          "result": true
+        },
+        "saran": [
+          "Jelaskan lebih detail tentang role setiap komponen dalam Laravel, mis. Eloquent untuk Model, Blade untuk View, dan Controller di dalam routes.",
+          "Sebutkan contoh kode sederhana di Laravel (mis. route, controller, model) untuk menegaskan pemahaman kamu.",
+          "Ceritakan bagaimana Laravel mengelola dependency injection atau middleware yang memperkuat MVC di dalam framework."
+        ],
+        "status": "dinilai",
+        "skor_total": 38
+      }
+    },
+    {
+      "pertanyaan": "Bagaimana cara mengatasi error 404 di aplikasi web sederhana menggunakan PHP?",
+      "jawaban": "S: Saya pernah mengalami error 404 saat menguji API lokal. T: Saya cek path endpoint, memastikan file .php tersedia dan server konfigurasi Apache/nge. A: Saya mengaktifkan mod_rewrite dan menambahkan .htaccess redirect ke index.php, serta menambahkan log kesalahan untuk menelusuri sumbernya. R: Error 404 berhasil diatasi, aplikasi berjalan normal.",
       "grade": {
         "relevan": true,
         "skor": {
@@ -365,73 +412,49 @@
           "result": true
         },
         "saran": [
-          "Sertakan contoh kode lengkap termasuk pengecekan status response.",
-          "Jelaskan cara mengatur loading state di UI secara singkat."
+          "Jelaskan lebih detail contoh .htaccess yang digunakan.",
+          "Sebutkan peran log error dalam mendiagnosis 404.",
+          "Ceritakan langkah validasi sebelum memodifikasi konfigurasi."
         ],
         "status": "dinilai",
         "skor_total": 81
       }
     },
     {
-      "pertanyaan": "Bagaimana kamu memilih antara PHP/Laravel atau Node.js untuk membangun backend sederhana, dan apa pertimbangan utama kamu?",
-      "jawaban": "Situasi: Saat memilih stack backend untuk sebuah prototipe aplikasi internal, tim memperdebatkan antara PHP/Laravel dan Node.js. Tugas saya membantu keputusan. Aksi: Saya membandingkan faktor-faktor seperti kecepatan pengembangan (Node.js dengan JavaScript sudah saya kuasai), ekosistem paket, serta kebutuhan skalabilitas. Hasil: Kami memutuskan menggunakan Node.js karena dapat dipakai bersama front‑end React dan mempercepat integrasi. Pertimbangan utama saya adalah kesesuaian bahasa dengan tim dan kemudahan deployment.",
+      "pertanyaan": "Apa itu Docker dan bagaimana kamu menggunakannya untuk mengemas aplikasi web?",
+      "jawaban": "S: Saya belum pernah memakai Docker secara langsung. T: Namun saya telah mempelajari konsep containerisasi melalui tutorial online dan mencoba menjalankan container Node.js sederhana. A: Rencana saya adalah menginstal Docker Desktop, membuat Dockerfile untuk aplikasi React, dan men-deploy di server. R: Dengan belajar terstruktur, saya yakin dapat mengemas aplikasi web menggunakan Docker.",
       "grade": {
         "relevan": true,
         "skor": {
-          "kejelasan": 4,
-          "relevansi": 4,
+          "kejelasan": 3,
+          "relevansi": 3,
+          "kedalaman": 2,
+          "struktur": 4
+        },
+        "star": {
+          "situation": true,
+          "task": true,
+          "action": true,
+          "result": true
+        },
+        "saran": [
+          "Berikan contoh Dockerfile yang lebih detail, seperti FROM node:alpine",
+          "Jelaskan cara build dan run image, termasuk perintah docker build && docker run",
+          "Sebutkan contoh perintah deploy ke server, misalnya docker push dan docker run di remote"
+        ],
+        "status": "dinilai",
+        "skor_total": 50
+      }
+    },
+    {
+      "pertanyaan": "Ceritakan pengalaman pertama kali kamu belajar bahasa pemrograman baru dan cara kamu menyesuaikan diri.",
+      "jawaban": "S: Saat memulai belajar bahasa JavaScript, saya merasa kewalahan. T: Saya membuat rencana belajar harian: 1 jam teori, 1 jam praktik, dan mengerjakan mini project. A: Saya membuat aplikasi to-do list menggunakan localStorage dan memanfaatkan forum komunitas online. R: Setelah 3 minggu, saya mahir JavaScript dasar dan mampu membuat aplikasi sederhana.",
+      "grade": {
+        "relevan": true,
+        "skor": {
+          "kejelasan": 5,
+          "relevansi": 5,
           "kedalaman": 3,
-          "struktur": 4
-        },
-        "star": {
-          "situation": true,
-          "task": true,
-          "action": true,
-          "result": true
-        },
-        "saran": [
-          "Berikan contoh perbandingan performa atau biaya hosting antara Laravel dan Node.js.",
-          "Sertakan pertimbangan keamanan atau dukungan komunitas untuk memperkaya analisis."
-        ],
-        "status": "dinilai",
-        "skor_total": 69
-      }
-    },
-    {
-      "pertanyaan": "Saat halaman tidak menampilkan data yang diharapkan, langkah-langkah debugging apa yang kamu lakukan?",
-      "jawaban": "Situasi: Pada proyek To‑Do List, halaman tidak menampilkan tugas yang baru ditambahkan. Tugas saya menemukan penyebabnya. Aksi: Saya memeriksa console untuk error, mengecek apakah data tersimpan di localStorage, men‑debug fungsi render dengan breakpoint, dan memastikan fetch atau update state dipanggil setelah penyimpanan. Hasil: Ternyata ada typo pada key localStorage, setelah diperbaiki data muncul dengan benar. Dari situ saya belajar pentingnya validasi data dan inspeksi log.",
-      "grade": {
-        "relevan": true,
-        "skor": {
-          "kejelasan": 4,
-          "relevansi": 5,
-          "kedalaman": 4,
-          "struktur": 4
-        },
-        "star": {
-          "situation": true,
-          "task": true,
-          "action": true,
-          "result": true
-        },
-        "saran": [
-          "Berikan contoh kode atau log yang ditemukan.",
-          "Jelaskan lebih detail langkah 'memeriksa console' dengan contoh pesan error.",
-          "Cantumkan apa yang diupdate pada state, misalnya setState atau dispatch."
-        ],
-        "status": "dinilai",
-        "skor_total": 81
-      }
-    },
-    {
-      "pertanyaan": "Ceritakan pengalaman ketika kamu harus belajar teknologi baru dalam waktu singkat untuk menyelesaikan proyek.",
-      "jawaban": "Situasi: Di Himpunan Mahasiswa Informatika, saya ditugaskan mengelola website dan harus menambahkan fitur chart interaktif dalam seminggu. Tugas: Saya belum familiar dengan library chart di JavaScript. Aksi: Saya mengikuti tutorial cepat di YouTube, membaca dokumentasi Chart.js, dan bereksperimen di sandbox. Hasil: Saya berhasil mengintegrasikan chart yang menampilkan statistik anggota, selesai tepat waktu. Saya belajar cara belajar mandiri dan memprioritaskan fitur utama dulu.",
-      "grade": {
-        "relevan": true,
-        "skor": {
-          "kejelasan": 4,
-          "relevansi": 5,
-          "kedalaman": 4,
           "struktur": 5
         },
         "star": {
@@ -441,22 +464,22 @@
           "result": true
         },
         "saran": [
-          "Sebutkan secara singkat library yang dipilih untuk memperjelas konteks.",
-          "Gunakan contoh kode singkat untuk menunjukkan eksperimen yang kamu lakukan."
+          "Coba jelaskan kendala spesifik yang kamu hadapi saat belajar JavaScript dan bagaimana kamu mengatasinya.",
+          "Tambahkan ukuran keberhasilan yang lebih terukur pada hasil akhir, seperti jumlah fitur aplikasi yang berhasil dibuat."
         ],
         "status": "dinilai",
         "skor_total": 88
       }
     },
     {
-      "pertanyaan": "Bagaimana kamu berkolaborasi dengan desainer untuk memastikan tampilan web responsif di berbagai perangkat?",
-      "jawaban": "Situasi: Saat mengerjakan website katalog UMKM, desainer memberikan mockup responsif di Figma. Tugas saya memastikan tampilan sesuai di semua perangkat. Aksi: Saya berkoordinasi lewat Slack, meminta spesifikasi breakpoint, lalu menggunakan Tailwind CSS utility classes serta media queries untuk menyesuaikan layout. Saya juga melakukan testing di Chrome DevTools dengan mode perangkat. Hasil: Website tampil konsisten di desktop, tablet, dan mobile, dan desainer puas dengan hasil akhir.",
+      "pertanyaan": "Berikan contoh situasi di mana kamu harus bekerja dengan tim untuk menyelesaikan bug kritis. Bagaimana kamu menyelesaikannya?",
+      "jawaban": "S: Di Himpunan Mahasiswa Informatika, kami menemukan bug kritis pada sistem publikasi website. T: Saya memimpin tim untuk menelusuri bug, menggunakan log, dan mengidentifikasi penyebabnya pada fungsi pengiriman data. A: Kami melakukan code review, memperbaiki validasi input, dan menambahkan unit test. R: Bug teratasi dalam 2 hari, dan tim belajar pentingnya kolaborasi dan testing.",
       "grade": {
         "relevan": true,
         "skor": {
-          "kejelasan": 5,
+          "kejelasan": 4,
           "relevansi": 5,
-          "kedalaman": 5,
+          "kedalaman": 4,
           "struktur": 5
         },
         "star": {
@@ -466,10 +489,11 @@
           "result": true
         },
         "saran": [
-          "Pastikan selalu update versi Tailwind agar kompatibel dengan browser terbaru."
+          "Berikan contoh spesifik alat atau metode yang digunakan, mis. Git, Jenkins, atau framework testing.",
+          "Gunakan bahasa yang lebih formal, hindari singkatan seperti Himpunan Mahasiswa."
         ],
         "status": "dinilai",
-        "skor_total": 100
+        "skor_total": 88
       }
     }
   ]
