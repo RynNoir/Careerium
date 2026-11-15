@@ -86,26 +86,27 @@ export function HasilView() {
       </div>
 
       {/* Ponsel: skor → perlu ditingkatkan → radar → kekuatan. Desktop: bento 3 kolom. */}
-      <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start">
-        <div className="order-1 flex items-start gap-3 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:flex-col lg:gap-4">
-          <div className="min-w-0 flex-1 lg:w-full">
+      {/* Desktop: tinggi tetap, kolom 3 dibagi dua sama tinggi; daftar panjang bergulir di dalam kartu. */}
+      <div className="grid gap-4 lg:h-150 lg:grid-cols-[240px_minmax(0,1fr)_minmax(0,1.1fr)] lg:grid-rows-[minmax(0,1fr)_minmax(0,1fr)] print:h-auto">
+        <div className="order-1 flex items-start gap-3 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:min-h-0 lg:flex-col lg:gap-4">
+          <div className="min-w-0 flex-1 lg:w-full lg:flex-none">
             <ScoreTile gap={gap} />
           </div>
-          <div className="flex w-[42%] max-w-45 flex-col items-center gap-2 lg:w-full lg:max-w-none lg:rounded-card lg:border-2 lg:border-ink lg:bg-surface lg:p-4 lg:shadow-(--shadow-card)">
+          <div className="flex w-[42%] max-w-45 flex-col items-center gap-2 lg:w-full lg:max-w-none lg:min-h-0 lg:flex-1 lg:justify-center lg:rounded-card lg:border-2 lg:border-ink lg:bg-surface lg:p-4 lg:shadow-(--shadow-card)">
             <KiraBubble>{kiraHasil(gap)}</KiraBubble>
             <Kira pose="menunjuk" size={72} className="lg:w-24" />
           </div>
         </div>
 
-        <div className="order-3 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        <div className="order-3 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:min-h-0">
           <RadarCard radar={gap.radar} />
         </div>
 
-        <div className="order-2 lg:col-start-3 lg:row-start-1">
+        <div className="order-2 lg:col-start-3 lg:row-start-1 lg:min-h-0">
           <GapList gap={gap} />
         </div>
 
-        <div className="order-4 lg:col-start-3 lg:row-start-2">
+        <div className="order-4 lg:col-start-3 lg:row-start-2 lg:min-h-0">
           <KekuatanList gap={gap} />
         </div>
       </div>
@@ -168,7 +169,7 @@ const tersembunyi = (i: number, open: boolean) => !open && i >= RINGKAS;
 function LihatSemua({ total, open, onToggle, label }: { total: number; open: boolean; onToggle: () => void; label: string }) {
   if (total <= RINGKAS) return null;
   return (
-    <button type="button" className="min-h-11 self-start font-bold text-primary-text print:hidden" aria-expanded={open} onClick={onToggle}>
+    <button type="button" className="min-h-11 self-start font-bold text-primary-text lg:hidden print:hidden" aria-expanded={open} onClick={onToggle}>
       {open ? "Tampilkan lebih sedikit" : `Lihat semua ${total} ${label}`}
     </button>
   );
@@ -177,7 +178,7 @@ function LihatSemua({ total, open, onToggle, label }: { total: number; open: boo
 function GapList({ gap }: { gap: GapResult }) {
   const [open, setOpen] = useState(false);
   return (
-    <section className="card flex flex-col gap-1" aria-labelledby="judul-gap">
+    <section className="card flex flex-col gap-1 lg:h-full lg:min-h-0" aria-labelledby="judul-gap">
       <div className="flex items-baseline justify-between gap-2">
         <h2 id="judul-gap" className="text-[17px]">
           Perlu ditingkatkan
@@ -187,11 +188,11 @@ function GapList({ gap }: { gap: GapResult }) {
       {gap.gap.length === 0 ? (
         <p className="py-2 text-text-muted">Tidak ada gap utama. Kebutuhan posisi ini sudah terpenuhi.</p>
       ) : (
-        <ul className="flex flex-col">
+        <ul className="flex flex-col lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1 print:overflow-visible">
           {gap.gap.map((g, i) => (
             <li
               key={g.nama}
-              className={`items-start gap-3 border-t-[1.5px] border-ink py-2.5 first:border-t-0 ${tersembunyi(i, open) ? "hidden print:flex" : "flex"}`}
+              className={`items-start gap-3 border-t-[1.5px] border-ink py-2.5 first:border-t-0 ${tersembunyi(i, open) ? "hidden lg:flex print:flex" : "flex"}`}
             >
               <div className="flex min-w-0 flex-1 flex-col">
                 <span className="font-semibold wrap-break-word">{g.nama}</span>
@@ -210,7 +211,7 @@ function GapList({ gap }: { gap: GapResult }) {
 function KekuatanList({ gap }: { gap: GapResult }) {
   const [open, setOpen] = useState(false);
   return (
-    <section className="card flex flex-col gap-1" aria-labelledby="judul-kekuatan">
+    <section className="card flex flex-col gap-1 lg:h-full lg:min-h-0" aria-labelledby="judul-kekuatan">
       <div className="flex items-baseline justify-between gap-2">
         <h2 id="judul-kekuatan" className="text-[17px]">
           Kekuatan
@@ -220,9 +221,9 @@ function KekuatanList({ gap }: { gap: GapResult }) {
       {gap.kekuatan.length === 0 ? (
         <p className="py-2 text-text-muted">Belum ada skill yang cocok dengan kebutuhan posisi. Roadmap di bawah membantumu memulai.</p>
       ) : (
-        <ul className="flex flex-col">
+        <ul className="flex flex-col lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1 print:overflow-visible">
           {gap.kekuatan.map((k, i) => (
-            <li key={k.nama} className={`border-t-[1.5px] border-ink py-2.5 first:border-t-0 ${tersembunyi(i, open) ? "hidden print:block" : ""}`}>
+            <li key={k.nama} className={`border-t-[1.5px] border-ink py-2.5 first:border-t-0 ${tersembunyi(i, open) ? "hidden lg:block print:block" : ""}`}>
               <details className="group">
                 <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
                   <Check className="size-5 shrink-0 text-success" strokeWidth={3} aria-hidden="true" />

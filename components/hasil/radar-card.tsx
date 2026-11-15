@@ -10,9 +10,9 @@ export function RadarCard({ radar }: { radar: GapResult["radar"] }) {
   const ringkas = radar.map((r) => `${r.label}: kamu ${Math.round(r.kamu)}, target ${Math.round(r.target)}`).join("; ");
 
   return (
-    <section className="card flex flex-col gap-2">
+    <section className="card flex flex-col gap-2 lg:h-full lg:min-h-0">
       <h2 className="text-[17px]">Peta skill</h2>
-      <figure role="img" aria-label={`Radar skill dari 0 sampai 100. ${ringkas}.`} className="m-0 h-[300px] w-full lg:h-[340px]">
+      <figure role="img" aria-label={`Radar skill dari 0 sampai 100. ${ringkas}.`} className="m-0 h-[300px] w-full lg:h-auto lg:min-h-0 lg:flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={radar} outerRadius="68%" margin={{ top: 8, right: 24, bottom: 8, left: 24 }}>
             <PolarGrid stroke="var(--border-soft)" />

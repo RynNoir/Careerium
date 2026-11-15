@@ -18,7 +18,7 @@ const bricolage = Bricolage_Grotesque({
 
 export const metadata: Metadata = {
   title: "Careerium",
-  description: "Mentor karier berbasis AI untuk mahasiswa dan fresh graduate yang menargetkan karier TI.",
+  description: "Mentor karier berbasis AI untuk mahasiswa dan fresh graduate yang menargetkan karier impian mereka.",
 };
 
 export const viewport: Viewport = { themeColor: "#F5F8FF" };
