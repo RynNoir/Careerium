@@ -188,7 +188,7 @@ export function ProfilView() {
         </h1>
         <p className="max-w-[65ch] text-text-muted">
           {modeEksplorasi ? (
-            <>Kira akan mencari skill beserta buktinya di CV-mu, lalu mengusulkan jalur TI yang paling cocok.</>
+            <>Kira akan mencari skill beserta buktinya di CV-mu, lalu mengusulkan jalur karier yang paling cocok.</>
           ) : (
             <>
               Target: <strong className="text-text">{posisi}</strong>. Kira akan mencari skill beserta buktinya di CV-mu.

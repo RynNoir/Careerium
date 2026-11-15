@@ -72,11 +72,11 @@ export const PENOLAKAN: Record<Exclude<Intent["kategori"], "karier_ti">, { judul
   },
   upaya_manipulasi: {
     judul: "Kalimat itu tidak bisa diproses",
-    isi: "Ceritakan tujuan kariermu di bidang TI dengan kalimatmu sendiri, misalnya posisi yang kamu incar.",
+    isi: "Ceritakan tujuan kariermu dengan kalimatmu sendiri, misalnya posisi yang kamu incar.",
   },
   tidak_jelas: {
     judul: "Kira belum menangkap tujuanmu",
-    isi: "Coba sebut posisi TI yang kamu incar dan tahap kuliahmu, atau pilih salah satu contoh di bawah.",
+    isi: "Coba sebut posisi yang kamu incar dan tahap kuliahmu, atau pilih salah satu contoh di bawah.",
   },
 };
 
@@ -86,7 +86,7 @@ export const CATATAN_PERKIRAAN =
   "Posisi ini belum ada di data lowongan kami. Tempel deskripsi lowongan agar hasilnya lebih tepat. Tanpa itu, hasilnya berupa perkiraan umum, bukan data lowongan.";
 
 export const CATATAN_EKSPLORASI =
-  "Belum yakin posisinya? Tidak apa-apa. Setelah membaca CV-mu, Kira akan mengusulkan 2–3 jalur TI yang paling cocok untuk kamu pilih.";
+  "Belum yakin posisinya? Tidak apa-apa. Setelah membaca CV-mu, Kira akan mengusulkan 2–3 jalur karier yang paling cocok untuk kamu pilih.";
 
 // ---------- Mode eksplorasi ----------
 export const EKSPLORASI = {

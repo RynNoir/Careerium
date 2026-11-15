@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChartNoAxesColumn, History, House, MessagesSquare, UserRound } from "lucide-react";
@@ -40,10 +41,8 @@ export function Sidebar() {
         aria-label="Careerium, ke halaman Mulai"
         className="mb-1.5 grid size-11 place-items-center"
       >
-        {/* Kotak 38 px sesuai DESIGN.md, area klik 44 px */}
-        <span className="grid size-9.5 place-items-center rounded-xl border-2 border-sidebar-fg bg-primary font-display text-lg font-extrabold text-primary-fg">
-          C
-        </span>
+        {/* Logo kepala maskot Kira; area klik 44 px */}
+        <Image src="/mascot/kira-kepala.svg" alt="" aria-hidden="true" width={42} height={40} unoptimized />
       </Link>
       {items.map(({ href, label, icon: Icon }) => {
         const on = isActive(path, href);

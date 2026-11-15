@@ -68,7 +68,7 @@ export function MulaiView() {
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-2">
           <h1 className="display">
-            Mau jadi <span className="hl">apa</span> di dunia TI?
+            Mau jadi <span className="hl">apa</span> kamu nanti?
           </h1>
           <p className="max-w-[65ch] text-text-muted">
             Ceritakan tujuanmu dengan kalimat bebas. Kira akan memetakan skill, gap, dan roadmap belajarmu.
@@ -295,12 +295,12 @@ function KartuKonfirmasi({
                 {LABEL_POSISI[p]}
               </option>
             ))}
-            <option value="lainnya">Posisi TI lain (tulis sendiri)</option>
+            <option value="lainnya">Posisi lain (tulis sendiri)</option>
           </select>
           {lainnya && (
             <input
               className="field mt-2"
-              aria-label="Nama posisi TI"
+              aria-label="Nama posisi"
               placeholder="Contoh: Game Developer"
               maxLength={100}
               value={intent.posisi_target ?? ""}
